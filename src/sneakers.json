@@ -1,0 +1,32 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "AIR JORDAN 1 SE",
+      "color": "Dark Chocolate",
+      "price": "GHS 400.00",
+      "image": "/Sneakers/Air Jordan 1 SE.svg"
+    },
+    {
+      "id": 2,
+      "name": "NIKE SB DUNK",
+      "color": "Low Midnight",
+      "price": "GHS 450.00",
+      "image": "/Sneakers/Nike SB Dunk.svg"
+    },
+    {
+      "id": 3,
+      "name": "NIKE CALM",
+      "color": "Slide Black",
+      "price": "GHS 320.00",
+      "image": "/Sneakers/Nike Calm.svg"
+    },
+    {
+      "id": 4,
+      "name": "NIKE AIR FORCE 1",
+      "color": "College Pack",
+      "price": "GHS 470.00",
+      "image": "/Sneakers/Nike Air Force I.svg"
+    }
+  ]
+}
