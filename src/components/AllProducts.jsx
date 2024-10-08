@@ -6,7 +6,7 @@ const AllProducts = () => {
   const products = sneakers.products;
 
   return (
-    <div className="md:flex justify-center items-center my-10 gap-5 md:gap-10 grid grid-cols-2 p-2">
+    <div className="md:flex justify-center items-center my-10 gap-y-6 gap-x-1 md:gap-10 grid grid-cols-2 p-2">
       {products.map((prod) => (
         <Product
           key={prod.id}

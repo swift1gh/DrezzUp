@@ -2,8 +2,8 @@ import React from "react";
 
 const Product = ({ Image, Name, Color, Price }) => {
   return (
-    <div>
-      <div className=" border border-black rounded-2xl p-1 md:p-2 bg-white w-[8.5rem] md:w-[12rem] h-auto">
+    <div className="flex justify-center items-center">
+      <div className=" border border-black rounded-2xl p-1 md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto">
         <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3]">
           <img
             src={Image}
