@@ -8,8 +8,10 @@ const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
       } transition-transform duration-300`} // Increase size when selected
       onClick={selectProduct}>
       <div
-        className={`border border-black hover:border-slate-800 md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
-          isSelected ? "border-b-4 border-[#3F4972] shadow-md" : ""
+        className={`border border-[#474747]  md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
+          isSelected
+            ? "border-b-4 border-[#464981] md:hover:border-slate-600 shadow-md"
+            : ""
         }`}>
         <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3]">
           <img
