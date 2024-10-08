@@ -1,9 +1,16 @@
 import React from "react";
 
-const Product = ({ Image, Name, Color, Price }) => {
+const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
   return (
-    <div className="flex justify-center items-center">
-      <div className=" border border-black rounded-2xl p-1 md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto">
+    <div
+      className={`flex justify-center items-center cursor-pointer ${
+        isSelected ? "scale-110" : "scale-100"
+      } transition-transform duration-300`} // Increase size when selected
+      onClick={selectProduct}>
+      <div
+        className={`border border-black hover:border-slate-800 md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
+          isSelected ? "border-b-4 border-[#3F4972] shadow-md" : ""
+        }`}>
         <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3]">
           <img
             src={Image}
