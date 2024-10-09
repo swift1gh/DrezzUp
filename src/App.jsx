@@ -1,15 +1,25 @@
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
 import React from "react";
-import Navbar from "./components/Navbar";
-import Filter from "./components/Filter";
-import AllProducts from "./components/AllProducts";
+import HomePage from "./pages/HomePage";
+import MainLayout from "./layouts/MainLayout";
+import ComboPage from "./pages/ComboPage";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<MainLayout />}>
+      <Route index element={<HomePage />} />
+      <Route path="/combo" element={<ComboPage />} />
+    </Route>
+  )
+);
 
 const App = () => {
-  return (
-    <div>
-      <Navbar />
-      <AllProducts />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

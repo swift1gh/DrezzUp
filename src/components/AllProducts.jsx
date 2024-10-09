@@ -1,22 +1,29 @@
-import React, { useState } from "react";
-import sneakers from "../sneakers.json";
+import React from "react";
 import Product from "./Product";
+import sneakers from "../sneakers.json";
+import { useState } from "react";
 
-const AllProducts = () => {
-  const [selectedProducts, setSelectedProducts] = useState([]); // Store selected product IDs
+const AllProducts = ({ setSelectedProducts }) => {
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
   const handleSelectProduct = (id) => {
     // Toggle the selected product in the list
-    if (selectedProducts.includes(id)) {
-      setSelectedProducts(selectedProducts.filter((prodId) => prodId !== id));
+    if (selectedProductIds.includes(id)) {
+      const newSelectedProducts = selectedProductIds.filter(
+        (prodId) => prodId !== id
+      );
+      setSelectedProductIds(newSelectedProducts);
+      setSelectedProducts(newSelectedProducts); // Update HomePage state
     } else {
-      setSelectedProducts([...selectedProducts, id]);
+      const newSelectedProducts = [...selectedProductIds, id];
+      setSelectedProductIds(newSelectedProducts);
+      setSelectedProducts(newSelectedProducts); // Update HomePage state
     }
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="my-10 gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
+    <div className="flex justify-center items-center mt-24 mb-10 ">
+      <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
         {sneakers.products.map((prod) => (
           <Product
             key={prod.id}
@@ -24,7 +31,7 @@ const AllProducts = () => {
             Name={prod.name}
             Color={prod.color}
             Price={prod.price}
-            isSelected={selectedProducts.includes(prod.id)} // Check if it's selected
+            isSelected={selectedProductIds.includes(prod.id)} // Check if it's selected
             selectProduct={() => handleSelectProduct(prod.id)} // Pass the handler
           />
         ))}

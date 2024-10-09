@@ -30,17 +30,17 @@
     },
     {
       "id": 5,
-      "name": "NIKE CALM",
-      "color": "Slide Black",
-      "price": "GHS 320.00",
-      "image": "/Sneakers/Nike Calm.svg"
-    },
-    {
-      "id": 6,
       "name": "NIKE AIR FORCE 1",
       "color": "College Pack",
       "price": "GHS 470.00",
       "image": "/Sneakers/Nike Air Force I.svg"
+    },
+    {
+      "id": 6,
+      "name": "NIKE CALM",
+      "color": "Slide Black",
+      "price": "GHS 320.00",
+      "image": "/Sneakers/Nike Calm.svg"
     },
     {
       "id": 7,
@@ -58,17 +58,17 @@
     },
     {
       "id": 9,
+      "name": "NIKE CALM",
+      "color": "Slide Black",
+      "price": "GHS 320.00",
+      "image": "/Sneakers/Nike Calm.svg"
+    },
+    {
+      "id": 10,
       "name": "NIKE AIR FORCE 1",
       "color": "College Pack",
       "price": "GHS 470.00",
       "image": "/Sneakers/Nike Air Force I.svg"
-    },
-    {
-      "id": 10,
-      "name": "NIKE SB DUNK",
-      "color": "Low Midnight",
-      "price": "GHS 450.00",
-      "image": "/Sneakers/Nike SB Dunk.svg"
     },
     {
       "id": 11,
@@ -79,10 +79,10 @@
     },
     {
       "id": 12,
-      "name": "NIKE CALM",
-      "color": "Slide Black",
-      "price": "GHS 320.00",
-      "image": "/Sneakers/Nike Calm.svg"
+      "name": "NIKE SB DUNK",
+      "color": "Low Midnight",
+      "price": "GHS 450.00",
+      "image": "/Sneakers/Nike SB Dunk.svg"
     }
   ]
 }
