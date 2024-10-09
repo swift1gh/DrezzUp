@@ -12,7 +12,7 @@ const Navbar = () => {
         <div className="flex justify-center items-center gap-5">
           {/* <img src={Search} alt="" className="h-5 md:h-6 cursor-pointer" />
           <img src={Cart} alt="" className="h-5 md:h-6 cursor-pointer" /> */}
-          <button className="bg-[#BD815A] p-3 border rounded-[18px] border-[#000000bb]">
+          <button className="bg-[#BD815A] p-2 md:p-3 border rounded-[18px] border-[#000000bb]">
             <span className="text-white">Calculate Combo</span>
           </button>
         </div>
