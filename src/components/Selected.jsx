@@ -31,7 +31,7 @@ const Selected = ({ selectedIds }) => {
             ))}
           </div>
 
-          <div className="bg-[#b9b8b8] w-4/5 py-4">
+          <div className="bg-[#b9b8b8] w-11/12 md:w-4/5 py-4">
             <h2 className="flex justify-center text-center items-center gap-3 text-xl font-normal font-roboto">
               Combo Price:{" "}
               <span className="text-[#9F4B15] font-mono font-bold">
