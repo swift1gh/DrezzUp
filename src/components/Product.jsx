@@ -21,7 +21,7 @@ const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
           />
         </div>
         <div className="flex flex-col py-2">
-          <h2 className="uppercase font-bold font-roboto text-[12px] md:text-[16px]">
+          <h2 className="uppercase font-bold font-robotoCondensed text-[12px] md:text-[16px]">
             {Name}
           </h2>
           <span className="font-thin text-[10px] md:text-[12px]">{Color}</span>

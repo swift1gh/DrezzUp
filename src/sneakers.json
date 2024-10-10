@@ -24,9 +24,9 @@
     {
       "id": 4,
       "name": "NIKE AIR FORCE 1",
-      "color": "College Pack",
-      "price": "GHS 470.00",
-      "image": "/Sneakers/Nike Air Force I.svg"
+      "color": "Lanvin Black & White ",
+      "price": "GHS 480.00",
+      "image": "/Sneakers/NikeLanvin.png"
     },
     {
       "id": 5,
@@ -73,9 +73,9 @@
     {
       "id": 11,
       "name": "NIKE AIR FORCE 1",
-      "color": "Lanvin Black & White ",
-      "price": "GHS 480.00",
-      "image": "/Sneakers/NikeLanvin.png"
+      "color": "College Pack",
+      "price": "GHS 470.00",
+      "image": "/Sneakers/Nike Air Force I.svg"
     },
     {
       "id": 12,
