@@ -17,7 +17,7 @@ const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
           <img
             src={Image}
             alt={Name}
-            className="h-[-webkit-fill-available] drop-shadow-lg backdrop-blur-3xl"
+            className="h-[-webkit-fill-available] drop-shadow-lg backdrop-blur-3xl w-full"
           />
         </div>
         <div className="flex flex-col py-2">

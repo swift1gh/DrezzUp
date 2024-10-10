@@ -9,17 +9,17 @@
     },
     {
       "id": 2,
-      "name": "NIKE SB DUNK",
-      "color": "Low Midnight",
-      "price": "GHS 450.00",
-      "image": "/Sneakers/Nike SB Dunk.svg"
+      "name": "NIKE AIR FORCE 1",
+      "color": "Lanvin Multi-Colored",
+      "price": "GHS 480.00",
+      "image": "/Sneakers/NikeLanvinMulti.png"
     },
     {
       "id": 3,
-      "name": "NIKE CALM",
-      "color": "Slide Black",
-      "price": "GHS 320.00",
-      "image": "/Sneakers/Nike Calm.svg"
+      "name": "JORDAN 11 RETRO",
+      "color": "Low Cool Grey",
+      "price": "GHS 420.00",
+      "image": "/Sneakers/Jordan 11 Retro 1.png"
     },
     {
       "id": 4,
@@ -30,59 +30,59 @@
     },
     {
       "id": 5,
-      "name": "NIKE AIR FORCE 1",
-      "color": "College Pack",
-      "price": "GHS 470.00",
-      "image": "/Sneakers/Nike Air Force I.svg"
+      "name": "NIKE SB DUNK",
+      "color": "Low Midnight",
+      "price": "GHS 450.00",
+      "image": "/Sneakers/Nike SB Dunk.svg"
     },
     {
       "id": 6,
-      "name": "NIKE CALM",
-      "color": "Slide Black",
-      "price": "GHS 320.00",
-      "image": "/Sneakers/Nike Calm.svg"
+      "name": "Air Jordan Retro",
+      "color": "Retro 5 Olive",
+      "price": "GHS 360.00",
+      "image": "/Sneakers/Air Jordan Retro 5.png"
     },
     {
       "id": 7,
-      "name": "NIKE SB DUNK",
-      "color": "Low Midnight",
-      "price": "GHS 450.00",
-      "image": "/Sneakers/Nike SB Dunk.svg"
+      "name": "Amiri Skel top low",
+      "color": "White Grey",
+      "price": "GHS 500.00",
+      "image": "/Sneakers/Amiri Skel.png"
     },
     {
       "id": 8,
-      "name": "AIR JORDAN 1 SE",
-      "color": "Dark Chocolate",
-      "price": "GHS 400.00",
-      "image": "/Sneakers/Air Jordan 1 SE.svg"
-    },
-    {
-      "id": 9,
       "name": "NIKE CALM",
       "color": "Slide Black",
       "price": "GHS 320.00",
       "image": "/Sneakers/Nike Calm.svg"
     },
     {
+      "id": 9,
+      "name": "JORDAN 11 RETRO",
+      "color": "Low Bred",
+      "price": "GHS 420.00",
+      "image": "/Sneakers/Jordan 11 Retro 2.png"
+    },
+    {
       "id": 10,
-      "name": "NIKE AIR FORCE 1",
-      "color": "College Pack",
-      "price": "GHS 470.00",
-      "image": "/Sneakers/Nike Air Force I.svg"
+      "name": "JORDAN 11 RETRO",
+      "color": "Low Cool Grey",
+      "price": "GHS 420.00",
+      "image": "/Sneakers/Jordan 11 Retro 1.png"
     },
     {
       "id": 11,
-      "name": "AIR JORDAN 1 SE",
-      "color": "Dark Chocolate",
-      "price": "GHS 400.00",
-      "image": "/Sneakers/Air Jordan 1 SE.svg"
+      "name": "NIKE AIR FORCE 1",
+      "color": "Lanvin Black & White ",
+      "price": "GHS 480.00",
+      "image": "/Sneakers/NikeLanvin.png"
     },
     {
       "id": 12,
-      "name": "NIKE SB DUNK",
-      "color": "Low Midnight",
-      "price": "GHS 450.00",
-      "image": "/Sneakers/Nike SB Dunk.svg"
+      "name": "AIR JORDAN 3",
+      "color": "Retro Off Noir",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/Air Jordan 3.png"
     }
   ]
 }
