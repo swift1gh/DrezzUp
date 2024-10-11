@@ -9,7 +9,7 @@ const Selected = ({ selectedIds }) => {
   );
 
   return (
-    <div className="mt-24 mb-10">
+    <div className="mb-10">
       {selectedProducts.length === 0 ? (
         <div className="pt-28">
           <div className="flex justify-center items-center gap-2">
