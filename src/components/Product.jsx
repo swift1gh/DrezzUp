@@ -10,7 +10,7 @@ const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
       <div
         className={`border border-[#474747]  md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
           isSelected
-            ? "border-b-4 border-2 border-[#464981] md:hover:border-slate-600 shadow-md"
+            ? "border-b-4 border-2 border-[#BD815A] md:hover:border-slate-600 shadow-md"
             : ""
         }`}>
         <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3]">
