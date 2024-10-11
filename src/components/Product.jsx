@@ -3,7 +3,7 @@ import React from "react";
 const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
   return (
     <div
-      className={`flex justify-center items-center cursor-pointer ${
+      className={`flex hover:scale-105 justify-center items-center cursor-pointer ${
         isSelected ? "scale-110" : "scale-100"
       } transition-transform duration-300`} // Increase size when selected
       onClick={selectProduct}>

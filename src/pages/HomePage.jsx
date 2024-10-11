@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import AllProducts from "../components/AllProducts";
+import Filter from "../components/Filter";
 
 const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState("All");
 
   return (
     <div>
@@ -11,7 +13,14 @@ const HomePage = () => {
         Btn={"Calculate Combo"}
         Destination={`/combo?ids=${selectedProducts.join(",")}`}
       />
-      <AllProducts setSelectedProducts={setSelectedProducts} />
+      <Filter
+        selectedBrand={selectedBrand}
+        setSelectedBrand={setSelectedBrand}
+      />
+      <AllProducts
+        setSelectedProducts={setSelectedProducts}
+        selectedBrand={selectedBrand}
+      />
     </div>
   );
 };
