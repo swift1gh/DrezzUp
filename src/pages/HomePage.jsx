@@ -10,12 +10,10 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header>
-        <Navbar
-          Btn={"Calculate Combo"}
-          Destination={`/combo?ids=${selectedProducts.join(",")}`}
-        />
-      </header>
+      <Navbar
+        Btn={"Calculate Combo"}
+        Destination={`/combo?ids=${selectedProducts.join(",")}`}
+      />
 
       <main className="flex-grow">
         <Filter

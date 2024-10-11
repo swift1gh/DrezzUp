@@ -2,10 +2,10 @@
   "products": [
     {
       "id": 1,
-      "name": "AIR JORDAN 1 SE",
-      "color": "Dark Chocolate",
-      "price": "GHS 400.00",
-      "image": "/Sneakers/Air Jordan 1 SE.svg"
+      "name": "NIKE AIR FORCE 1 ",
+      "color": "07 WB Wheat Flax",
+      "price": "GHS 330.00",
+      "image": "/Sneakers/10.png"
     },
     {
       "id": 2,
@@ -54,7 +54,7 @@
       "name": "NIKE CALM",
       "color": "Slide Black",
       "price": "GHS 320.00",
-      "image": "/Sneakers/Nike Calm.svg"
+      "image": "/Sneakers/11.png"
     },
     {
       "id": 9,
@@ -72,73 +72,59 @@
     },
     {
       "id": 11,
-      "name": "NIKE AIR FORCE 1",
-      "color": "College Pack",
-      "price": "GHS 470.00",
-      "image": "/Sneakers/Nike Air Force I.svg"
-    },
-    {
-      "id": 12,
-      "name": "AIR JORDAN 3",
-      "color": "Retro Off Noir",
+      "name": "NIKE SB DUNK",
+      "color": "UNLV",
       "price": "GHS 370.00",
       "image": "/Sneakers/7.png"
     },
     {
-      "id": 14,
+      "id": 12,
       "name": "AIR JORDAN 3",
       "color": "Red Cement Chicabo All-Star",
       "price": "GHS 370.00",
       "image": "/Sneakers/2.png"
     },
     {
-      "id": 15,
+      "id": 13,
       "name": "NIKE SB DUNK",
       "color": "low Rayssa Leal",
       "price": "GHS 370.00",
       "image": "/Sneakers/3.png"
     },
     {
-      "id": 16,
+      "id": 14,
       "name": "AIR JORDAN 3",
       "color": "Retro Off Noir",
       "price": "GHS 370.00",
       "image": "/Sneakers/4.png"
     },
     {
-      "id": 17,
+      "id": 15,
       "name": "Amiri Skel top low",
       "color": "White Blue",
       "price": "GHS 370.00",
       "image": "/Sneakers/5.png"
     },
     {
-      "id": 18,
-      "name": "AIR JORDAN 3",
-      "color": "Retro Off Noir",
+      "id": 16,
+      "name": "NIKE AIR MAX",
+      "color": "Wolf Grey",
       "price": "GHS 370.00",
       "image": "/Sneakers/6.png"
     },
     {
-      "id": 18,
-      "name": "AIR JORDAN 3",
-      "color": "Retro Off Noir",
-      "price": "GHS 370.00",
+      "id": 17,
+      "name": "nike mule",
+      "color": "Light Smoke",
+      "price": "GHS 210.00",
       "image": "/Sneakers/8.png"
     },
     {
       "id": 18,
-      "name": "AIR JORDAN 3",
-      "color": "Retro Off Noir",
-      "price": "GHS 370.00",
+      "name": "ADIDAS YEEZY SLIDES",
+      "color": "Bone",
+      "price": "GHS 250.00",
       "image": "/Sneakers/9.png"
-    },
-    {
-      "id": 18,
-      "name": "NIKE AIR FORCE 1 ",
-      "color": "07 WB Wheat Flax",
-      "price": "GHS 330.00",
-      "image": "/Sneakers/10.png"
     }
   ]
 }
