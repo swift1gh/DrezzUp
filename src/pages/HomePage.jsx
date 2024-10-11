@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import AllProducts from "../components/AllProducts";
 import Filter from "../components/Filter";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -21,6 +22,7 @@ const HomePage = () => {
         setSelectedProducts={setSelectedProducts}
         selectedBrand={selectedBrand}
       />
+      <Footer />
     </div>
   );
 };
