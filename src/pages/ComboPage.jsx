@@ -12,9 +12,13 @@ const ComboPage = () => {
     : [];
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar Btn={"Home"} Destination="/" />
-      <Selected selectedIds={selectedIds} />
+
+      <main className="flex-grow">
+        <Selected selectedIds={selectedIds} />
+      </main>
+
       <Footer />
     </div>
   );
