@@ -30,7 +30,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
   return (
     <div className="flex justify-center items-center mb-10">
       {filteredProducts.length === 0 ? (
-        <p>No {selectedBrand} shoes currently available</p>
+        <p>No {selectedBrand} Sneakers Currently Available</p>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
           {filteredProducts.map((prod) => (
