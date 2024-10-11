@@ -6,7 +6,7 @@ const Filter = ({ selectedBrand, setSelectedBrand }) => {
 
   return (
     <nav className="py-3 bg-[#ffffff00] sticky justify-center flex items-center top-20 w-full z-50">
-      <div className="flex gap-2 drop-shadow-lg p-4">
+      <div className="flex gap-2 drop-shadow-lg pb-4">
         {brands.map((brand) => (
           <FilterButton
             key={brand}
