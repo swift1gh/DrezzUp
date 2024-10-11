@@ -33,7 +33,7 @@
       "name": "NIKE SB DUNK",
       "color": "Low Midnight",
       "price": "GHS 450.00",
-      "image": "/Sneakers/Nike SB Dunk.svg"
+      "image": "/Sneakers/1.png"
     },
     {
       "id": 6,
@@ -82,7 +82,63 @@
       "name": "AIR JORDAN 3",
       "color": "Retro Off Noir",
       "price": "GHS 370.00",
-      "image": "/Sneakers/Air Jordan 3.png"
+      "image": "/Sneakers/7.png"
+    },
+    {
+      "id": 14,
+      "name": "AIR JORDAN 3",
+      "color": "Red Cement Chicabo All-Star",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/2.png"
+    },
+    {
+      "id": 15,
+      "name": "NIKE SB DUNK",
+      "color": "low Rayssa Leal",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/3.png"
+    },
+    {
+      "id": 16,
+      "name": "AIR JORDAN 3",
+      "color": "Retro Off Noir",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/4.png"
+    },
+    {
+      "id": 17,
+      "name": "Amiri Skel top low",
+      "color": "White Blue",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/5.png"
+    },
+    {
+      "id": 18,
+      "name": "AIR JORDAN 3",
+      "color": "Retro Off Noir",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/6.png"
+    },
+    {
+      "id": 18,
+      "name": "AIR JORDAN 3",
+      "color": "Retro Off Noir",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/8.png"
+    },
+    {
+      "id": 18,
+      "name": "AIR JORDAN 3",
+      "color": "Retro Off Noir",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/9.png"
+    },
+    {
+      "id": 18,
+      "name": "NIKE AIR FORCE 1 ",
+      "color": "07 WB Wheat Flax",
+      "price": "GHS 330.00",
+      "image": "/Sneakers/10.png"
     }
   ]
 }

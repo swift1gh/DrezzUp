@@ -9,19 +9,25 @@ const HomePage = () => {
   const [selectedBrand, setSelectedBrand] = useState("All");
 
   return (
-    <div>
-      <Navbar
-        Btn={"Calculate Combo"}
-        Destination={`/combo?ids=${selectedProducts.join(",")}`}
-      />
-      <Filter
-        selectedBrand={selectedBrand}
-        setSelectedBrand={setSelectedBrand}
-      />
-      <AllProducts
-        setSelectedProducts={setSelectedProducts}
-        selectedBrand={selectedBrand}
-      />
+    <div className="flex flex-col min-h-screen">
+      <header>
+        <Navbar
+          Btn={"Calculate Combo"}
+          Destination={`/combo?ids=${selectedProducts.join(",")}`}
+        />
+      </header>
+
+      <main className="flex-grow">
+        <Filter
+          selectedBrand={selectedBrand}
+          setSelectedBrand={setSelectedBrand}
+        />
+        <AllProducts
+          setSelectedProducts={setSelectedProducts}
+          selectedBrand={selectedBrand}
+        />
+      </main>
+
       <Footer />
     </div>
   );

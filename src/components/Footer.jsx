@@ -2,10 +2,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="w-full flex justify-center items-center bg-[#FBF4F4] py-4">
+    <footer className="bg-[#FBF4F4] py-4 w-full flex justify-center items-center">
       <div className="text-sm">
         <p>
-          &#169; DREZZUP. All Rights Reserved. Devloped by
+          &#169; DREZZUP. All Rights Reserved. Developed by
           <a
             className="cursor-pointer text-blue-800"
             href="https://princeyekunya.netlify.app/">
@@ -14,7 +14,7 @@ const Footer = () => {
           </a>
         </p>
       </div>
-    </div>
+    </footer>
   );
 };
 
