@@ -10,7 +10,8 @@ const Footer = () => {
             Developed by{" "}
             <a
               className="cursor-pointer text-blue-800"
-              href="https://princeyekunya.netlify.app/">
+              href="https://princeyekunya.netlify.app/"
+              target="_blank">
               {" "}
               Swift
             </a>{" "}
