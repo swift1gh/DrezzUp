@@ -4,6 +4,8 @@ import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
 
 const Selected = ({ selectedIds }) => {
+  // This component doesn't need to manage its own state for selected products
+  // It just filters the products based on the selectedIds passed down as props
   const selectedProducts = sneakers.products.filter((prod) =>
     selectedIds.includes(String(prod.id))
   );
@@ -23,6 +25,7 @@ const Selected = ({ selectedIds }) => {
           <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
             {selectedProducts.map((prod) => (
               <Product
+                key={prod.id} // Ensure each product has a unique key
                 Image={prod.image}
                 Color={prod.color}
                 Price={prod.price}

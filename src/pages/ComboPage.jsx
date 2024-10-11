@@ -13,12 +13,13 @@ const ComboPage = () => {
     : [];
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen">
       <Navbar Btn={"Home"} Destination="/" />
 
       <main className="flex-grow">
         <Selected selectedIds={selectedIds} />
-        <OrderForm />
+        {selectedIds.length > 0 && <OrderForm selectedIds={selectedIds} />}{" "}
+        {/* Pass selectedIds to OrderForm */}
       </main>
       <br />
       <br />
