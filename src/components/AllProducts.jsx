@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Product from "./Product";
 import sneakers from "../sneakers.json";
+import warningIcon from "../assets/warning.svg";
 
 const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
@@ -30,7 +31,10 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
   return (
     <div className="flex justify-center items-center mb-10">
       {filteredProducts.length === 0 ? (
-        <p>No {selectedBrand} Sneakers Currently Available</p>
+        <div className="flex justify-center items-center gap-2">
+          <img src={warningIcon} className="h-6" alt="" />
+          <p>No {selectedBrand} Sneakers Currently Available</p>
+        </div>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
           {filteredProducts.map((prod) => (

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Selected from "../components/Selected";
 import Footer from "../components/Footer";
+import OrderForm from "../components/OrderForm";
 
 const ComboPage = () => {
   const location = useLocation();
@@ -12,13 +13,15 @@ const ComboPage = () => {
     : [];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       <Navbar Btn={"Home"} Destination="/" />
 
       <main className="flex-grow">
         <Selected selectedIds={selectedIds} />
+        <OrderForm />
       </main>
-
+      <br />
+      <br />
       <Footer />
     </div>
   );
