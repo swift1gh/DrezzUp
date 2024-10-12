@@ -24,8 +24,16 @@ const Selected = ({ selectedIds }) => {
           <h2 className="p-2 font-mono font-medium">Selected Sneakers</h2>
           <div
             className={`${
-              selectedProducts.length < 4 ? "md:flex" : ""
-            } grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2`}>
+              selectedProducts.length === 1
+                ? "flex"
+                : selectedProducts.length > 1 && selectedProducts.length < 4
+                ? "md:flex"
+                : "grid"
+            } ${
+              selectedProducts.length !== 1
+                ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                : ""
+            } p-2`}>
             {selectedProducts.map((prod) => (
               <div className="scale-90">
                 <Product
@@ -50,7 +58,7 @@ const Selected = ({ selectedIds }) => {
             </div>
           ) : (
             <div className="pt-5">
-              <div className="flex justify-center items-center gap-2">
+              <div className="flex justify-center items-center gap-2 px-8">
                 <img src={WarningIcon} className="h-6" alt="" />
                 <span>
                   The Combo Price Cannot Be Calculated With Only One Pair Of
