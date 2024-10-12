@@ -15,7 +15,6 @@ const Filter = ({ selectedBrand, setSelectedBrand }) => {
   return (
     <nav className="p-3 bg-[#ffffff00] flex justify-center items-center sticky top-20 w-full z-50">
       <div className="flex gap-2 overflow-x-auto scrollbar-hide p-3 scroll-smooth">
-        {/* Use flex for inline arrangement and overflow-x-auto for horizontal scroll */}
         {brands.map((brand) => (
           <FilterButton
             key={brand}

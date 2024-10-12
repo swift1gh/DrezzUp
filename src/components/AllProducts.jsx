@@ -44,7 +44,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
   return (
     <div className="flex justify-center items-center mb-10">
       {shuffledProducts.length === 0 ? (
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center gap-2 mt-[10%]">
           <img src={warningIcon} className="h-6" alt="" />
           <p>No {selectedBrand} Sneakers Currently Available</p>
         </div>
