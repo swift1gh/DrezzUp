@@ -20,6 +20,16 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
     }
   };
 
+  // Fisher-Yates shuffle to randomize the products array
+  const shuffleArray = (array) => {
+    let shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
   // Filter products based on the selected brand
   const filteredProducts =
     selectedBrand === "All"
@@ -28,16 +38,19 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
           prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
         );
 
+  // Shuffle the filtered products
+  const shuffledProducts = shuffleArray(filteredProducts);
+
   return (
     <div className="flex justify-center items-center mb-10">
-      {filteredProducts.length === 0 ? (
+      {shuffledProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2">
           <img src={warningIcon} className="h-6" alt="" />
           <p>No {selectedBrand} Sneakers Currently Available</p>
         </div>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
-          {filteredProducts.map((prod) => (
+          {shuffledProducts.map((prod) => (
             <Product
               key={prod.id}
               Image={prod.image}

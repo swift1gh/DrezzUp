@@ -125,6 +125,48 @@
       "color": "Bone",
       "price": "GHS 250.00",
       "image": "/Sneakers/9.png"
+    },
+    {
+      "id": 19,
+      "name": "TIMBERLAND",
+      "color": "Ghost Frost Fancy",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/12.png"
+    },
+    {
+      "id": 20,
+      "name": "TIMBERLAND 6",
+      "color": "Basic Boot-Green",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/13.png"
+    },
+    {
+      "id": 21,
+      "name": "TB-K4 TIMBERLAND",
+      "color": "6-Inch Icon Premium",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/14.png"
+    },
+    {
+      "id": 22,
+      "name": "TIMBERLAND PREMIUM",
+      "color": "6-Inch White Waterproof",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/15.png"
+    },
+    {
+      "id": 23,
+      "name": "TIMBERLAND PREMIUM",
+      "color": "6-Inch Blue White",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/16.png"
+    },
+    {
+      "id": 24,
+      "name": "TIMBERLAND PREMIUM",
+      "color": "6-Inch Nuback",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/17.png"
     }
   ]
 }

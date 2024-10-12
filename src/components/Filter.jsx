@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import FilterButton from "./FilterButton";
 
 const Filter = ({ selectedBrand, setSelectedBrand }) => {
-  const brands = ["All", "Air Jordan", "Nike", "Vans", "Amiri", "Adidas"];
+  const brands = [
+    "All",
+    "Air Jordan",
+    "Nike",
+    "Timberland",
+    "Vans",
+    "Amiri",
+    "Adidas",
+  ];
 
   return (
-    <nav className="py-3 bg-[#ffffff00] sticky justify-center flex items-center top-20 w-full z-50">
-      <div className="flex gap-2 drop-shadow-lg pb-4">
+    <nav className="p-3 bg-[#ffffff00] flex justify-center items-center sticky top-20 w-full z-50">
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide p-3 scroll-smooth">
+        {/* Use flex for inline arrangement and overflow-x-auto for horizontal scroll */}
         {brands.map((brand) => (
           <FilterButton
             key={brand}
             Name={brand}
             isActive={selectedBrand === brand}
-            onClick={() => setSelectedBrand(brand)} // Set selected brand when clicked
+            onClick={() => setSelectedBrand(brand)}
           />
         ))}
       </div>
