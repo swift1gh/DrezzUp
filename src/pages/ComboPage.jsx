@@ -18,7 +18,7 @@ const ComboPage = () => {
 
       <main className="flex-grow">
         <Selected selectedIds={selectedIds} />
-        {selectedIds.length > 0 && <OrderForm selectedIds={selectedIds} />}{" "}
+        {selectedIds.length > 1 && <OrderForm selectedIds={selectedIds} />}{" "}
         {/* Pass selectedIds to OrderForm */}
       </main>
       <br />

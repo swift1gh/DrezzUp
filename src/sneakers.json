@@ -9,10 +9,10 @@
     },
     {
       "id": 2,
-      "name": "NIKE AIR FORCE 1",
-      "color": "Lanvin Multi-Colored",
-      "price": "GHS 480.00",
-      "image": "/Sneakers/NikeLanvinMulti.png"
+      "name": "NIKE AIR MAX",
+      "color": "Wolf Grey",
+      "price": "GHS 370.00",
+      "image": "/Sneakers/6.png"
     },
     {
       "id": 3,
@@ -107,10 +107,10 @@
     },
     {
       "id": 16,
-      "name": "NIKE AIR MAX",
-      "color": "Wolf Grey",
-      "price": "GHS 370.00",
-      "image": "/Sneakers/6.png"
+      "name": "NIKE AIR FORCE 1",
+      "color": "Lanvin Multi-Colored",
+      "price": "GHS 480.00",
+      "image": "/Sneakers/NikeLanvinMulti.png"
     },
     {
       "id": 17,
