@@ -31,7 +31,7 @@ const Selected = ({ selectedIds }) => {
                 : "grid"
             } ${
               selectedProducts.length !== 1
-                ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+                ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                 : ""
             } p-2`}>
             {selectedProducts.map((prod) => (
