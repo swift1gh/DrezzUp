@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Selected from "../components/Selected";
@@ -11,6 +11,11 @@ const ComboPage = () => {
   const selectedIds = queryParams.get("ids")
     ? queryParams.get("ids").split(",")
     : [];
+
+  // Scroll to the top when the component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
