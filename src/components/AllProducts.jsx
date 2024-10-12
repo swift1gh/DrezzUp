@@ -31,31 +31,37 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
     return shuffled;
   };
 
-  // Shuffle products only once when the component mounts
+  // Shuffle products only once when the component mounts or on refresh
   useEffect(() => {
-    // Filter products based on the selected brand
-    const filteredProducts =
-      selectedBrand === "All"
-        ? sneakers.products
-        : sneakers.products.filter((prod) =>
-            prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
-          );
+    const storedShuffledProducts = localStorage.getItem("shuffledProducts");
 
-    // Shuffle filtered products and store in state
-    const shuffled = shuffleArray(filteredProducts);
-    setShuffledProducts(shuffled);
-  }, [selectedBrand]); // Re-shuffle if the selected brand changes
+    if (storedShuffledProducts) {
+      setShuffledProducts(JSON.parse(storedShuffledProducts));
+    } else {
+      const shuffled = shuffleArray(sneakers.products);
+      setShuffledProducts(shuffled);
+      localStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
+    }
+  }, []); // Only run on initial mount or page refresh
+
+  // Filter products based on the selected brand without reshuffling
+  const filteredProducts =
+    selectedBrand === "All"
+      ? shuffledProducts
+      : shuffledProducts.filter((prod) =>
+          prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
+        );
 
   return (
     <div className="flex justify-center items-center mb-10">
-      {shuffledProducts.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">
           <img src={warningIcon} className="h-6" alt="" />
           <p>No {selectedBrand} Sneakers Currently Available</p>
         </div>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">
-          {shuffledProducts.map((prod) => (
+          {filteredProducts.map((prod) => (
             <Product
               key={prod.id}
               Image={prod.image}
