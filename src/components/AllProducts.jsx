@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Product from "./Product";
 import sneakers from "../sneakers.json";
 import warningIcon from "../assets/warning.svg";
 
 const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
+  const [shuffledProducts, setShuffledProducts] = useState([]);
 
   const handleSelectProduct = (id) => {
     if (selectedProductIds.includes(id)) {
@@ -30,16 +31,20 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
     return shuffled;
   };
 
-  // Filter products based on the selected brand
-  const filteredProducts =
-    selectedBrand === "All"
-      ? sneakers.products
-      : sneakers.products.filter((prod) =>
-          prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
-        );
+  // Shuffle products only once when the component mounts
+  useEffect(() => {
+    // Filter products based on the selected brand
+    const filteredProducts =
+      selectedBrand === "All"
+        ? sneakers.products
+        : sneakers.products.filter((prod) =>
+            prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
+          );
 
-  // Shuffle the filtered products
-  const shuffledProducts = shuffleArray(filteredProducts);
+    // Shuffle filtered products and store in state
+    const shuffled = shuffleArray(filteredProducts);
+    setShuffledProducts(shuffled);
+  }, [selectedBrand]); // Re-shuffle if the selected brand changes
 
   return (
     <div className="flex justify-center items-center mb-10">
