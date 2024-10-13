@@ -61,7 +61,7 @@ const Selected = ({ selectedIds }) => {
               <div className="flex justify-center items-center gap-2 px-8">
                 <img src={WarningIcon} className="h-6" alt="" />
                 <span>
-                  The Combo Price Cannot Be Calculated With Only One Pair Of
+                  The Combo Price Cannot Be Calculated On Only One Pair Of
                   Sneakers
                 </span>
               </div>
