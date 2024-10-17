@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { db } from "../utils/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 const OrderForm = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +27,7 @@ const OrderForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation: Check if all required fields are filled
@@ -43,16 +45,26 @@ const OrderForm = () => {
 
     setError(""); // Clear any previous error message
 
+    try {
+      const result = await addDoc(collection(db, "customers"), formData);
+      console.log(result);
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    // Log formData to check the input values before submission
+    console.log("Form Data before submission:", formData);
+
     // Show the pop-up when form is submitted
     setPopupVisible(true);
 
-    // Hide the pop-up after 10 seconds and redirect to the homepage
+    // Hide the pop-up after 5 seconds and redirect to the homepage
     setTimeout(() => {
       setPopupVisible(false);
       navigate("/"); // Redirect to the homepage after the pop-up disappears
     }, 5000); // 5 seconds
 
-    // Reset the form fields
+    // Log formData after resetting the form
     setFormData({
       fullName: "",
       contact: "",
