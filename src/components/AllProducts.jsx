@@ -3,7 +3,7 @@ import Product from "./Product";
 import sneakers from "../sneakers.json";
 import warningIcon from "../assets/warning.svg";
 
-const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
+const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [shuffledProducts, setShuffledProducts] = useState([]);
 
@@ -21,7 +21,6 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
     }
   };
 
-  // Fisher-Yates shuffle to randomize the products array
   const shuffleArray = (array) => {
     let shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -31,7 +30,6 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
     return shuffled;
   };
 
-  // Shuffle products only once when the component mounts or on refresh
   useEffect(() => {
     const storedShuffledProducts = localStorage.getItem("shuffledProducts");
 
@@ -42,15 +40,18 @@ const AllProducts = ({ setSelectedProducts, selectedBrand }) => {
       setShuffledProducts(shuffled);
       localStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
     }
-  }, []); // Only run on initial mount or page refresh
+  }, []);
 
-  // Filter products based on the selected brand without reshuffling
-  const filteredProducts =
-    selectedBrand === "All"
-      ? shuffledProducts
-      : shuffledProducts.filter((prod) =>
-          prod.name.toLowerCase().includes(selectedBrand.toLowerCase())
-        );
+  // Filter products based on selected brand, search term (name or color)
+  const filteredProducts = shuffledProducts.filter((prod) => {
+    const matchesBrand =
+      selectedBrand === "All" ||
+      prod.name.toLowerCase().includes(selectedBrand.toLowerCase());
+    const matchesSearchTerm =
+      prod.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      prod.color.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesBrand && matchesSearchTerm;
+  });
 
   return (
     <div className="flex justify-center items-center mb-10">

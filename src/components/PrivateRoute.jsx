@@ -1,17 +1,18 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.jsx"; // Ensure the useAuth hook is correctly implemented
+import { useAuth } from "../hooks/useAuth.jsx";
 
 const PrivateRoute = ({ element }) => {
-  const { admin, loading } = useAuth(); // Destructure loading state from useAuth
+  const { user, loading } = useAuth(); // Change admin to user
 
-  // If the authentication is still loading, you can return a loading screen
+  // If authentication is still loading, show a loading message or spinner
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // If not authenticated, redirect to adminLogin
-  return admin ? element : <Navigate to="/adminLogin" />;
+  // If user is authenticated, allow access to the protected route (element)
+  // If not authenticated, redirect to /adminLogin
+  return user ? element : <Navigate to="/adminLogin" />;
 };
 
 export default PrivateRoute;

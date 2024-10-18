@@ -167,6 +167,41 @@
       "color": "6-Inch Nuback",
       "price": "GHS 700.00",
       "image": "/Sneakers/17.png"
+    },
+    {
+      "id": 25,
+      "name": "Nike Jordan 1",
+      "color": "Pine Green Patent",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/18.png"
+    },
+    {
+      "id": 26,
+      "name": "Nike Jordan 1 Low",
+      "color": "Panda",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/19.png"
+    },
+    {
+      "id": 27,
+      "name": "Air Jordan 1 High",
+      "color": "Retro OG Patent",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/20.png"
+    },
+    {
+      "id": 28,
+      "name": "Air Jordan 1 Low",
+      "color": "SE Concord",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/21.png"
+    },
+    {
+      "id": 29,
+      "name": "Air Jordan 1 Low",
+      "color": "SE All Stars",
+      "price": "GHS 700.00",
+      "image": "/Sneakers/22.png"
     }
   ]
 }

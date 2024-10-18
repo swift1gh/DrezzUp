@@ -31,8 +31,10 @@ const AdminLogin = () => {
         adminPassword.email,
         adminPassword.password
       );
-      console.log("Login Successful");
-      navigate("/adminDashboard"); // Navigate to admin dashboard after success
+      console.log("Login Successful", response.user); // Log user object to ensure success
+
+      // Navigate to admin dashboard after successful login
+      navigate("/adminDashboard");
     } catch (error) {
       console.error(error.message);
       setError("Invalid email or password"); // Set error message on failure

@@ -1,5 +1,4 @@
 import {
-  Navigate,
   Route,
   createBrowserRouter,
   createRoutesFromElements,
@@ -12,7 +11,7 @@ import ComboPage from "./pages/ComboPage.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { AuthProvider } from "./hooks/useAuth.jsx"; // Import AuthProvider
-import PrivateRoute from "./components/PrivateRoute.jsx"; // Import the PrivateRoute component
+import PrivateRoute from "./components/PrivateRoute.jsx"; // Import PrivateRoute
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,8 +30,6 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <AuthProvider>
-      {" "}
-      {/* Wrap with AuthProvider */}
       <RouterProvider router={router} />
     </AuthProvider>
   );
