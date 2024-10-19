@@ -31,16 +31,27 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   };
 
   useEffect(() => {
-    const storedShuffledProducts = localStorage.getItem("shuffledProducts");
+    // Check if the page was refreshed using the performance API
+    const isPageReloaded = () => {
+      const navEntries = window.performance.getEntriesByType("navigation");
+      return navEntries.length > 0 && navEntries[0].type === "reload";
+    };
+
+    const storedShuffledProducts = sessionStorage.getItem("shuffledProducts");
 
     if (storedShuffledProducts) {
+      // If shuffled products exist in session storage, use them
       setShuffledProducts(JSON.parse(storedShuffledProducts));
-    } else {
+    } else if (isPageReloaded()) {
+      // If the page was reloaded, shuffle the products and store in session storage
       const shuffled = shuffleArray(sneakers.products);
       setShuffledProducts(shuffled);
-      localStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
+      sessionStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
+    } else {
+      // If not reloaded and no stored shuffled products, use the default order
+      setShuffledProducts(sneakers.products);
     }
-  }, []);
+  }, []); // This will run once when the component mounts
 
   // Filter products based on selected brand, search term (name or color)
   const filteredProducts = shuffledProducts.filter((prod) => {
@@ -58,7 +69,11 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
       {filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">
           <img src={warningIcon} className="h-6" alt="" />
-          <p>No {selectedBrand} Sneakers Currently Available</p>
+          {selectedBrand === "All" ? (
+            <p>No Sneakers Currently Available</p>
+          ) : (
+            <p>No {selectedBrand} Sneakers Currently Available</p>
+          )}
         </div>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 ">

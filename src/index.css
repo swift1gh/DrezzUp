@@ -26,3 +26,8 @@
 html {
   scroll-behavior: smooth;
 }
+
+.hover\:text-green-500 {
+  filter: invert(50%) sepia(100%) saturate(1000%) hue-rotate(85deg)
+    brightness(90%) contrast(100%);
+}

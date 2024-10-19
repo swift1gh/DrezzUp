@@ -30,7 +30,6 @@ const OrderForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation: Check if all required fields are filled
     if (
       !formData.fullName ||
       !formData.contact ||
@@ -40,31 +39,37 @@ const OrderForm = () => {
       !formData.guarantorContact
     ) {
       setError("Please fill out all the required fields.");
-      return; // Prevent submission if validation fails
+      return;
     }
 
-    setError(""); // Clear any previous error message
+    setError("");
+
+    const orderDate = new Date().toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const orderData = {
+      ...formData,
+      date: orderDate, // Add the formatted date to the order data
+    };
 
     try {
-      const result = await addDoc(collection(db, "customers"), formData);
+      const result = await addDoc(collection(db, "customers"), orderData);
       console.log(result);
     } catch (error) {
       console.error(error.message);
     }
 
-    // Log formData to check the input values before submission
-    console.log("Form Data before submission:", formData);
-
-    // Show the pop-up when form is submitted
     setPopupVisible(true);
-
-    // Hide the pop-up after 5 seconds and redirect to the homepage
     setTimeout(() => {
       setPopupVisible(false);
-      navigate("/"); // Redirect to the homepage after the pop-up disappears
-    }, 5000); // 5 seconds
+      navigate("/");
+    }, 5000);
 
-    // Log formData after resetting the form
     setFormData({
       fullName: "",
       contact: "",
