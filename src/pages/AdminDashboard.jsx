@@ -166,7 +166,7 @@ const AdminDashboard = () => {
                   <td className="py-3 px-6 text-left">
                     {order.addBox ? "Yes" : "No"}
                   </td>
-                  <td className="px-6 text-left flex justify-center items-center gap-2">
+                  <td className="px-1 text-left flex justify-center items-center gap-2 h-full">
                     <button
                       onClick={() => handleToggleStatus(order.id, order.status)}
                       className="hover:scale-110">
@@ -176,6 +176,7 @@ const AdminDashboard = () => {
                         className="h-7"
                       />
                     </button>
+
                     <button
                       onClick={() => handleDelete(order.id)}
                       className="hover:scale-110">
