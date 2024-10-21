@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { db } from "../utils/firebase";
 import doneIcon from "../assets/done.svg";
 import deleteIcon from "../assets/delete.svg";
+import detailsIcon from "../assets/details.svg";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -37,18 +38,19 @@ const AdminDashboard = () => {
     return () => unsubscribe();
   }, []);
 
-  // Optimistic Update: Mark as done
-  const handleMarkAsDone = async (orderId) => {
+  // Optimistic Update: Toggle between "done" and "new"
+  const handleToggleStatus = async (orderId, currentStatus) => {
     // Optimistically update the UI before waiting for Firestore
+    const newStatus = currentStatus === "done" ? "new" : "done";
     const updatedOrders = orders.map((order) =>
-      order.id === orderId ? { ...order, status: "done" } : order
+      order.id === orderId ? { ...order, status: newStatus } : order
     );
     setOrders(updatedOrders);
 
     try {
       // Update Firestore document
       const orderRef = doc(db, "customers", orderId);
-      await updateDoc(orderRef, { status: "done" });
+      await updateDoc(orderRef, { status: newStatus });
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -164,16 +166,24 @@ const AdminDashboard = () => {
                   <td className="py-3 px-6 text-left">
                     {order.addBox ? "Yes" : "No"}
                   </td>
-                  <td className="py-3 px-6 text-left flex justify-center items-center gap-2">
+                  <td className="px-6 text-left flex justify-center items-center gap-2">
                     <button
-                      onClick={() => handleMarkAsDone(order.id)}
+                      onClick={() => handleToggleStatus(order.id, order.status)}
                       className="hover:scale-110">
-                      <img src={doneIcon} alt="" className="h-6" />
+                      <img
+                        src={order.status === "done" ? doneIcon : doneIcon} // Use appropriate icon
+                        alt=""
+                        className="h-7"
+                      />
                     </button>
                     <button
                       onClick={() => handleDelete(order.id)}
                       className="hover:scale-110">
-                      <img src={deleteIcon} alt="" className="h-6" />
+                      <img src={deleteIcon} alt="" className="h-7 w-9" />
+                    </button>
+
+                    <button className="hover:scale-110">
+                      <img src={detailsIcon} alt="" className="h-6" />
                     </button>
                   </td>
                 </tr>
