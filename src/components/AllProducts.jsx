@@ -31,7 +31,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   };
 
   useEffect(() => {
-    fetch("/src/sneakers.json?time=" + new Date().getTime())
+    fetch("/sneakers.json?time=" + new Date().getTime())
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch sneakers data");

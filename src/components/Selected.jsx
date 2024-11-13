@@ -1,11 +1,33 @@
-import React from "react";
-import sneakers from "../sneakers.json";
+import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
 
 const Selected = ({ selectedIds }) => {
+  const [sneakers, setSneakers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch the sneakers data from the public folder
+    fetch("/sneakers.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSneakers(data.products); // Assuming data has a "products" key
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
+
   // Filter selected products based on selectedIds passed as props
-  const selectedProducts = sneakers.products.filter((prod) =>
+  const selectedProducts = sneakers.filter((prod) =>
     selectedIds.includes(String(prod.id))
   );
 
@@ -14,6 +36,14 @@ const Selected = ({ selectedIds }) => {
     (total, prod) => total + prod.comboPrice,
     0
   );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading products: {error.message}</div>;
+  }
 
   return (
     <div className="mb-10 mt-5">
