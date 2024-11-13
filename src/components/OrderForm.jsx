@@ -206,7 +206,7 @@ const OrderForm = () => {
           <div className="mb-4 text-sm text-orange-600 bg-[#FBF4F4] p-4 rounded">
             <p>
               &#9888; Kindly note that these deals don’t come in boxes. A box
-              costs 20 cedis. It can be added by your choice and the price
+              costs 20 cedis. It can be added by your choice and the singlePrice
               factored in.
             </p>
           </div>

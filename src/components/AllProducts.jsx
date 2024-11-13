@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Product from "./Product";
-import sneakers from "../sneakers.json";
 import warningIcon from "../assets/warning.svg";
 
 const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [shuffledProducts, setShuffledProducts] = useState([]);
+  const [error, setError] = useState(null); // To handle any fetch errors
 
   const handleSelectProduct = (id) => {
     if (selectedProductIds.includes(id)) {
@@ -31,27 +31,24 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   };
 
   useEffect(() => {
-    // Check if the page was refreshed using the performance API
-    const isPageReloaded = () => {
-      const navEntries = window.performance.getEntriesByType("navigation");
-      return navEntries.length > 0 && navEntries[0].type === "reload";
-    };
-
-    const storedShuffledProducts = sessionStorage.getItem("shuffledProducts");
-
-    if (storedShuffledProducts) {
-      // If shuffled products exist in session storage, use them
-      setShuffledProducts(JSON.parse(storedShuffledProducts));
-    } else if (isPageReloaded()) {
-      // If the page was reloaded, shuffle the products and store in session storage
-      const shuffled = shuffleArray(sneakers.products);
-      setShuffledProducts(shuffled);
-      sessionStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
-    } else {
-      // If not reloaded and no stored shuffled products, use the default order
-      setShuffledProducts(sneakers.products);
-    }
-  }, []); // This will run once when the component mounts
+    fetch("/src/sneakers.json?time=" + new Date().getTime())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch sneakers data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Data loaded:", data); // Add logging to see if data is fetched
+        const shuffled = shuffleArray(data.products);
+        setShuffledProducts(shuffled);
+        sessionStorage.setItem("shuffledProducts", JSON.stringify(shuffled));
+      })
+      .catch((error) => {
+        setError(error.message);
+        console.error("Error fetching sneakers data:", error);
+      });
+  }, []);
 
   // Filter products based on selected brand, search term (name or color)
   const filteredProducts = shuffledProducts.filter((prod) => {
@@ -66,6 +63,11 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
 
   return (
     <div className="flex justify-center items-center mb-10">
+      {error && (
+        <div className="text-red-500">
+          <p>Error: {error}</p>
+        </div>
+      )}
       {filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">
           <img src={warningIcon} className="h-6" alt="" />
@@ -83,7 +85,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
               Image={prod.image}
               Name={prod.name}
               Color={prod.color}
-              Price={prod.price}
+              singlePrice={`GHS ${prod.singlePrice}.00`}
               isSelected={selectedProductIds.includes(prod.id)}
               selectProduct={() => handleSelectProduct(prod.id)}
             />

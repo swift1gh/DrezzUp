@@ -4,204 +4,225 @@
       "id": 1,
       "name": "NIKE AIR FORCE 1 ",
       "color": "07 WB Wheat Flax",
-      "price": "GHS 330.00",
+      "singlePrice": 330,
+      "comboPrice": 210,
       "image": "/Sneakers/10.png"
     },
     {
       "id": 2,
       "name": "NIKE AIR MAX",
       "color": "Wolf Grey",
-      "price": "GHS 370.00",
+      "singlePrice": 370,
+      "comboPrice": 220,
       "image": "/Sneakers/6.png"
     },
     {
       "id": 3,
-      "name": "JORDAN 11 RETRO",
-      "color": "Low Cool Grey",
-      "price": "GHS 420.00",
-      "image": "/Sneakers/Jordan 11 Retro 1.png"
+      "name": "Air Jordan 1 Low",
+      "color": "SE All Stars",
+      "singlePrice": 440,
+      "comboPrice": 260,
+      "image": "/Sneakers/22.png"
     },
     {
       "id": 4,
       "name": "NIKE AIR FORCE 1",
       "color": "Lanvin Black & White ",
-      "price": "GHS 480.00",
+      "singlePrice": 420,
+      "comboPrice": 240,
       "image": "/Sneakers/NikeLanvin.png"
     },
     {
       "id": 5,
       "name": "NIKE SB DUNK",
       "color": "Low Midnight",
-      "price": "GHS 450.00",
+      "singlePrice": 450,
+      "comboPrice": 280,
       "image": "/Sneakers/1.png"
     },
     {
       "id": 6,
       "name": "Air Jordan Retro",
       "color": "Retro 5 Olive",
-      "price": "GHS 360.00",
+      "singlePrice": 450,
+      "comboPrice": 280,
       "image": "/Sneakers/Air Jordan Retro 5.png"
     },
     {
       "id": 7,
       "name": "Amiri Skel top low",
       "color": "White Grey",
-      "price": "GHS 500.00",
+      "singlePrice": 500,
+      "comboPrice": 300,
       "image": "/Sneakers/Amiri Skel.png"
     },
     {
       "id": 8,
       "name": "NIKE CALM",
       "color": "Slide Black",
-      "price": "GHS 320.00",
+      "singlePrice": 320,
+      "comboPrice": 220,
       "image": "/Sneakers/11.png"
     },
     {
       "id": 9,
       "name": "AIR JORDAN 11 RETRO",
       "color": "Low Bred",
-      "price": "GHS 420.00",
+      "singlePrice": 440,
+      "comboPrice": 260,
       "image": "/Sneakers/Jordan 11 Retro 2.png"
     },
     {
       "id": 10,
       "name": "AIR JORDAN 11 RETRO",
       "color": "Low Cool Grey",
-      "price": "GHS 420.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/Jordan 11 Retro 1.png"
     },
     {
       "id": 11,
       "name": "NIKE SB DUNK",
       "color": "UNLV",
-      "price": "GHS 370.00",
+      "singlePrice": 420,
+      "comboPrice": 280,
       "image": "/Sneakers/7.png"
     },
     {
       "id": 12,
       "name": "AIR JORDAN 3",
       "color": "Red Cement Chicabo All-Star",
-      "price": "GHS 370.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/2.png"
     },
     {
       "id": 13,
       "name": "NIKE SB DUNK",
       "color": "low Rayssa Leal",
-      "price": "GHS 370.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/3.png"
     },
     {
       "id": 14,
       "name": "AIR JORDAN 3",
       "color": "Retro Off Noir",
-      "price": "GHS 370.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/4.png"
     },
     {
       "id": 15,
       "name": "Amiri Skel top low",
       "color": "White Blue",
-      "price": "GHS 370.00",
+      "singlePrice": 500,
+      "comboPrice": 320,
       "image": "/Sneakers/5.png"
     },
     {
       "id": 16,
       "name": "NIKE AIR FORCE 1",
       "color": "Lanvin Multi-Colored",
-      "price": "GHS 480.00",
+      "singlePrice": 480,
+      "comboPrice": 280,
       "image": "/Sneakers/NikeLanvinMulti.png"
     },
     {
       "id": 17,
       "name": "nike mule",
       "color": "Light Smoke",
-      "price": "GHS 210.00",
+      "singlePrice": 400,
+      "comboPrice": 210,
       "image": "/Sneakers/8.png"
     },
     {
       "id": 18,
       "name": "ADIDAS YEEZY SLIDES",
       "color": "Bone",
-      "price": "GHS 250.00",
+      "singlePrice": 350,
+      "comboPrice": 200,
       "image": "/Sneakers/9.png"
     },
     {
       "id": 19,
       "name": "TIMBERLAND",
       "color": "Ghost Frost Fancy",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/12.png"
     },
     {
       "id": 20,
       "name": "TIMBERLAND 6",
       "color": "Basic Boot-Green",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/13.png"
     },
     {
       "id": 21,
       "name": "TB-K4 TIMBERLAND",
       "color": "6-Inch Icon Premium",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/14.png"
     },
     {
       "id": 22,
       "name": "TIMBERLAND PREMIUM",
       "color": "6-Inch White Waterproof",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/15.png"
     },
     {
       "id": 23,
       "name": "TIMBERLAND PREMIUM",
       "color": "6-Inch Blue White",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/16.png"
     },
     {
       "id": 24,
       "name": "TIMBERLAND PREMIUM",
       "color": "6-Inch Nuback",
-      "price": "GHS 700.00",
+      "singlePrice": 700,
+      "comboPrice": 580,
       "image": "/Sneakers/17.png"
     },
     {
       "id": 25,
       "name": "Nike Jordan 1",
       "color": "Pine Green Patent",
-      "price": "GHS 700.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/18.png"
     },
     {
       "id": 26,
       "name": "Nike Jordan 1 Low",
       "color": "Panda",
-      "price": "GHS 700.00",
+      "singlePrice": 440,
+      "comboPrice": 260,
       "image": "/Sneakers/19.png"
     },
     {
       "id": 27,
       "name": "Air Jordan 1 High",
       "color": "Retro OG Patent",
-      "price": "GHS 700.00",
+      "singlePrice": 420,
+      "comboPrice": 250,
       "image": "/Sneakers/20.png"
     },
     {
       "id": 28,
       "name": "Air Jordan 1 Low",
       "color": "SE Concord",
-      "price": "GHS 700.00",
+      "singlePrice": 450,
+      "comboPrice": 270,
       "image": "/Sneakers/21.png"
-    },
-    {
-      "id": 29,
-      "name": "Air Jordan 1 Low",
-      "color": "SE All Stars",
-      "price": "GHS 700.00",
-      "image": "/Sneakers/22.png"
     }
   ]
 }

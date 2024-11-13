@@ -1,14 +1,24 @@
 import React from "react";
 
-const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
+const Product = ({
+  Image,
+  Name,
+  Color,
+  singlePrice,
+  comboPrice,
+  isSelected,
+  selectProduct,
+}) => {
+  const displayPrice = comboPrice || singlePrice;
+
   return (
     <div
       className={`flex justify-center items-center cursor-pointer ${
         isSelected ? "scale-105" : "scale-100"
-      } transition-transform duration-100`} // Increase size when selected t-miliseconds
+      } transition-transform duration-100`} // Increase size when selected
       onClick={selectProduct}>
       <div
-        className={`border border-[#474747]  md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
+        className={`border border-[#474747] md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
           isSelected
             ? "border-b-4 border-2 border-[#BD815A] md:hover:border-slate-600 shadow-md"
             : ""
@@ -28,7 +38,7 @@ const Product = ({ Image, Name, Color, Price, isSelected, selectProduct }) => {
         </div>
         <div className="w-full justify-center items-center text-center md:py-1">
           <span className="font-mono font-semibold text-[12px] md:text-[16px]">
-            {Price}
+            {displayPrice}
           </span>
         </div>
       </div>
