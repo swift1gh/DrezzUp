@@ -12,7 +12,6 @@ const ComboPage = () => {
     ? queryParams.get("ids").split(",")
     : [];
 
-  // Scroll to the top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -23,11 +22,9 @@ const ComboPage = () => {
 
       <main className="flex-grow">
         <Selected selectedIds={selectedIds} />
-        {selectedIds.length > 1 && <OrderForm selectedIds={selectedIds} />}{" "}
-        {/* Pass selectedIds to OrderForm */}
+        {selectedIds.length > 1 && <OrderForm selectedIds={selectedIds} />}
       </main>
-      <br />
-      <br />
+
       <Footer />
     </div>
   );

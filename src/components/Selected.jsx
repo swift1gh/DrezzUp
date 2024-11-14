@@ -1,48 +1,45 @@
 import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../utils/firebase";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
 
 const Selected = ({ selectedIds }) => {
-  const [sneakers, setSneakers] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the sneakers data from the public folder
-    fetch("/sneakers.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setSneakers(data.products); // Assuming data has a "products" key
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const products = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .filter((product) => selectedIds.includes(product.id.toString())); // Convert id to string
 
-  // Filter selected products based on selectedIds passed as props
-  const selectedProducts = sneakers.filter((prod) =>
-    selectedIds.includes(String(prod.id))
-  );
+        setSelectedProducts(products);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(err);
+        setLoading(false);
+      }
+    };
 
-  // Calculate total combo price
+    fetchProducts();
+  }, [selectedIds]);
+
   const totalComboPrice = selectedProducts.reduce(
     (total, prod) => total + prod.comboPrice,
     0
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return <div>Error loading products: {error.message}</div>;
+    return <p>Error fetching products: {error.message}</p>;
   }
 
   return (

@@ -9,15 +9,15 @@ const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [isSearchActive, setIsSearchActive] = useState(false); // New state to track search bar visibility
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   // Scroll to the top whenever the selected brand changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [selectedBrand]); // Run effect when selectedBrand changes
+  }, [selectedBrand]);
 
   const handleSearchBtn = () => {
-    setIsSearchActive(!isSearchActive); // Toggle search bar and filter visibility
+    setIsSearchActive(!isSearchActive);
   };
 
   return (
@@ -30,7 +30,6 @@ const HomePage = () => {
       />
 
       <main className="flex-grow">
-        {/* Conditionally render the Filter and Search bar based on isSearchActive */}
         {!isSearchActive && (
           <Filter
             selectedBrand={selectedBrand}
@@ -38,10 +37,9 @@ const HomePage = () => {
           />
         )}
 
-        {/* Search bar */}
         {isSearchActive && (
           <div className="flex justify-center items-center sticky top-[5.5rem] z-50 pb-7">
-            <div className=" bg-[#eae1e1] shadow-inner border-2 px-5 py-2 rounded-3xl w-80  ">
+            <div className=" bg-[#eae1e1] shadow-inner border-2 px-5 py-2 rounded-3xl w-80">
               <input
                 type="text"
                 placeholder="Search"
@@ -60,10 +58,9 @@ const HomePage = () => {
           searchTerm={searchTerm}
         />
 
-        {/* Search button */}
         <button
-          onClick={handleSearchBtn} // Toggle search on button click
-          className="md:hidden fixed bottom-10 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem] ">
+          onClick={handleSearchBtn}
+          className="md:hidden fixed bottom-10 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
           <img src={searchIcon} className="h-5 m-2" />
         </button>
       </main>
