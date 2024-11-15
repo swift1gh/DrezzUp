@@ -27,6 +27,7 @@ const Product = ({
           <img
             src={Image}
             alt={Name}
+            loading="lazy" // Lazy load the image
             className="h-[-webkit-fill-available] drop-shadow-lg backdrop-blur-3xl w-full"
           />
         </div>
