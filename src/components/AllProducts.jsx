@@ -19,14 +19,27 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
     setSelectedProducts(newSelectedProducts);
   };
 
+  // Shuffle function (Fisher-Yates)
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "products"));
-        const productsList = querySnapshot.docs.map((doc) => ({
+        let productsList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Shuffle the products list
+        productsList = shuffleArray(productsList);
+
         setProducts(productsList);
         setLoading(false);
       } catch (err) {
@@ -52,9 +65,12 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   return (
     <div className="flex justify-center items-center mb-10">
       {error && <p>{error.message || error.toString()}</p>}
-      {filteredProducts.length === 0 ? (
+
+      {loading ? (
+        <p>Loading...</p> // Show loading indicator while loading is true
+      ) : filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">
-          <img src={warningIcon} className="h-6" alt="" />
+          <img src={warningIcon} className="h-6" alt="Warning icon" />
           {selectedBrand === "All" ? (
             <p>No Sneakers Currently Available</p>
           ) : (

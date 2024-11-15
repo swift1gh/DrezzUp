@@ -21,19 +21,24 @@ const ProductUpload = () => {
   // Fetch the highest ID and set the next ID
   useEffect(() => {
     const fetchHighestId = async () => {
-      const productsRef = collection(db, "products");
-      const highestIdQuery = query(
-        productsRef,
-        orderBy("id", "desc"),
-        limit(1)
-      );
-      const querySnapshot = await getDocs(highestIdQuery);
+      try {
+        const productsRef = collection(db, "products");
+        const highestIdQuery = query(
+          productsRef,
+          orderBy("id", "desc"),
+          limit(1)
+        );
+        const querySnapshot = await getDocs(highestIdQuery);
 
-      if (!querySnapshot.empty) {
-        const highestId = querySnapshot.docs[0].data().id;
-        setProductId(highestId + 1);
-      } else {
-        setProductId(1); // Start with ID 1 if no products exist
+        if (!querySnapshot.empty) {
+          const highestId = querySnapshot.docs[0].data().id;
+          setProductId(highestId + 1);
+        } else {
+          setProductId(1); // Start with ID 1 if no products exist
+        }
+      } catch (error) {
+        console.error("Error fetching highest ID:", error);
+        setMessage("Failed to fetch highest product ID.");
       }
     };
 
@@ -41,14 +46,33 @@ const ProductUpload = () => {
   }, []);
 
   const handleUpload = async () => {
+    if (
+      !productName ||
+      !productSinglePrice ||
+      !productComboPrice ||
+      !productColor ||
+      !productImageUrl
+    ) {
+      setMessage("Please fill in all fields.");
+      return;
+    }
+
+    const parsedSinglePrice = parseFloat(productSinglePrice);
+    const parsedComboPrice = parseFloat(productComboPrice);
+
+    if (isNaN(parsedSinglePrice) || isNaN(parsedComboPrice)) {
+      setMessage("Prices must be valid numbers.");
+      return;
+    }
+
     try {
       await addDoc(collection(db, "products"), {
         id: productId,
         name: productName,
         color: productColor,
         image: productImageUrl,
-        singlePrice: parseFloat(productSinglePrice),
-        comboPrice: parseFloat(productComboPrice),
+        singlePrice: parsedSinglePrice,
+        comboPrice: parsedComboPrice,
       });
       setMessage("Product uploaded successfully!");
       setProductName("");
