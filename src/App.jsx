@@ -12,6 +12,7 @@ import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import { AuthProvider } from "./hooks/useAuth.jsx"; // Import AuthProvider
 import PrivateRoute from "./components/PrivateRoute.jsx"; // Import PrivateRoute
+import ProductUpload from "./pages/ProductUpload.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
         path="adminDashboard"
         element={<PrivateRoute element={<AdminDashboard />} />}
       />
+      <Route path="productUpload" element={<ProductUpload />} />
     </Route>
   )
 );
