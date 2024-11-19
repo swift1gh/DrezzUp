@@ -27,6 +27,7 @@ const HomePage = () => {
         Destination={`/combo?ids=${selectedProducts.join(",")}`}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        isHome={true}
       />
 
       <main className="flex-grow">
