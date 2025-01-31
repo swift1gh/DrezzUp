@@ -1,25 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { motion } from "motion/react";
 import Product from "./Product";
 import warningIcon from "../assets/warning.svg";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
+const ITEMS_PER_PAGE = 12;
+
 const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const handleSelectProduct = (id) => {
-    const newSelectedProducts = selectedProductIds.includes(id)
-      ? selectedProductIds.filter((prodId) => prodId !== id)
-      : [...selectedProductIds, id];
+  const handleSelectProduct = useCallback(
+    (id) => {
+      setSelectedProductIds((prevSelected) => {
+        const newSelected = prevSelected.includes(id)
+          ? prevSelected.filter((prodId) => prodId !== id)
+          : [...prevSelected, id];
 
-    setSelectedProductIds(newSelectedProducts);
-    setSelectedProducts(newSelectedProducts);
-  };
+        setSelectedProducts(newSelected);
+        return newSelected;
+      });
+    },
+    [setSelectedProducts]
+  );
 
-  // Shuffle function (Fisher-Yates)
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -37,9 +45,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
           ...doc.data(),
         }));
 
-        // Shuffle the products list
         productsList = shuffleArray(productsList);
-
         setProducts(productsList);
         setLoading(false);
       } catch (err) {
@@ -52,22 +58,46 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter((prod) => {
-    const matchesBrand =
-      selectedBrand === "All" ||
-      prod.name.toLowerCase().includes(selectedBrand.toLowerCase());
-    const matchesSearchTerm =
-      prod.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      prod.color.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesBrand && matchesSearchTerm;
-  });
+  const filteredProducts = useMemo(() => {
+    return products.filter((prod) => {
+      const matchesBrand =
+        selectedBrand === "All" ||
+        prod.name.toLowerCase().includes(selectedBrand.toLowerCase());
+      const matchesSearchTerm =
+        prod.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        prod.color.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesBrand && matchesSearchTerm;
+    });
+  }, [products, selectedBrand, searchTerm]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedBrand, searchTerm]);
+
+  const visibleProducts = useMemo(() => {
+    return filteredProducts.slice(0, page * ITEMS_PER_PAGE);
+  }, [filteredProducts, page]);
+
+  const loadMore = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   return (
-    <div className="flex justify-center items-center mb-10">
+    <div className="flex flex-col justify-center items-center mb-10">
       {error && <p>{error.message || error.toString()}</p>}
 
       {loading ? (
-        <p>Loading...</p> // Show loading indicator while loading is true
+        <motion.div
+          className="text-lg font-semibold text-gray-500"
+          animate={{
+            opacity: [0.3, 1, 0.3],
+          }}
+          transition={{
+            duration: 1.2,
+            repeat: Infinity,
+          }}>
+          Loading products...
+        </motion.div>
       ) : filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">
           <img src={warningIcon} className="h-6" alt="Warning icon" />
@@ -79,7 +109,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
         </div>
       ) : (
         <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
-          {filteredProducts.map((prod) => (
+          {visibleProducts.map((prod) => (
             <Product
               key={prod.id}
               Image={prod.image}
@@ -88,9 +118,18 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
               singlePrice={`GHS ${prod.singlePrice}.00`}
               isSelected={selectedProductIds.includes(prod.id)}
               selectProduct={() => handleSelectProduct(prod.id)}
+              loading={loading}
             />
           ))}
         </div>
+      )}
+
+      {visibleProducts.length < filteredProducts.length && (
+        <button
+          onClick={loadMore}
+          className="mt-6 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition">
+          Show More
+        </button>
       )}
     </div>
   );

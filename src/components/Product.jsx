@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "motion/react";
 
 const Product = ({
   Image,
@@ -8,14 +9,16 @@ const Product = ({
   comboPrice,
   isSelected,
   selectProduct,
+  loading,
 }) => {
   const displayPrice = comboPrice || singlePrice;
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <div
       className={`flex justify-center items-center cursor-pointer ${
         isSelected ? "scale-105" : "scale-100"
-      } transition-transform duration-100`} // Increase size when selected
+      } transition-transform duration-100`}
       onClick={selectProduct}>
       <div
         className={`border border-[#474747] md:hover:shadow-2xl rounded-2xl p-[6px] md:p-2 bg-white w-[10rem] md:w-[12rem] h-auto ${
@@ -23,12 +26,22 @@ const Product = ({
             ? "border-b-4 border-2 border-[#BD815A] md:hover:border-slate-600 shadow-md"
             : ""
         }`}>
-        <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3]">
+        <div className="p-1 bg-[#D9D9D9] w-auto h-[7rem] md:h-[8rem] flex justify-center items-center rounded-2xl shadow-inner border border-[#a3a3a3] relative">
+          {(!imageLoaded || loading) && (
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+              className="w-10 h-10 border-4 border-gray-300 border-t-gray-400 rounded-full absolute"
+            />
+          )}
           <img
             src={Image}
             alt={Name}
-            loading="lazy" // Lazy load the image
-            className="h-[-webkit-fill-available] drop-shadow-lg backdrop-blur-3xl w-full"
+            className={`h-full object-contain w-full transition-opacity duration-300 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(false)} // Handle failed image load
           />
         </div>
         <div className="flex flex-col py-2">

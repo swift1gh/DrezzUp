@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
+import { motion } from "framer-motion";
 
 const Selected = ({ selectedIds }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -35,7 +36,15 @@ const Selected = ({ selectedIds }) => {
   );
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-40">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-10 h-10 border-4 border-gray-300 border-t-gray-800 rounded-full"
+        />
+      </div>
+    );
   }
 
   if (error) {
@@ -68,12 +77,22 @@ const Selected = ({ selectedIds }) => {
             } p-2`}>
             {selectedProducts.map((prod) => (
               <div key={prod.id} className="scale-90">
-                <Product
-                  Image={prod.image}
-                  Color={prod.color}
-                  comboPrice={`GHS ${prod.comboPrice}.00`}
-                  Name={prod.name}
-                />
+                <React.Suspense
+                  fallback={
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                      className="w-10 h-10 border-4 border-gray-300 border-t-gray-800 rounded-full mx-auto"
+                    />
+                  }
+                >
+                  <Product
+                    Image={prod.image}
+                    Color={prod.color}
+                    comboPrice={`GHS ${prod.comboPrice}.00`}
+                    Name={prod.name}
+                  />
+                </React.Suspense>
               </div>
             ))}
           </div>

@@ -10,11 +10,14 @@ import { db } from "../utils/firebase";
 import doneIcon from "../assets/done.svg";
 import deleteIcon from "../assets/delete.svg";
 import detailsIcon from "../assets/details.svg";
+import someOtherIcon from "../assets/new.svg"; // Icon for 'new' status
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("new"); // Filter by 'new' or 'done'
   const [loading, setLoading] = useState(true); // To manage loading state
+  const [selectedOrder, setSelectedOrder] = useState(null); // Selected order for modal
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
 
   // Real-time listener for orders data from Firestore
   useEffect(() => {
@@ -40,7 +43,6 @@ const AdminDashboard = () => {
 
   // Optimistic Update: Toggle between "done" and "new"
   const handleToggleStatus = async (orderId, currentStatus) => {
-    // Optimistically update the UI before waiting for Firestore
     const newStatus = currentStatus === "done" ? "new" : "done";
     const updatedOrders = orders.map((order) =>
       order.id === orderId ? { ...order, status: newStatus } : order
@@ -48,7 +50,6 @@ const AdminDashboard = () => {
     setOrders(updatedOrders);
 
     try {
-      // Update Firestore document
       const orderRef = doc(db, "customers", orderId);
       await updateDoc(orderRef, { status: newStatus });
     } catch (error) {
@@ -58,17 +59,21 @@ const AdminDashboard = () => {
 
   // Optimistic Delete: Remove from UI immediately
   const handleDelete = async (orderId) => {
-    // Optimistically remove the order from the state
     const updatedOrders = orders.filter((order) => order.id !== orderId);
     setOrders(updatedOrders);
 
     try {
-      // Delete Firestore document
       const orderRef = doc(db, "customers", orderId);
       await deleteDoc(orderRef);
     } catch (error) {
       console.error("Error deleting document: ", error);
     }
+  };
+
+  // Open modal to show order details
+  const handleShowDetails = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
   };
 
   // Helper function to parse the date string 'DD/MM/YYYY, HH:mm' to a Date object
@@ -171,7 +176,7 @@ const AdminDashboard = () => {
                       onClick={() => handleToggleStatus(order.id, order.status)}
                       className="hover:scale-110">
                       <img
-                        src={order.status === "done" ? doneIcon : doneIcon} // Use appropriate icon
+                        src={order.status === "done" ? doneIcon : someOtherIcon}
                         alt=""
                         className="h-7"
                       />
@@ -183,7 +188,9 @@ const AdminDashboard = () => {
                       <img src={deleteIcon} alt="" className="h-7 w-9" />
                     </button>
 
-                    <button className="hover:scale-110">
+                    <button
+                      onClick={() => handleShowDetails(order)}
+                      className="hover:scale-110">
                       <img src={detailsIcon} alt="" className="h-6" />
                     </button>
                   </td>
@@ -191,6 +198,56 @@ const AdminDashboard = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Modal for order details */}
+      {showModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-1/2">
+            <h2 className="text-xl font-bold mb-4">Order Details</h2>
+            <p>
+              <strong>Date:</strong> {formatDate(selectedOrder.date)}
+            </p>
+            <p>
+              <strong>Name:</strong> {selectedOrder.fullName}
+            </p>
+            <p>
+              <strong>Contact:</strong> {selectedOrder.contact}
+            </p>
+            <p>
+              <strong>Location:</strong> {selectedOrder.location}
+            </p>
+            <p>
+              <strong>Size:</strong> {selectedOrder.size}
+            </p>
+            <p>
+              <strong>Guarantor's Name:</strong> {selectedOrder.guarantorName}
+            </p>
+            <p>
+              <strong>Guarantor's Contact:</strong>{" "}
+              {selectedOrder.guarantorContact}
+            </p>
+            <p>
+              <strong>Box Added:</strong> {selectedOrder.addBox ? "Yes" : "No"}
+            </p>
+            <p>
+              <strong>Products:</strong>
+            </p>
+            <ul className="list-disc ml-6">
+              {selectedOrder.products &&
+                selectedOrder.products.map((product, index) => (
+                  <li key={index}>
+                    {product.name} - {product.color} ({product.price})
+                  </li>
+                ))}
+            </ul>
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 px-4 py-2 bg-gray-800 text-white rounded">
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
