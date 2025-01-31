@@ -6,15 +6,13 @@ const Footer = () => {
       <div className="text-sm">
         <p>&#169;2025 DREZZUP. All Rights Reserved </p>
       </div>
-      <span className="flex justify-end text-xs text-gray-500">
-        {" "}
-        Developed by{" "}
+      <span className="flex justify-end text-xs text-gray-500 gap-x-1">
+        Developed by
         <a
           className="cursor-pointer text-blue-800"
           href="https://princeyekunya.netlify.app/"
           target="_blank"
           rel="noopener noreferrer">
-          {" "}
           Swift
         </a>
       </span>

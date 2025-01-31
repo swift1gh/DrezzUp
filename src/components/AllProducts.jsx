@@ -96,7 +96,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
             duration: 1.2,
             repeat: Infinity,
           }}>
-          Loading products...
+          Loading Sneakers...
         </motion.div>
       ) : filteredProducts.length === 0 ? (
         <div className="flex justify-center items-center gap-2 mt-[10%]">

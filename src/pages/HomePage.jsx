@@ -61,7 +61,7 @@ const HomePage = () => {
 
         <button
           onClick={handleSearchBtn}
-          className="md:hidden fixed bottom-10 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
+          className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
           <img src={searchIcon} className="h-5 m-2" />
         </button>
       </main>
