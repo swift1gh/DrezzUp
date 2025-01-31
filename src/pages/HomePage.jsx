@@ -4,6 +4,7 @@ import AllProducts from "../components/AllProducts";
 import Filter from "../components/Filter";
 import Footer from "../components/Footer";
 import searchIcon from "../assets/search.svg";
+import SearchBar from "../components/SearchBar";
 
 const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -39,17 +40,8 @@ const HomePage = () => {
         )}
 
         {isSearchActive && (
-          <div className="flex justify-center items-center sticky top-[5.5rem] z-50 pb-7">
-            <div className=" bg-[#eae1e1] shadow-inner border-2 px-5 py-2 rounded-3xl w-80">
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                required
-                className="text-[#262424b9] md:hover:cursor-text w-full bg-[#eae1e1] border-none outline-none"
-              />
-            </div>
+          <div className="flex md:hidden justify-center items-center sticky top-[5.5rem] z-50 pb-7">
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           </div>
         )}
 
