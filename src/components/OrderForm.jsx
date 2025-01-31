@@ -82,7 +82,7 @@ const OrderForm = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex justify-center items-center mb-16 mb-12">
+    <div className="relative min-h-screen flex justify-center items-center mb-16 md:mb-12">
       {/* Apply blur when the pop-up is visible */}
       <div
         className={`w-full flex justify-center items-center ${
