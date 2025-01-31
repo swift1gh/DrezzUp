@@ -2,22 +2,22 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#FBF4F4] py-4 w-full flex justify-center items-center">
+    <footer className="bg-[#FBF4F4] py-4 w-full flex justify-between px-4 md:px-10 items-center">
       <div className="text-sm">
-        <p>
-          &#169; 2024 DREZZUP. All Rights Reserved.{" "}
-          <span className="justify-end">
-            Developed by{" "}
-            <a
-              className="cursor-pointer text-blue-800"
-              href="https://princeyekunya.netlify.app/"
-              target="_blank">
-              {" "}
-              Swift
-            </a>{" "}
-          </span>
-        </p>
+        <p>&#169;2025 DREZZUP. All Rights Reserved </p>
       </div>
+      <span className="flex justify-end text-xs text-gray-500">
+        {" "}
+        Developed by{" "}
+        <a
+          className="cursor-pointer text-blue-800"
+          href="https://princeyekunya.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer">
+          {" "}
+          Swift
+        </a>
+      </span>
     </footer>
   );
 };
