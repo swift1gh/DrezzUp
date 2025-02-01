@@ -6,85 +6,49 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../utils/firebase";
-import doneIcon from "../assets/done.svg";
-import deleteIcon from "../assets/delete.svg";
-import detailsIcon from "../assets/details.svg";
-import someOtherIcon from "../assets/new.svg"; // Icon for 'new' status
+import { db } from "../../utils/firebase";
+import doneIcon from "../../assets/done.svg";
+import deleteIcon from "../../assets/delete.svg";
+import detailsIcon from "../../assets/details.svg";
+import someOtherIcon from "../../assets/new.svg";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
-  const [filter, setFilter] = useState("new"); // Filter by 'new' or 'done'
-  const [loading, setLoading] = useState(true); // To manage loading state
-  const [selectedOrder, setSelectedOrder] = useState(null); // Selected order for modal
-  const [showModal, setShowModal] = useState(false); // Modal visibility state
+  const [filter, setFilter] = useState("new");
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Real-time listener for orders data from Firestore
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "customers"), (snapshot) => {
-      const orderList = snapshot.docs
-        .map((doc) => ({
+      if (!snapshot.empty) {
+        const orderList = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }))
-        .sort((a, b) => {
-          const dateA = parseDateString(a.date);
-          const dateB = parseDateString(b.date);
-          return dateB - dateA; // Latest date at the top
-        });
+        }));
 
-      setOrders(orderList);
-      setLoading(false); // Hide loading spinner once data is fetched
+        orderList.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        setOrders(orderList);
+      } else {
+        setOrders([]);
+      }
+      setLoading(false);
     });
 
-    // Clean up the listener when component unmounts
     return () => unsubscribe();
   }, []);
 
-  // Optimistic Update: Toggle between "done" and "new"
-  const handleToggleStatus = async (orderId, currentStatus) => {
-    const newStatus = currentStatus === "done" ? "new" : "done";
-    const updatedOrders = orders.map((order) =>
-      order.id === orderId ? { ...order, status: newStatus } : order
-    );
-    setOrders(updatedOrders);
-
-    try {
-      const orderRef = doc(db, "customers", orderId);
-      await updateDoc(orderRef, { status: newStatus });
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
-  // Optimistic Delete: Remove from UI immediately
-  const handleDelete = async (orderId) => {
-    const updatedOrders = orders.filter((order) => order.id !== orderId);
-    setOrders(updatedOrders);
-
-    try {
-      const orderRef = doc(db, "customers", orderId);
-      await deleteDoc(orderRef);
-    } catch (error) {
-      console.error("Error deleting document: ", error);
-    }
-  };
-
-  // Open modal to show order details
-  const handleShowDetails = (order) => {
-    setSelectedOrder(order);
-    setShowModal(true);
-  };
-
-  // Helper function to parse the date string 'DD/MM/YYYY, HH:mm' to a Date object
+  // Helper function to parse date strings
   const parseDateString = (dateString) => {
     if (!dateString || typeof dateString !== "string") {
-      return new Date(); // Return current date if the string is invalid
+      return new Date();
     }
 
     const [datePart, timePart] = dateString.split(", ");
     if (!datePart || !timePart) {
-      return new Date(); // Return current date if the format is incorrect
+      return new Date();
     }
 
     const [day, month, year] = datePart.split("/");
@@ -92,7 +56,7 @@ const AdminDashboard = () => {
     return new Date(`${year}-${month}-${day}T${hours}:${minutes}`);
   };
 
-  // Helper function to format timestamp to 'DD-MM-YYYY HH:mm'
+  // Helper function to format dates
   const formatDate = (dateString) => {
     if (!dateString || typeof dateString !== "string") {
       return "Unknown Date";
@@ -105,7 +69,7 @@ const AdminDashboard = () => {
     return `${day}-${month}-${year} ${timePart}`;
   };
 
-  // Filtered orders based on status (new or done)
+  // Filter orders based on status
   const filteredOrders = orders.filter((order) =>
     filter === "new" ? order.status !== "done" : order.status === "done"
   );

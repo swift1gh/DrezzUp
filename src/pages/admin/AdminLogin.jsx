@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { auth } from "../utils/firebase"; // Make sure this path is correct
+import { auth } from "../../utils/firebase"; // Make sure this path is correct
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -22,22 +22,21 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Reset error message before login attempt
+    setError("");
 
     try {
-      // Firebase sign-in with email and password
       const response = await signInWithEmailAndPassword(
         auth,
         adminPassword.email,
         adminPassword.password
       );
-      console.log("Login Successful", response.user); // Log user object to ensure success
+      console.log("Login Successful", response.user);
 
-      // Navigate to admin dashboard after successful login
-      navigate("/adminDashboard");
+      // Corrected navigation path
+      navigate("/admin/dashboard");
     } catch (error) {
       console.error(error.message);
-      setError("Invalid email or password"); // Set error message on failure
+      setError("Invalid password");
     }
   };
 

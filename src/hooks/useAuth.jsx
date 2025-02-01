@@ -12,11 +12,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      console.log("Auth state changed:", currentUser); // Debugging
       setUser(currentUser);
-      setLoading(false); // Stop loading once auth state is determined
+      setLoading(false);
     });
 
-    return () => unsubscribe(); // Clean up subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   return (

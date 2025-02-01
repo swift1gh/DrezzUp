@@ -8,24 +8,31 @@ import React from "react";
 import HomePage from "./pages/HomePage.jsx";
 import MainLayout from "./layouts/MainLayout.jsx";
 import ComboPage from "./pages/ComboPage.jsx";
-import AdminLogin from "./pages/AdminLogin.jsx";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
-import { AuthProvider } from "./hooks/useAuth.jsx"; // Import AuthProvider
-import PrivateRoute from "./components/PrivateRoute.jsx"; // Import PrivateRoute
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import ProductUpload from "./pages/ProductUpload.jsx";
+import { AuthProvider } from "./hooks/useAuth.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import AuthLayout from "./layouts/AuthLayout.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<MainLayout />}>
-      <Route index element={<HomePage />} />
-      <Route path="combo" element={<ComboPage />} />
-      <Route path="adminLogin" element={<AdminLogin />} />
-      <Route
-        path="adminDashboard"
-        element={<PrivateRoute element={<AdminDashboard />} />}
-      />
-      <Route path="productUpload" element={<ProductUpload />} />
-    </Route>
+    <>
+      {/* Public Routes */}
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="combo" element={<ComboPage />} />
+      </Route>
+
+      {/* Admin Routes */}
+      <Route path="/admin" element={<AuthLayout />}>
+        <Route path="login" element={<AdminLogin />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="productUpload" element={<ProductUpload />} />
+        </Route>
+      </Route>
+    </>
   )
 );
 
