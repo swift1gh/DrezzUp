@@ -3,7 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const Selected = ({ selectedIds }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -81,15 +81,18 @@ const Selected = ({ selectedIds }) => {
                   fallback={
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: "linear",
+                      }}
                       className="w-10 h-10 border-4 border-gray-300 border-t-gray-800 rounded-full mx-auto"
                     />
-                  }
-                >
+                  }>
                   <Product
                     Image={prod.image}
                     Color={prod.color}
-                    comboPrice={`GHS ${prod.comboPrice}.00`}
+                    singlePrice={`GHS ${prod.singlePrice}.00`}
                     Name={prod.name}
                   />
                 </React.Suspense>
@@ -102,7 +105,14 @@ const Selected = ({ selectedIds }) => {
               <h2 className="flex justify-center text-center items-center gap-3 text-xl font-normal font-roboto">
                 Combo Price:{" "}
                 <span className="text-[#cf743c] font-mono font-bold">
-                  GHS {totalComboPrice.toFixed(2)}
+                  {(() => {
+                    let extraAmount = 0;
+                    if (selectedProducts.length === 2) extraAmount = 200;
+                    if (selectedProducts.length === 3) extraAmount = 300;
+                    if (selectedProducts.length === 4) extraAmount = 400;
+
+                    return `GHS ${(totalComboPrice + extraAmount).toFixed(2)}`;
+                  })()}
                 </span>
               </h2>
             </div>
