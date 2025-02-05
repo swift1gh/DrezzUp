@@ -3,6 +3,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { TfiReload } from "react-icons/tfi";
 import Product from "../../components/Product";
+import { GiCheckMark } from "react-icons/gi";
+import { BsFillTrash3Fill } from "react-icons/bs";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -60,6 +62,21 @@ const AdminDashboard = () => {
     filter === "new" ? order.status === "new" : order.status === "done"
   );
 
+  const groupedOrders = filteredOrders.reduce((acc, order) => {
+    const date = new Date(
+      order.date.split(",")[0].split("/").reverse().join("-")
+    ).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(order);
+    return acc;
+  }, {});
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
@@ -82,7 +99,7 @@ const AdminDashboard = () => {
               : "bg-gray-700 hover:bg-gray-600"
           }`}
           onClick={() => setFilter("new")}>
-          New Orders
+          New
         </button>
         <button
           className={`w-full p-3 rounded-lg transition ${
@@ -91,38 +108,54 @@ const AdminDashboard = () => {
               : "bg-gray-700 hover:bg-gray-600"
           }`}
           onClick={() => setFilter("done")}>
-          Done Orders
+          Done
         </button>
       </div>
 
       {/* Main Content */}
       <div className="w-3/4 p-5 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-5 text-gray-800">
-          Admin Dashboard
+        <h1 className="text-3xl font-bold mb-10 text-gray-800">
+          DREZZUP COMBO ORDERS
         </h1>
-        {filteredOrders.length === 0 ? (
+        {Object.keys(groupedOrders).length === 0 ? (
           <p className="text-gray-600">No orders found.</p>
         ) : (
-          filteredOrders.map((order) => (
-            <div key={order.id} className="mb-6">
+          Object.keys(groupedOrders).map((date) => (
+            <div key={date}>
               <h2 className="text-lg font-bold bg-gray-300 p-2 rounded-t-lg">
-                {order.date}
+                {date}
               </h2>
-              <ul className="bg-white shadow-lg rounded-b-lg p-4">
-                <li
-                  className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
-                  onClick={() => setSelectedOrder(order)}>
-                  <p>
-                    <strong>Name:</strong> {order.fullName}
-                  </p>
-                  <p>
-                    <strong>Contact:</strong> {order.contact}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {order.location}
-                  </p>
-                </li>
-              </ul>
+              <div className="bg-white shadow-lg rounded-b-lg p-4 mb-5">
+                {groupedOrders[date].map((order) => (
+                  <div key={order.id} className="mb-6 last:mb-0 flex">
+                    <ul className="w-8/12">
+                      <li
+                        className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
+                        onClick={() => setSelectedOrder(order)}>
+                        <p>
+                          <strong>Name:</strong> {order.fullName}
+                        </p>
+                        <p>
+                          <strong>Contact:</strong> {order.contact}
+                        </p>
+                        <p>
+                          <strong>Location:</strong> {order.location}
+                        </p>
+                      </li>
+                    </ul>
+
+                    <div className="w-4/12 flex justify-center items-center gap-2">
+                      <button className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1">
+                        <GiCheckMark /> Done
+                      </button>
+
+                      <button className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-800 transition flex items-center gap-1">
+                        <BsFillTrash3Fill /> Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ))
         )}
