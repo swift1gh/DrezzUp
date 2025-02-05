@@ -57,7 +57,7 @@ const AdminDashboard = () => {
   }, []);
 
   const filteredOrders = orders.filter((order) =>
-    filter === "new" ? order.status !== "done" : order.status === "done"
+    filter === "new" ? order.status === "new" : order.status === "done"
   );
 
   return (
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
         <div
           className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm"
           onClick={() => setSelectedOrder(null)}>
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-bold mb-3 text-gray-800">
               Order Details
             </h2>
@@ -180,14 +180,21 @@ const AdminDashboard = () => {
             <h3 className="text-lg font-bold mt-4">Selected Products</h3>
             <div className="grid grid-cols-2 gap-4 mt-4">
               {products
-                .filter((product) =>
-                  selectedOrder.selectedIds.includes(product.id)
-                )
+                .filter((product) => {
+                  const isSelected = selectedOrder.selectedIds.includes(
+                    product.id.toString()
+                  );
+                  console.log(
+                    `Product ID: ${product.id}, Is Selected: ${isSelected}`
+                  );
+                  return isSelected;
+                })
                 .map((product) => (
                   <Product
                     key={product.id}
                     Image={product.image}
                     Name={product.name}
+                    Color={product.color}
                   />
                 ))}
             </div>
