@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { TfiReload } from "react-icons/tfi";
 import Product from "../../components/Product";
 import { GiCheckMark } from "react-icons/gi";
 import { BsFillTrash3Fill } from "react-icons/bs";
+import { IoArrowUndoSharp } from "react-icons/io5";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -57,6 +64,28 @@ const AdminDashboard = () => {
     fetchOrders();
     fetchProducts();
   }, []);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      const orderRef = doc(db, "customers", orderId);
+      await updateDoc(orderRef, { status: newStatus });
+      fetchOrders();
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      try {
+        const orderRef = doc(db, "customers", orderId);
+        await deleteDoc(orderRef);
+        fetchOrders();
+      } catch (error) {
+        console.error("Error deleting order:", error);
+      }
+    }
+  };
 
   const filteredOrders = orders.filter((order) =>
     filter === "new" ? order.status === "new" : order.status === "done"
@@ -145,11 +174,25 @@ const AdminDashboard = () => {
                     </ul>
 
                     <div className="w-4/12 flex justify-center items-center gap-2">
-                      <button className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1">
-                        <GiCheckMark /> Done
-                      </button>
+                      {filter === "new" && (
+                        <button
+                          className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
+                          onClick={() => handleStatusChange(order.id, "done")}>
+                          <GiCheckMark /> Done
+                        </button>
+                      )}
 
-                      <button className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-800 transition flex items-center gap-1">
+                      {filter === "done" && (
+                        <button
+                          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
+                          onClick={() => handleStatusChange(order.id, "new")}>
+                          <IoArrowUndoSharp /> Undo
+                        </button>
+                      )}
+
+                      <button
+                        className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
+                        onClick={() => handleDeleteOrder(order.id)}>
                         <BsFillTrash3Fill /> Delete
                       </button>
                     </div>
@@ -164,13 +207,13 @@ const AdminDashboard = () => {
       {/* Order Details Modal */}
       {selectedOrder && (
         <div
-          className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm"
+          className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto py-10"
           onClick={() => setSelectedOrder(null)}>
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-3 text-gray-800">
-              Order Details
-            </h2>
-            <table className="w-full mb-4">
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg text-center w-auto mt-10"
+            onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-xl font-bold mb-4">Order Details</h2>
+            <table className="w-full mb-4 text-left">
               <tbody>
                 <tr>
                   <td className="font-semibold text-gray-800">Name:</td>
