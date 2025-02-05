@@ -1,214 +1,199 @@
-import {
-  collection,
-  doc,
-  onSnapshot,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import doneIcon from "../../assets/done.svg";
-import deleteIcon from "../../assets/delete.svg";
-import detailsIcon from "../../assets/details.svg";
-import someOtherIcon from "../../assets/new.svg";
+import { TfiReload } from "react-icons/tfi";
+import Product from "../../components/Product";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("new");
-  const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
-  // Real-time listener for orders data from Firestore
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "customers"), (snapshot) => {
-      if (!snapshot.empty) {
-        const orderList = snapshot.docs.map((doc) => ({
+  // Fetch Orders
+  const fetchOrders = async () => {
+    try {
+      console.log("Fetching orders...");
+      const querySnapshot = await getDocs(collection(db, "customers"));
+      if (querySnapshot.empty) {
+        console.warn("No documents found in Firestore.");
+      }
+      const orderList = querySnapshot.docs
+        .map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
+          status: doc.data().status || "new",
+        }))
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+      console.log("Fetched Orders:", orderList);
+      setOrders(orderList);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
-        orderList.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        setOrders(orderList);
-      } else {
-        setOrders([]);
+  // Fetch Products
+  const fetchProducts = async () => {
+    try {
+      console.log("Fetching products...");
+      const querySnapshot = await getDocs(collection(db, "products"));
+      if (querySnapshot.empty) {
+        console.warn("No products found in Firestore.");
       }
-      setLoading(false);
-    });
+      const productList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log("Fetched Products:", productList);
+      setProducts(productList);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
-    return () => unsubscribe();
+  useEffect(() => {
+    fetchOrders();
+    fetchProducts();
   }, []);
 
-  // Helper function to parse date strings
-  const parseDateString = (dateString) => {
-    if (!dateString || typeof dateString !== "string") {
-      return new Date();
-    }
-
-    const [datePart, timePart] = dateString.split(", ");
-    if (!datePart || !timePart) {
-      return new Date();
-    }
-
-    const [day, month, year] = datePart.split("/");
-    const [hours, minutes] = timePart.split(":");
-    return new Date(`${year}-${month}-${day}T${hours}:${minutes}`);
-  };
-
-  // Helper function to format dates
-  const formatDate = (dateString) => {
-    if (!dateString || typeof dateString !== "string") {
-      return "Unknown Date";
-    }
-    const [datePart, timePart] = dateString.split(", ");
-    if (!datePart || !timePart) {
-      return "Invalid Date";
-    }
-    const [day, month, year] = datePart.split("/");
-    return `${day}-${month}-${year} ${timePart}`;
-  };
-
-  // Filter orders based on status
   const filteredOrders = orders.filter((order) =>
     filter === "new" ? order.status !== "done" : order.status === "done"
   );
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">COMBO ORDERS</h1>
-
-      {/* Tabs for filtering orders */}
-      <div className="mb-6">
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-gray-900 text-white p-5 shadow-lg">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-xl font-bold">Orders</h2>
+          <TfiReload
+            size={20}
+            className="cursor-pointer hover:rotate-180 transition-transform"
+            onClick={() => {
+              fetchOrders();
+              fetchProducts();
+            }}
+          />
+        </div>
         <button
-          className={`mr-4 px-4 py-2 ${
-            filter === "new" ? "bg-gray-800 text-white" : "bg-gray-300"
+          className={`w-full p-3 mb-2 rounded-lg transition ${
+            filter === "new"
+              ? "bg-white text-black"
+              : "bg-gray-700 hover:bg-gray-600"
           }`}
           onClick={() => setFilter("new")}>
           New Orders
         </button>
         <button
-          className={`px-4 py-2 ${
-            filter === "done" ? "bg-gray-800 text-white" : "bg-gray-300"
+          className={`w-full p-3 rounded-lg transition ${
+            filter === "done"
+              ? "bg-white text-black"
+              : "bg-gray-700 hover:bg-gray-600"
           }`}
           onClick={() => setFilter("done")}>
           Done Orders
         </button>
       </div>
 
-      {/* Loading spinner */}
-      {loading && <p>Loading orders...</p>}
+      {/* Main Content */}
+      <div className="w-3/4 p-5 overflow-y-auto">
+        <h1 className="text-3xl font-bold mb-5 text-gray-800">
+          Admin Dashboard
+        </h1>
+        {filteredOrders.length === 0 ? (
+          <p className="text-gray-600">No orders found.</p>
+        ) : (
+          filteredOrders.map((order) => (
+            <div key={order.id} className="mb-6">
+              <h2 className="text-lg font-bold bg-gray-300 p-2 rounded-t-lg">
+                {order.date}
+              </h2>
+              <ul className="bg-white shadow-lg rounded-b-lg p-4">
+                <li
+                  className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
+                  onClick={() => setSelectedOrder(order)}>
+                  <p>
+                    <strong>Name:</strong> {order.fullName}
+                  </p>
+                  <p>
+                    <strong>Contact:</strong> {order.contact}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {order.location}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          ))
+        )}
+      </div>
 
-      {!loading && (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left">Date</th>
-                <th className="py-3 px-6 text-left">Name</th>
-                <th className="py-3 px-6 text-left">Contact</th>
-                <th className="py-3 px-6 text-left">Location</th>
-                <th className="py-3 px-6 text-left">Size</th>
-                <th className="py-3 px-6 text-left">Guarantor's Name</th>
-                <th className="py-3 px-6 text-left">Guarantor's Contact</th>
-                <th className="py-3 px-6 text-left">Box</th>
-                <th className="py-3 px-6 text-left">Action</th>
-              </tr>
-            </thead>
-
-            <tbody className="font-robotoCondensed font-light">
-              {filteredOrders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="border-b border-gray-300 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-left whitespace-nowrap">
-                    {formatDate(order.date)}
-                  </td>
-                  <td className="py-3 px-6 text-left">{order.fullName}</td>
-                  <td className="py-3 px-6 text-left">{order.contact}</td>
-                  <td className="py-3 px-6 text-left">{order.location}</td>
-                  <td className="py-3 px-6 text-left">{order.size}</td>
-                  <td className="py-3 px-6 text-left">{order.guarantorName}</td>
-                  <td className="py-3 px-6 text-left">
-                    {order.guarantorContact}
-                  </td>
-                  <td className="py-3 px-6 text-left">
-                    {order.addBox ? "Yes" : "No"}
-                  </td>
-                  <td className="px-1 text-left flex justify-center items-center gap-2 h-full">
-                    <button
-                      onClick={() => handleToggleStatus(order.id, order.status)}
-                      className="hover:scale-110">
-                      <img
-                        src={order.status === "done" ? doneIcon : someOtherIcon}
-                        alt=""
-                        className="h-7"
-                      />
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(order.id)}
-                      className="hover:scale-110">
-                      <img src={deleteIcon} alt="" className="h-7 w-9" />
-                    </button>
-
-                    <button
-                      onClick={() => handleShowDetails(order)}
-                      className="hover:scale-110">
-                      <img src={detailsIcon} alt="" className="h-6" />
-                    </button>
-                  </td>
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <div
+          className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm"
+          onClick={() => setSelectedOrder(null)}>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-3 text-gray-800">
+              Order Details
+            </h2>
+            <table className="w-full mb-4">
+              <tbody>
+                <tr>
+                  <td className="font-semibold text-gray-800">Name:</td>
+                  <td>{selectedOrder.fullName}</td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* Modal for order details */}
-      {showModal && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-1/2">
-            <h2 className="text-xl font-bold mb-4">Order Details</h2>
-            <p>
-              <strong>Date:</strong> {formatDate(selectedOrder.date)}
-            </p>
-            <p>
-              <strong>Name:</strong> {selectedOrder.fullName}
-            </p>
-            <p>
-              <strong>Contact:</strong> {selectedOrder.contact}
-            </p>
-            <p>
-              <strong>Location:</strong> {selectedOrder.location}
-            </p>
-            <p>
-              <strong>Size:</strong> {selectedOrder.size}
-            </p>
-            <p>
-              <strong>Guarantor's Name:</strong> {selectedOrder.guarantorName}
-            </p>
-            <p>
-              <strong>Guarantor's Contact:</strong>{" "}
-              {selectedOrder.guarantorContact}
-            </p>
-            <p>
-              <strong>Box Added:</strong> {selectedOrder.addBox ? "Yes" : "No"}
-            </p>
-            <p>
-              <strong>Products:</strong>
-            </p>
-            <ul className="list-disc ml-6">
-              {selectedOrder.products &&
-                selectedOrder.products.map((product, index) => (
-                  <li key={index}>
-                    {product.name} - {product.color} ({product.price})
-                  </li>
+                <tr>
+                  <td className="font-semibold text-gray-800">Contact:</td>
+                  <td>{selectedOrder.contact}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">Location:</td>
+                  <td>{selectedOrder.location}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">Box:</td>
+                  <td>{selectedOrder.addBox ? "Yes" : "No"}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">
+                    Guarantor's Name:
+                  </td>
+                  <td>{selectedOrder.guarantorName}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">
+                    Guarantor's Contact:
+                  </td>
+                  <td>{selectedOrder.guarantorContact}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">Shoe Size:</td>
+                  <td>{selectedOrder.size}</td>
+                </tr>
+                <tr>
+                  <td className="font-semibold text-gray-800">Combo Price:</td>
+                  <td>GHS {selectedOrder.comboPrice}.00</td>
+                </tr>
+              </tbody>
+            </table>
+            <h3 className="text-lg font-bold mt-4">Selected Products</h3>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              {products
+                .filter((product) =>
+                  selectedOrder.selectedIds.includes(product.id)
+                )
+                .map((product) => (
+                  <Product
+                    key={product.id}
+                    Image={product.image}
+                    Name={product.name}
+                  />
                 ))}
-            </ul>
+            </div>
             <button
-              onClick={() => setShowModal(false)}
-              className="mt-4 px-4 py-2 bg-gray-800 text-white rounded">
+              className="mt-5 w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition"
+              onClick={() => setSelectedOrder(null)}>
               Close
             </button>
           </div>

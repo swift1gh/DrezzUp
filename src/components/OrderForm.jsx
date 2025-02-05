@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { useNavigate } from "react-router-dom";
 import { db } from "../utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-const OrderForm = () => {
+const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     contact: "",
@@ -12,19 +12,20 @@ const OrderForm = () => {
     guarantorName: "",
     guarantorContact: "",
     addBox: false,
+    selectedIds: selectedIds,
+    comboPrice: comboPrice,
   });
 
-  const [isPopupVisible, setPopupVisible] = useState(false); // State to manage popup visibility
-  const [error, setError] = useState(""); // State to show error message
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -54,36 +55,40 @@ const OrderForm = () => {
 
     const orderData = {
       ...formData,
-      date: orderDate, // Add the formatted date to the order data
+      date: orderDate,
+      selectedIds,
+      comboPrice,
     };
 
     try {
       const result = await addDoc(collection(db, "customers"), orderData);
-      console.log(result);
+      console.log("Order created with ID:", result.id);
+
+      setPopupVisible(true);
+      setTimeout(() => {
+        setPopupVisible(false);
+        navigate("/");
+      }, 2000);
+
+      setFormData({
+        fullName: "",
+        contact: "",
+        location: "",
+        size: "",
+        guarantorName: "",
+        guarantorContact: "",
+        addBox: false,
+        selectedIds: [],
+        comboPrice: 0, // Ensure it resets correctly
+      });
     } catch (error) {
-      console.error(error.message);
+      console.error("Error placing order:", error.message);
+      setError("Failed to place order. Try again later.");
     }
-
-    setPopupVisible(true);
-    setTimeout(() => {
-      setPopupVisible(false);
-      navigate("/");
-    }, 5000);
-
-    setFormData({
-      fullName: "",
-      contact: "",
-      location: "",
-      size: "",
-      guarantorName: "",
-      guarantorContact: "",
-      addBox: false,
-    });
   };
 
   return (
     <div className="relative min-h-screen flex justify-center items-center mb-16 md:mb-12">
-      {/* Apply blur when the pop-up is visible */}
       <div
         className={`w-full flex justify-center items-center ${
           isPopupVisible ? "blur-md" : ""
@@ -97,97 +102,29 @@ const OrderForm = () => {
 
           {error && <p className="text-red-500 mb-4 font-medium">{error}</p>}
 
-          <div className="mb-4">
-            <label htmlFor="fullName" className="block font-medium mb-1">
-              Full Name:
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              id="fullName"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="contact" className="block font-medium mb-1">
-              Contact:
-            </label>
-            <input
-              type="text"
-              name="contact"
-              id="contact"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.contact}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="location" className="block font-medium mb-1">
-              Location:
-            </label>
-            <input
-              type="text"
-              name="location"
-              id="location"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.location}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="size" className="block font-medium mb-1">
-              Size:
-            </label>
-            <input
-              type="text"
-              name="size"
-              id="size"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.size}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="guarantorName" className="block font-medium mb-1">
-              Guarantor's Name:
-            </label>
-            <input
-              type="text"
-              name="guarantorName"
-              id="guarantorName"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.guarantorName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="guarantorContact"
-              className="block font-medium mb-1">
-              Guarantor's Contact:
-            </label>
-            <input
-              type="text"
-              name="guarantorContact"
-              id="guarantorContact"
-              className="w-full p-2 border border-gray-300 rounded"
-              value={formData.guarantorContact}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {[
+            { label: "Full Name", name: "fullName" },
+            { label: "Contact", name: "contact" },
+            { label: "Location", name: "location" },
+            { label: "Size", name: "size" },
+            { label: "Guarantor's Name", name: "guarantorName" },
+            { label: "Guarantor's Contact", name: "guarantorContact" },
+          ].map(({ label, name }) => (
+            <div className="mb-4" key={name}>
+              <label htmlFor={name} className="block font-medium mb-1">
+                {label}:
+              </label>
+              <input
+                type="text"
+                name={name}
+                id={name}
+                className="w-full p-2 border border-gray-300 rounded"
+                value={formData[name]}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          ))}
 
           <div className="flex items-center mb-4">
             <input
@@ -206,7 +143,7 @@ const OrderForm = () => {
           <div className="mb-4 text-sm text-orange-600 bg-[#FBF4F4] p-4 rounded">
             <p>
               &#9888; Kindly note that these deals don’t come in boxes. A box
-              costs 20 cedis. It can be added by your choice and the singlePrice
+              costs 20 cedis. It can be added by your choice and the price
               factored in.
             </p>
           </div>
@@ -219,7 +156,6 @@ const OrderForm = () => {
         </form>
       </div>
 
-      {/* Pop-up overlay with blur effect */}
       {isPopupVisible && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center w-2/3 md:w-1/3">

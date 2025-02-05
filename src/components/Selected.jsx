@@ -1,56 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../utils/firebase";
+import React from "react";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
 import { motion } from "motion/react";
 
-const Selected = ({ selectedIds }) => {
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const products = querySnapshot.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((product) => selectedIds.includes(product.id.toString())); // Convert id to string
-
-        setSelectedProducts(products);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError(err);
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [selectedIds]);
-
-  const totalComboPrice = selectedProducts.reduce(
-    (total, prod) => total + prod.comboPrice,
-    0
-  );
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="w-10 h-10 border-4 border-gray-300 border-t-gray-800 rounded-full"
-        />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <p>Error fetching products: {error.message}</p>;
-  }
-
+const Selected = ({ selectedProducts, totalComboPrice }) => {
   return (
     <div className="mb-10 mt-5">
       {selectedProducts.length === 0 ? (
@@ -104,15 +57,8 @@ const Selected = ({ selectedIds }) => {
             <div className="bg-[#cbcaca] w-11/12 md:w-4/5 py-4">
               <h2 className="flex justify-center text-center items-center gap-3 text-xl font-normal font-roboto">
                 Combo Price:{" "}
-                <span className="text-[#cf743c] font-mono font-bold">
-                  {(() => {
-                    let extraAmount = 0;
-                    if (selectedProducts.length === 2) extraAmount = 200;
-                    if (selectedProducts.length === 3) extraAmount = 300;
-                    if (selectedProducts.length === 4) extraAmount = 400;
-
-                    return `GHS ${(totalComboPrice + extraAmount).toFixed(2)}`;
-                  })()}
+                <span className="text-[#cf743c] font-mono font-bold md:text-2xl">
+                  GHS {totalComboPrice}.00
                 </span>
               </h2>
             </div>
