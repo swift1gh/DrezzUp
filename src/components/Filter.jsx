@@ -2,7 +2,27 @@ import React from "react";
 import FilterButton from "./FilterButton";
 
 const Filter = ({ selectedBrand, setSelectedBrand }) => {
-  const brands = ["All", "Air Jordan", "Nike", "Timberland", "Amiri", "Adidas"];
+  const brands = [
+    "All",
+    "Air Jordan",
+    "Nike",
+    "Timberland",
+    "Amiri",
+    "Adidas",
+    "Asics",
+    "Balenciaga",
+    "Converse",
+    "New Balance",
+    "Puma",
+    "Reebok",
+    "Vans",
+    "Yeezy",
+    "Bape",
+    "Dr. Martens",
+    "Louis Vuitton",
+    "Rick Owens",
+    "Christian Dior",
+  ];
 
   return (
     <nav className="px-3 pb-5 bg-[#ffffff00] flex justify-center items-center sticky top-20 w-full z-50">
