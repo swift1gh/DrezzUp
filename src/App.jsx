@@ -12,6 +12,7 @@ import AdminLogin from "./pages/admin/AdminLogin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import { AuthProvider } from "./hooks/useAuth.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
+import ProductUpload from "./pages/ProductUpload.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       {/* Protecting Admin Routes */}
       <Route path="/admin" element={<AdminRoute />}>
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="productupload" element={<ProductUpload />} />
       </Route>
     </>
   )

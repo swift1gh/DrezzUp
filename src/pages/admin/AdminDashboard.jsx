@@ -12,6 +12,7 @@ import Product from "../../components/Product";
 import { GiCheckMark } from "react-icons/gi";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { IoArrowUndoSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -122,7 +123,7 @@ const AdminDashboard = () => {
           />
         </div>
         <button
-          className={`w-full p-3 mb-2 rounded-lg transition ${
+          className={`w-full p-3 mb-2 rounded-2xl transition ${
             filter === "new"
               ? "bg-white text-black"
               : "bg-gray-700 hover:bg-gray-600"
@@ -131,7 +132,7 @@ const AdminDashboard = () => {
           New
         </button>
         <button
-          className={`w-full p-3 rounded-lg transition ${
+          className={`w-full p-3 rounded-2xl transition ${
             filter === "done"
               ? "bg-white text-black"
               : "bg-gray-700 hover:bg-gray-600"
@@ -139,6 +140,13 @@ const AdminDashboard = () => {
           onClick={() => setFilter("done")}>
           Done
         </button>
+
+        {/* Add Products button at the bottom of the sidebar */}
+        <Link to="/admin/productupload">
+          <button className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition">
+            Add New Product
+          </button>
+        </Link>
       </div>
 
       {/* Main Content */}

@@ -88,56 +88,58 @@ const ProductUpload = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center p-5">
-      <h2 className="text-lg font-bold mb-4">Upload Product</h2>
-      {message && <p className="text-green-600">{message}</p>}
-      <input
-        type="text"
-        placeholder="Product ID"
-        value={productId || ""}
-        readOnly
-        className="p-2 m-2 border border-gray-300 rounded bg-gray-100"
-      />
-      <input
-        type="text"
-        placeholder="Product Name"
-        value={productName}
-        onChange={(e) => setProductName(e.target.value)}
-        className="p-2 m-2 border border-gray-300 rounded"
-      />
-      <input
-        type="text"
-        placeholder="Single Price"
-        value={productSinglePrice}
-        onChange={(e) => setProductSinglePrice(e.target.value)}
-        className="p-2 m-2 border border-gray-300 rounded"
-      />
-      <input
-        type="text"
-        placeholder="Combo Price"
-        value={productComboPrice}
-        onChange={(e) => setProductComboPrice(e.target.value)}
-        className="p-2 m-2 border border-gray-300 rounded"
-      />
-      <input
-        type="text"
-        placeholder="Color"
-        value={productColor}
-        onChange={(e) => setProductColor(e.target.value)}
-        className="p-2 m-2 border border-gray-300 rounded"
-      />
-      <input
-        type="text"
-        placeholder="Image URL"
-        value={productImageUrl}
-        onChange={(e) => setProductImageUrl(e.target.value)}
-        className="p-2 m-2 border border-gray-300 rounded"
-      />
-      <button
-        onClick={handleUpload}
-        className="p-3 bg-gray-600 m-2 rounded-lg text-white">
-        Submit
-      </button>
+    <div className="flex text-center items-center justify-center h-screen bg-slate-600">
+      <div className="flex flex-col justify-center items-center p-10 bg-[#FBF4F4] shadow-md rounded-lg w-[80%] md:w-2/6 max-w-lg">
+        <h2 className="text-lg font-bold mb-4">Upload Product</h2>
+        {message && <p className="text-green-600">{message}</p>}
+        <input
+          type="text"
+          placeholder="Product ID"
+          value={`Product ${productId}` || ""}
+          readOnly
+          className="p-2 w-full px-5 m-2 border text-center border-gray-200 rounded bg-gray-300 cursor-default"
+        />
+        <input
+          type="text"
+          placeholder="Product Name"
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+          className="p-2 w-full px-5 m-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Single Price"
+          value={productSinglePrice}
+          onChange={(e) => setProductSinglePrice(e.target.value)}
+          className="p-2 w-full px-5 m-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Combo Price"
+          value={productComboPrice}
+          onChange={(e) => setProductComboPrice(e.target.value)}
+          className="p-2 w-full px-5  m-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Color"
+          value={productColor}
+          onChange={(e) => setProductColor(e.target.value)}
+          className="p-2 w-full px-5 m-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Image URL"
+          value={productImageUrl}
+          onChange={(e) => setProductImageUrl(e.target.value)}
+          className="p-2 w-full px-5  m-2 border border-gray-300 rounded"
+        />
+        <button
+          onClick={handleUpload}
+          className="p-3 bg-blue-600 hover:bg-blue-700 m-2 rounded-lg text-white w-full">
+          Submit
+        </button>
+      </div>
     </div>
   );
 };
