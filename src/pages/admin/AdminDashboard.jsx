@@ -13,12 +13,37 @@ import { GiCheckMark } from "react-icons/gi";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { IoArrowUndoSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import {
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+  FaCheckDouble,
+  FaCloudUploadAlt,
+  FaFileAlt,
+} from "react-icons/fa";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("new");
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+
+    handleResize(); // Set initial state based on screen size
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Fetch Orders
   const fetchOrders = async () => {
@@ -107,53 +132,87 @@ const AdminDashboard = () => {
     return acc;
   }, {});
 
+  //Handle Open And Close Sidebar
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 w-full">
       {/* Sidebar */}
-      <div className="w-1/4 bg-gray-900 text-white p-5 shadow-lg">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-bold">Orders</h2>
+      <div
+        className={`transition-all duration-300 ${
+          isSidebarOpen ? "w-1/4" : "w-1/5 md:w-[8%] md:min-w-[8%]"
+        } bg-gray-900 text-white p-2 md:p-5 shadow-lg`}>
+        <div className="items-center mb-5 py-5">
+          {isSidebarOpen ? (
+            <FaAngleDoubleLeft
+              className="size-7 cursor-pointer"
+              onClick={handleToggleSidebar}
+            />
+          ) : (
+            <FaAngleDoubleRight
+              className="size-7 cursor-pointer"
+              onClick={handleToggleSidebar}
+            />
+          )}
+        </div>
+
+        {/* New Orders Button */}
+        <button
+          className={`w-full p-3 mb-2 rounded-2xl transition flex items-center justify-center gap-2 ${
+            filter === "new"
+              ? "bg-white text-black"
+              : "bg-gray-700 hover:bg-gray-600"
+          }`}
+          onClick={() => setFilter("new")}>
+          <FaFileAlt className="flex justify-center text-center my-auto " />
+          {isSidebarOpen && <span>New</span>}
+        </button>
+
+        {/* Done Orders Button */}
+        <button
+          className={`w-full p-3 rounded-2xl transition flex items-center justify-center  gap-2 ${
+            filter === "done"
+              ? "bg-white text-black"
+              : "bg-gray-700 hover:bg-gray-600"
+          }`}
+          onClick={() => setFilter("done")}>
+          <FaCheckDouble className="flex justify-center text-center my-auto" />
+          {isSidebarOpen && <span>Done</span>}
+        </button>
+
+        {/* Add New Product Button */}
+        <Link to="/admin/productupload">
+          <button className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition flex items-center justify-center gap-2">
+            <FaCloudUploadAlt className="flex justify-center text-center my-auto" />
+
+            {isSidebarOpen && <span>Add New Product</span>}
+          </button>
+        </Link>
+      </div>
+
+      {/* Main Content */}
+      <div
+        className={`${
+          isSidebarOpen ? "w-full" : "w-full md:w-[92%]"
+        } p-5 overflow-y-auto`}>
+        <div className="flex justify-between items-center mb-10 gap-5">
+          <h1 className="text-xl md:text-xl lg:text-3xl font-bold text-gray-800">
+            DREZZUP COMBO ORDERS
+          </h1>
+
+          {/* Refresh button */}
           <TfiReload
             size={20}
-            className="cursor-pointer hover:rotate-180 transition-transform"
+            className="cursor-pointer hover:rotate-180 transition-transform mr-5 size-auto"
             onClick={() => {
               fetchOrders();
               fetchProducts();
             }}
           />
         </div>
-        <button
-          className={`w-full p-3 mb-2 rounded-2xl transition ${
-            filter === "new"
-              ? "bg-white text-black"
-              : "bg-gray-700 hover:bg-gray-600"
-          }`}
-          onClick={() => setFilter("new")}>
-          New
-        </button>
-        <button
-          className={`w-full p-3 rounded-2xl transition ${
-            filter === "done"
-              ? "bg-white text-black"
-              : "bg-gray-700 hover:bg-gray-600"
-          }`}
-          onClick={() => setFilter("done")}>
-          Done
-        </button>
 
-        {/* Add Products button at the bottom of the sidebar */}
-        <Link to="/admin/productupload">
-          <button className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition">
-            Add New Product
-          </button>
-        </Link>
-      </div>
-
-      {/* Main Content */}
-      <div className="w-3/4 p-5 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-10 text-gray-800">
-          DREZZUP COMBO ORDERS
-        </h1>
         {Object.keys(groupedOrders).length === 0 ? (
           <p className="text-gray-600">No orders found.</p>
         ) : (
@@ -164,46 +223,54 @@ const AdminDashboard = () => {
               </h2>
               <div className="bg-white shadow-lg rounded-b-lg p-4 mb-5">
                 {groupedOrders[date].map((order) => (
-                  <div key={order.id} className="mb-6 last:mb-0 flex">
-                    <ul className="w-8/12">
+                  <div
+                    key={order.id}
+                    className="mb-6 last:mb-0 flex flex-col md:flex-row gap-4">
+                    <ul className="w-full">
                       <li
-                        className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
+                        className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition flex flex-col md:flex-row gap-5 justify-between items-center"
                         onClick={() => setSelectedOrder(order)}>
-                        <p>
-                          <strong>Name:</strong> {order.fullName}
-                        </p>
-                        <p>
-                          <strong>Contact:</strong> {order.contact}
-                        </p>
-                        <p>
-                          <strong>Location:</strong> {order.location}
-                        </p>
+                        <div>
+                          <p>
+                            <strong>Name:</strong> {order.fullName}
+                          </p>
+                          <p>
+                            <strong>Contact:</strong> {order.contact}
+                          </p>
+                          <p>
+                            <strong>Location:</strong> {order.location}
+                          </p>
+                        </div>
+
+                        <div className="flex md:justify-center items-center gap-2">
+                          {filter === "new" && (
+                            <button
+                              className="bg-green-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
+                              onClick={() =>
+                                handleStatusChange(order.id, "done")
+                              }>
+                              <GiCheckMark /> Done
+                            </button>
+                          )}
+
+                          {filter === "done" && (
+                            <button
+                              className="bg-blue-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
+                              onClick={() =>
+                                handleStatusChange(order.id, "new")
+                              }>
+                              <IoArrowUndoSharp /> Undo
+                            </button>
+                          )}
+
+                          <button
+                            className="bg-red-600 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
+                            onClick={() => handleDeleteOrder(order.id)}>
+                            <BsFillTrash3Fill /> Delete
+                          </button>
+                        </div>
                       </li>
                     </ul>
-
-                    <div className="w-4/12 flex justify-center items-center gap-2">
-                      {filter === "new" && (
-                        <button
-                          className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
-                          onClick={() => handleStatusChange(order.id, "done")}>
-                          <GiCheckMark /> Done
-                        </button>
-                      )}
-
-                      {filter === "done" && (
-                        <button
-                          className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
-                          onClick={() => handleStatusChange(order.id, "new")}>
-                          <IoArrowUndoSharp /> Undo
-                        </button>
-                      )}
-
-                      <button
-                        className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
-                        onClick={() => handleDeleteOrder(order.id)}>
-                        <BsFillTrash3Fill /> Delete
-                      </button>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -264,15 +331,9 @@ const AdminDashboard = () => {
             <h3 className="text-lg font-bold mt-4">Selected Products</h3>
             <div className="grid grid-cols-2 gap-4 mt-4">
               {products
-                .filter((product) => {
-                  const isSelected = selectedOrder.selectedIds.includes(
-                    product.id.toString()
-                  );
-                  console.log(
-                    `Product ID: ${product.id}, Is Selected: ${isSelected}`
-                  );
-                  return isSelected;
-                })
+                .filter((product) =>
+                  selectedOrder.selectedIds.includes(product.id.toString())
+                )
                 .map((product) => (
                   <Product
                     key={product.id}

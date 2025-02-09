@@ -12,6 +12,8 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Set the login timestamp in local storage
+      localStorage.setItem("loginTimestamp", new Date().getTime());
       navigate("/admin/dashboard");
     } catch (error) {
       console.error("Login failed:", error.message);
