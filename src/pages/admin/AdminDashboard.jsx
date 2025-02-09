@@ -20,6 +20,7 @@ import {
   FaCloudUploadAlt,
   FaFileAlt,
 } from "react-icons/fa";
+import { motion } from "motion/react";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -27,6 +28,7 @@ const AdminDashboard = () => {
   const [filter, setFilter] = useState("new");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [loadingOrderId, setLoadingOrderId] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,23 +94,29 @@ const AdminDashboard = () => {
   }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
+    setLoadingOrderId(orderId);
     try {
       const orderRef = doc(db, "customers", orderId);
       await updateDoc(orderRef, { status: newStatus });
       fetchOrders();
     } catch (error) {
       console.error("Error updating order status:", error);
+    } finally {
+      setLoadingOrderId(null);
     }
   };
 
   const handleDeleteOrder = async (orderId) => {
     if (window.confirm("Are you sure you want to delete this order?")) {
+      setLoadingOrderId(orderId);
       try {
         const orderRef = doc(db, "customers", orderId);
         await deleteDoc(orderRef);
         fetchOrders();
       } catch (error) {
         console.error("Error deleting order:", error);
+      } finally {
+        setLoadingOrderId(null);
       }
     }
   };
@@ -138,7 +146,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 w-full">
+    <div className="flex h-screen w-full">
       {/* Sidebar */}
       <div
         className={`transition-all duration-300 ${
@@ -214,7 +222,11 @@ const AdminDashboard = () => {
         </div>
 
         {Object.keys(groupedOrders).length === 0 ? (
-          <p className="text-gray-600">No orders found.</p>
+          <p className="text-gray-600">
+            Loading...
+            <br />
+            <i>While you wait, check your internet connection and refresh</i>
+          </p>
         ) : (
           Object.keys(groupedOrders).map((date) => (
             <div key={date}>
@@ -246,27 +258,74 @@ const AdminDashboard = () => {
                           {filter === "new" && (
                             <button
                               className="bg-green-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
-                              onClick={() =>
-                                handleStatusChange(order.id, "done")
-                              }>
-                              <GiCheckMark /> Done
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order.id, "done");
+                              }}>
+                              {loadingOrderId === order.id ? (
+                                <motion.div
+                                  animate={{ rotate: 360 }}
+                                  transition={{
+                                    repeat: Infinity,
+                                    duration: 1,
+                                    ease: "linear",
+                                  }}
+                                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                                />
+                              ) : (
+                                <>
+                                  <GiCheckMark /> Done
+                                </>
+                              )}
                             </button>
                           )}
 
                           {filter === "done" && (
                             <button
                               className="bg-blue-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
-                              onClick={() =>
-                                handleStatusChange(order.id, "new")
-                              }>
-                              <IoArrowUndoSharp /> Undo
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(order.id, "new");
+                              }}>
+                              {loadingOrderId === order.id ? (
+                                <motion.div
+                                  animate={{ rotate: 360 }}
+                                  transition={{
+                                    repeat: Infinity,
+                                    duration: 1,
+                                    ease: "linear",
+                                  }}
+                                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                                />
+                              ) : (
+                                <>
+                                  <IoArrowUndoSharp /> Undo
+                                </>
+                              )}
                             </button>
                           )}
 
                           <button
                             className="bg-red-600 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
-                            onClick={() => handleDeleteOrder(order.id)}>
-                            <BsFillTrash3Fill /> Delete
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteOrder(order.id);
+                            }}>
+                            {loadingOrderId === order.id ? (
+                              <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                  repeat: Infinity,
+                                  duration: 1,
+                                  ease: "linear",
+                                }}
+                                className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                              />
+                            ) : (
+                              <>
+                                <BsFillTrash3Fill /> Delete
+                              </>
+                            )}
                           </button>
                         </div>
                       </li>
