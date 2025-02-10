@@ -2,6 +2,7 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import bgImage from "../../assets/7.jpg";
 
 const AdminLogin = () => {
   const [email] = useState("drezzup@gmail.com");
@@ -21,7 +22,15 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      className="flex items-center justify-center min-h-screen bg-gray-100"
+      style={{
+        height: "100vh",
+        backgroundImage: `url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+      }}>
       <div className="bg-white shadow-lg rounded-xl p-6 w-96">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">
           Admin Login

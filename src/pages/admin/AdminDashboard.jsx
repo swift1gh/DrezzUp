@@ -145,12 +145,21 @@ const AdminDashboard = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const handleSidebarButtonClick = (newFilter) => {
+    setFilter(newFilter);
+
+    // Close sidebar only on mobile
+    if (window.innerWidth < 768) setIsSidebarOpen(false);
+  };
+
   return (
     <div className="flex h-screen w-full">
       {/* Sidebar */}
       <div
         className={`transition-all duration-300 ${
-          isSidebarOpen ? "w-1/4" : "w-1/5 md:w-[8%] md:min-w-[8%]"
+          isSidebarOpen
+            ? "w-3/5 md:w-1/4 absolute h-screen md:relative z-10"
+            : "w-1/5 md:w-[8%] md:min-w-[8%]"
         } bg-gray-900 text-white p-2 md:p-5 shadow-lg`}>
         <div className="items-center mb-5 py-5">
           {isSidebarOpen ? (
@@ -173,7 +182,7 @@ const AdminDashboard = () => {
               ? "bg-white text-black"
               : "bg-gray-700 hover:bg-gray-600"
           }`}
-          onClick={() => setFilter("new")}>
+          onClick={() => handleSidebarButtonClick("new")}>
           <FaFileAlt className="flex justify-center text-center my-auto " />
           {isSidebarOpen && <span>New</span>}
         </button>
@@ -185,16 +194,17 @@ const AdminDashboard = () => {
               ? "bg-white text-black"
               : "bg-gray-700 hover:bg-gray-600"
           }`}
-          onClick={() => setFilter("done")}>
+          onClick={() => handleSidebarButtonClick("done")}>
           <FaCheckDouble className="flex justify-center text-center my-auto" />
           {isSidebarOpen && <span>Done</span>}
         </button>
 
         {/* Add New Product Button */}
         <Link to="/admin/productupload">
-          <button className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition flex items-center justify-center gap-2">
+          <button
+            className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition flex items-center justify-center gap-2"
+            onClick={handleToggleSidebar}>
             <FaCloudUploadAlt className="flex justify-center text-center my-auto" />
-
             {isSidebarOpen && <span>Add New Product</span>}
           </button>
         </Link>
@@ -203,7 +213,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div
         className={`${
-          isSidebarOpen ? "w-full" : "w-full md:w-[92%]"
+          isSidebarOpen ? "w-full md:w-full" : "w-full md:w-[92%]"
         } p-5 overflow-y-auto`}>
         <div className="flex justify-between items-center mb-10 gap-5">
           <h1 className="text-xl md:text-xl lg:text-3xl font-bold text-gray-800">
