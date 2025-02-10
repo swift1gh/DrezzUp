@@ -1,7 +1,7 @@
 import React from "react";
 import Product from "./Product";
 import WarningIcon from "../assets/warning.svg";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const Selected = ({ selectedProducts, totalComboPrice }) => {
   return (
@@ -15,8 +15,14 @@ const Selected = ({ selectedProducts, totalComboPrice }) => {
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center">
-          <h2 className="p-2 font-mono font-medium">Selected Sneakers</h2>
-          <div
+          <h2 className="p-2 font-mono font-bold text-gray-600">
+            Selected Sneakers
+          </h2>
+          <motion.div
+            initial={{ opacity: 0, x: -200 }}
+            transition={{ duration: 1 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             className={`${
               selectedProducts.length === 1
                 ? "flex"
@@ -51,17 +57,22 @@ const Selected = ({ selectedProducts, totalComboPrice }) => {
                 </React.Suspense>
               </div>
             ))}
-          </div>
+          </motion.div>
 
           {selectedProducts.length > 1 ? (
-            <div className="bg-[#cbcaca] w-11/12 md:w-4/5 py-4">
+            <motion.div
+              initial={{ opacity: 0, x: 200 }}
+              transition={{ duration: 1 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-[#cbcaca] w-11/12 md:w-4/5 py-4">
               <h2 className="flex justify-center text-center items-center gap-3 text-xl font-normal font-roboto">
                 Combo Price:{" "}
                 <span className="text-[#cf743c] font-mono font-bold md:text-2xl">
                   GHS {totalComboPrice}.00
                 </span>
               </h2>
-            </div>
+            </motion.div>
           ) : (
             <div className="pt-5">
               <div className="flex justify-center items-center gap-2 px-8">

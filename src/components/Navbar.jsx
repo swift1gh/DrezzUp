@@ -21,9 +21,12 @@ const Navbar = ({
 
         {/* Search bar */}
         {isHome && (
-          <div className="hidden md:block pl-[2rem]">
+          <motion.div
+            initial={false}
+            animate={{ scale: 1 }}
+            className="hidden md:block pl-[2rem]">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          </div>
+          </motion.div>
         )}
 
         <div className="flex justify-center items-center gap-5 cursor-pointer">

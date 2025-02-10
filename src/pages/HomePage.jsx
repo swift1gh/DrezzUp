@@ -36,9 +36,10 @@ const HomePage = () => {
         {!isSearchActive && (
           <motion.div
             initial={{ opacity: 0, x: 200 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 1.5 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}>
+            viewport={{ once: true }}
+            className="sticky top-20 z-50">
             <Filter
               selectedBrand={selectedBrand}
               setSelectedBrand={setSelectedBrand}

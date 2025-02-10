@@ -90,6 +90,7 @@ const ComboPage = () => {
           totalComboPrice={totalComboPrice}
           selectedProducts={selectedProducts}
         />
+
         {selectedIds.length > 1 && (
           <OrderForm selectedIds={selectedIds} comboPrice={totalComboPrice} />
         )}

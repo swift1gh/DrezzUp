@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { motion } from "motion/react";
 
 const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
   const [formData, setFormData] = useState({
@@ -88,7 +89,12 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
   };
 
   return (
-    <div className="relative min-h-screen flex justify-center items-center mb-16 md:mb-12">
+    <motion.div
+      initial={{ opacity: 0, y: 200 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 200 }}
+      transition={{ duration: 2 }}
+      className="relative min-h-screen flex justify-center items-center mb-16 md:mb-12">
       <div
         className={`w-full flex justify-center items-center ${
           isPopupVisible ? "blur-md" : ""
@@ -165,7 +171,7 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
