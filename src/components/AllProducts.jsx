@@ -132,11 +132,18 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
       )}
 
       {visibleProducts.length < filteredProducts.length && (
-        <button
-          onClick={loadMore}
-          className="mt-6 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition">
-          Show More
-        </button>
+        <AnimatePresence>
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={loadMore}
+            className="mt-6 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition">
+            Show More
+          </motion.button>
+        </AnimatePresence>
       )}
     </div>
   );
