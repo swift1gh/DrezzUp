@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Product from "./Product";
 import warningIcon from "../assets/warning.svg";
 import { collection, getDocs } from "firebase/firestore";
@@ -108,20 +108,27 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
           )}
         </div>
       ) : (
-        <div className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
-          {visibleProducts.map((prod) => (
-            <Product
-              key={prod.id}
-              Image={prod.image}
-              Name={prod.name}
-              Color={prod.color}
-              singlePrice={`GHS ${prod.singlePrice}.00`}
-              isSelected={selectedProductIds.includes(prod.id)}
-              selectProduct={() => handleSelectProduct(prod.id)}
-              loading={loading}
-            />
-          ))}
-        </div>
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 200 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 200 }}
+            transition={{ duration: 1 }}
+            className="gap-y-6 gap-x-[1.25rem] md:gap-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
+            {visibleProducts.map((prod) => (
+              <Product
+                key={prod.id}
+                Image={prod.image}
+                Name={prod.name}
+                Color={prod.color}
+                singlePrice={`GHS ${prod.singlePrice}.00`}
+                isSelected={selectedProductIds.includes(prod.id)}
+                selectProduct={() => handleSelectProduct(prod.id)}
+                loading={loading}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {visibleProducts.length < filteredProducts.length && (

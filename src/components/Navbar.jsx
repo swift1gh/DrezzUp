@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import { motion } from "motion/react";
 
 const Navbar = ({
   Btn,
@@ -27,11 +28,14 @@ const Navbar = ({
 
         <div className="flex justify-center items-center gap-5 cursor-pointer">
           <Link to={Destination}>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onHoverStart={() => console.log("hover started!")}
               onClick={onClick}
-              className="bg-[#BD815A] p-2 px-3 md:p-3 border rounded-[18px] border-[#00000089] hover:scale-105 cursor-pointer">
+              className="bg-[#BD815A] p-2 px-3 md:p-3 border rounded-[18px] border-[#00000089] cursor-pointer">
               <span className="text-white cursor-pointer">{Btn}</span>
-            </button>
+            </motion.button>
           </Link>
         </div>
       </div>

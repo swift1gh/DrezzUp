@@ -5,6 +5,7 @@ import Filter from "../components/Filter";
 import Footer from "../components/Footer";
 import searchIcon from "../assets/search.svg";
 import SearchBar from "../components/SearchBar";
+import { motion } from "motion/react";
 
 const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -33,16 +34,27 @@ const HomePage = () => {
 
       <main className="flex-grow">
         {!isSearchActive && (
-          <Filter
-            selectedBrand={selectedBrand}
-            setSelectedBrand={setSelectedBrand}
-          />
+          <motion.div
+            initial={{ opacity: 0, x: 200 }}
+            transition={{ duration: 1 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}>
+            <Filter
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+            />
+          </motion.div>
         )}
 
         {isSearchActive && (
-          <div className="flex md:hidden justify-center items-center sticky top-[5.5rem] z-50 pb-7">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            transition={{ duration: 1 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex md:hidden justify-center items-center sticky top-[5.5rem] z-50 pb-7">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          </div>
+          </motion.div>
         )}
 
         <AllProducts
