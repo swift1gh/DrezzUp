@@ -5,7 +5,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
     <div className="flex justify-between items-center gap-1 bg-[#eae1e1] shadow-inner px-2 py-2 rounded-3xl md:w-60 lg:w-80 relative border border-gray-500">
       <input
         type="text"
-        placeholder="Search..."
+        placeholder="Find your sneakers..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm state
         required
