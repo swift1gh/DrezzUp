@@ -8,6 +8,7 @@ import {
   limit,
 } from "firebase/firestore";
 import { db } from "../utils/firebase"; // Adjust path to your Firebase config file
+import { upload } from "../utils/storage";
 
 const ProductUpload = () => {
   const [productName, setProductName] = useState("");
@@ -87,6 +88,14 @@ const ProductUpload = () => {
     }
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    console.log(file);
+    const response = await upload(file);
+    setProductImageUrl(response.url);
+  };
+
   return (
     <div className="flex text-center items-center justify-center h-screen bg-slate-600">
       <div className="flex flex-col justify-center items-center p-10 bg-[#FBF4F4] shadow-md rounded-lg w-[80%] md:w-2/6 max-w-lg">
@@ -128,15 +137,14 @@ const ProductUpload = () => {
           className="p-2 w-full px-5 m-2 border border-gray-300 rounded"
         />
         <input
-          type="text"
-          placeholder="Image URL"
-          value={productImageUrl}
-          onChange={(e) => setProductImageUrl(e.target.value)}
+          type="file"
+          onChange={handleFileUpload}
           className="p-2 w-full px-5  m-2 border border-gray-300 rounded"
         />
         <button
           onClick={handleUpload}
-          className="p-3 bg-blue-600 hover:bg-blue-700 m-2 rounded-lg text-white w-full">
+          className="p-3 bg-blue-600 hover:bg-blue-700 m-2 rounded-lg text-white w-full"
+        >
           Submit
         </button>
       </div>
