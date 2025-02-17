@@ -18,6 +18,7 @@ const ProductUpload = () => {
   const [productColor, setProductColor] = useState("");
   const [productImageUrl, setProductImageUrl] = useState("");
   const [message, setMessage] = useState("");
+  const [fileLoading, setFileLoading] = useState(false);
 
   // Fetch the highest ID and set the next ID
   useEffect(() => {
@@ -91,14 +92,15 @@ const ProductUpload = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    console.log(file);
+    setFileLoading(true);
     const response = await upload(file);
+    setFileLoading(false);
     setProductImageUrl(response.url);
   };
 
   return (
-    <div className="flex text-center items-center justify-center h-screen bg-slate-600">
-      <div className="flex flex-col justify-center items-center p-10 bg-[#FBF4F4] shadow-md rounded-lg w-[80%] md:w-2/6 max-w-lg">
+    <div className="flex text-center items-center justify-center h-screen bg-slate-600 ">
+      <div className="flex flex-col justify-center items-center p-10 bg-[#FBF4F4] shadow-md rounded-lg w-[80%] lg:max-w-3xl">
         <h2 className="text-lg font-bold mb-4">Upload Product</h2>
         {message && <p className="text-green-600">{message}</p>}
         <input
@@ -136,11 +138,25 @@ const ProductUpload = () => {
           onChange={(e) => setProductColor(e.target.value)}
           className="p-2 w-full px-5 m-2 border border-gray-300 rounded"
         />
-        <input
-          type="file"
-          onChange={handleFileUpload}
-          className="p-2 w-full px-5  m-2 border border-gray-300 rounded"
-        />
+        <div>
+          {" "}
+          <input
+            type="file"
+            onChange={handleFileUpload}
+            className="p-2 w-full px-5  m-2 border border-gray-300 rounded"
+          />
+          {fileLoading && <p>uploading</p>}
+          {productImageUrl && (
+            <img
+              src={productImageUrl}
+              width={400}
+              height={300}
+              className="max-w-full object-contain h-auto h"
+              alt="drezzup shoes"
+            />
+          )}
+        </div>
+
         <button
           onClick={handleUpload}
           className="p-3 bg-blue-600 hover:bg-blue-700 m-2 rounded-lg text-white w-full"
