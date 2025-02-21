@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import {
   collection,
-  getDocs,
+  onSnapshot,
   updateDoc,
   deleteDoc,
   doc,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { TfiReload } from "react-icons/tfi";
-import Product from "../../components/Product";
-import { GiCheckMark } from "react-icons/gi";
-import { BsFillTrash3Fill } from "react-icons/bs";
-import { IoArrowUndoSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import {
   FaAngleDoubleRight,
@@ -20,7 +16,8 @@ import {
   FaCloudUploadAlt,
   FaFileAlt,
 } from "react-icons/fa";
-import { motion } from "motion/react";
+import OrderDetails from "../../components/OrderDetails";
+import DashboardContent from "../../components/DashboardContent";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -31,6 +28,26 @@ const AdminDashboard = () => {
   const [loadingOrderId, setLoadingOrderId] = useState(null);
 
   useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "customers"), (snapshot) => {
+      const orderList = snapshot.docs
+        .map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            status: data.status || "new",
+            date: data.date?.toDate ? data.date.toDate() : new Date(data.date),
+          };
+        })
+        .sort((a, b) => b.date - a.date); // Sort by latest date first, including time
+
+      setOrders(orderList);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setIsSidebarOpen(false);
@@ -39,7 +56,7 @@ const AdminDashboard = () => {
       }
     };
 
-    handleResize(); // Set initial state based on screen size
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -47,29 +64,6 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  // Fetch Orders
-  const fetchOrders = async () => {
-    try {
-      console.log("Fetching orders...");
-      const querySnapshot = await getDocs(collection(db, "customers"));
-      if (querySnapshot.empty) {
-        console.warn("No documents found in Firestore.");
-      }
-      const orderList = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          status: doc.data().status || "new",
-        }))
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-      console.log("Fetched Orders:", orderList);
-      setOrders(orderList);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  };
-
-  // Fetch Products
   const fetchProducts = async () => {
     try {
       console.log("Fetching products...");
@@ -89,7 +83,6 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchOrders();
     fetchProducts();
   }, []);
 
@@ -98,7 +91,6 @@ const AdminDashboard = () => {
     try {
       const orderRef = doc(db, "customers", orderId);
       await updateDoc(orderRef, { status: newStatus });
-      fetchOrders();
     } catch (error) {
       console.error("Error updating order status:", error);
     } finally {
@@ -112,7 +104,6 @@ const AdminDashboard = () => {
       try {
         const orderRef = doc(db, "customers", orderId);
         await deleteDoc(orderRef);
-        fetchOrders();
       } catch (error) {
         console.error("Error deleting order:", error);
       } finally {
@@ -126,21 +117,32 @@ const AdminDashboard = () => {
   );
 
   const groupedOrders = filteredOrders.reduce((acc, order) => {
-    const date = new Date(
-      order.date.split(",")[0].split("/").reverse().join("-")
-    ).toLocaleDateString("en-GB", {
+    const formattedDate = order.date.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
     });
-    if (!acc[date]) {
-      acc[date] = [];
+
+    if (!acc[formattedDate]) {
+      acc[formattedDate] = [];
     }
-    acc[date].push(order);
+    acc[formattedDate].push(order);
     return acc;
   }, {});
 
-  //Handle Open And Close Sidebar
+  Object.keys(groupedOrders).forEach((date) => {
+    groupedOrders[date].sort((a, b) => b.date - a.date);
+  });
+
+  // Sort orders within each date group by time (latest first)
+  Object.keys(groupedOrders).forEach((date) => {
+    groupedOrders[date].sort((a, b) => {
+      const timeA = new Date(a.date).getTime();
+      const timeB = new Date(b.date).getTime();
+      return timeB - timeA;
+    });
+  });
+
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -148,7 +150,7 @@ const AdminDashboard = () => {
   const handleSidebarButtonClick = (newFilter) => {
     setFilter(newFilter);
 
-    // Close sidebar only on mobile
+    // Close sidebar by default only on mobile
     if (window.innerWidth < 768) setIsSidebarOpen(false);
   };
 
@@ -205,220 +207,30 @@ const AdminDashboard = () => {
             className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition flex items-center justify-center gap-2"
             onClick={handleToggleSidebar}>
             <FaCloudUploadAlt className="flex justify-center text-center my-auto" />
-            {isSidebarOpen && <span>Add New Product</span>}
+            {isSidebarOpen && <span>Products</span>}
           </button>
         </Link>
       </div>
 
       {/* Main Content */}
-      <div
-        className={`${
-          isSidebarOpen ? "w-full md:w-full" : "w-full md:w-[92%]"
-        } p-5 overflow-y-auto`}>
-        <div className="flex justify-between items-center mb-10 gap-5">
-          <h1 className="text-xl md:text-xl lg:text-3xl font-bold text-gray-800">
-            DREZZUP COMBO ORDERS
-          </h1>
-
-          {/* Refresh button */}
-          <TfiReload
-            size={20}
-            className="cursor-pointer hover:rotate-180 transition-transform mr-5 size-auto"
-            onClick={() => {
-              fetchOrders();
-              fetchProducts();
-            }}
-          />
-        </div>
-
-        {Object.keys(groupedOrders).length === 0 ? (
-          <p className="text-gray-600">
-            Loading...
-            <br />
-            <i>While you wait, check your internet connection and refresh</i>
-          </p>
-        ) : (
-          Object.keys(groupedOrders).map((date) => (
-            <div key={date}>
-              <h2 className="text-lg font-bold bg-gray-300 p-2 rounded-t-lg">
-                {date}
-              </h2>
-              <div className="bg-white shadow-lg rounded-b-lg p-4 mb-5">
-                {groupedOrders[date].map((order) => (
-                  <div
-                    key={order.id}
-                    className="mb-6 last:mb-0 flex flex-col md:flex-row gap-4">
-                    <ul className="w-full">
-                      <li
-                        className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition flex flex-col md:flex-row gap-5 justify-between items-center"
-                        onClick={() => setSelectedOrder(order)}>
-                        <div>
-                          <p>
-                            <strong>Name:</strong> {order.fullName}
-                          </p>
-                          <p>
-                            <strong>Contact:</strong> {order.contact}
-                          </p>
-                          <p>
-                            <strong>Location:</strong> {order.location}
-                          </p>
-                        </div>
-
-                        <div className="flex md:justify-center items-center gap-2">
-                          {filter === "new" && (
-                            <button
-                              className="bg-green-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(order.id, "done");
-                              }}>
-                              {loadingOrderId === order.id ? (
-                                <motion.div
-                                  animate={{ rotate: 360 }}
-                                  transition={{
-                                    repeat: Infinity,
-                                    duration: 1,
-                                    ease: "linear",
-                                  }}
-                                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                                />
-                              ) : (
-                                <>
-                                  <GiCheckMark /> Done
-                                </>
-                              )}
-                            </button>
-                          )}
-
-                          {filter === "done" && (
-                            <button
-                              className="bg-blue-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(order.id, "new");
-                              }}>
-                              {loadingOrderId === order.id ? (
-                                <motion.div
-                                  animate={{ rotate: 360 }}
-                                  transition={{
-                                    repeat: Infinity,
-                                    duration: 1,
-                                    ease: "linear",
-                                  }}
-                                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                                />
-                              ) : (
-                                <>
-                                  <IoArrowUndoSharp /> Undo
-                                </>
-                              )}
-                            </button>
-                          )}
-
-                          <button
-                            className="bg-red-600 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteOrder(order.id);
-                            }}>
-                            {loadingOrderId === order.id ? (
-                              <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{
-                                  repeat: Infinity,
-                                  duration: 1,
-                                  ease: "linear",
-                                }}
-                                className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                              />
-                            ) : (
-                              <>
-                                <BsFillTrash3Fill /> Delete
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      <DashboardContent
+        isSidebarOpen={isSidebarOpen}
+        groupedOrders={groupedOrders}
+        fetchProducts={fetchProducts}
+        setSelectedOrder={setSelectedOrder}
+        handleStatusChange={handleStatusChange}
+        handleDeleteOrder={handleDeleteOrder}
+        loadingOrderId={loadingOrderId}
+        filter={filter}
+      />
 
       {/* Order Details Modal */}
       {selectedOrder && (
-        <div
-          className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto py-10"
-          onClick={() => setSelectedOrder(null)}>
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg text-center w-auto mt-10"
-            onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold mb-4">Order Details</h2>
-            <table className="w-full mb-4 text-left">
-              <tbody>
-                <tr>
-                  <td className="font-semibold text-gray-800">Name:</td>
-                  <td>{selectedOrder.fullName}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">Contact:</td>
-                  <td>{selectedOrder.contact}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">Location:</td>
-                  <td>{selectedOrder.location}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">Box:</td>
-                  <td>{selectedOrder.addBox ? "Yes" : "No"}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">
-                    Guarantor's Name:
-                  </td>
-                  <td>{selectedOrder.guarantorName}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">
-                    Guarantor's Contact:
-                  </td>
-                  <td>{selectedOrder.guarantorContact}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">Shoe Size:</td>
-                  <td>{selectedOrder.size}</td>
-                </tr>
-                <tr>
-                  <td className="font-semibold text-gray-800">Combo Price:</td>
-                  <td>GHS {selectedOrder.comboPrice}.00</td>
-                </tr>
-              </tbody>
-            </table>
-            <h3 className="text-lg font-bold mt-4">Selected Products</h3>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              {products
-                .filter((product) =>
-                  selectedOrder.selectedIds.includes(product.id.toString())
-                )
-                .map((product) => (
-                  <Product
-                    key={product.id}
-                    Image={product.image}
-                    Name={product.name}
-                    Color={product.color}
-                  />
-                ))}
-            </div>
-            <button
-              className="mt-5 w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition"
-              onClick={() => setSelectedOrder(null)}>
-              Close
-            </button>
-          </div>
-        </div>
+        <OrderDetails
+          selectedOrder={selectedOrder}
+          setSelectedOrder={setSelectedOrder}
+          products={products}
+        />
       )}
     </div>
   );

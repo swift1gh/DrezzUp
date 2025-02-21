@@ -1,92 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../utils/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { motion } from "motion/react";
 
-const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    contact: "",
-    location: "",
-    size: "",
-    guarantorName: "",
-    guarantorContact: "",
-    addBox: false,
-    selectedIds: selectedIds,
-    comboPrice: comboPrice,
-  });
+const getDefaultFormState = (selectedIds = [], comboPrice = 0) => ({
+  fullName: "",
+  contact: "",
+  location: "",
+  size: "",
+  guarantorName: "",
+  guarantorContact: "",
+  addBox: "0",
+  selectedIds,
+  comboPrice,
+});
 
+const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
+  const [formData, setFormData] = useState(
+    getDefaultFormState(selectedIds, comboPrice)
+  );
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
-  };
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    if (
-      !formData.fullName ||
-      !formData.contact ||
-      !formData.location ||
-      !formData.size ||
-      !formData.guarantorName ||
-      !formData.guarantorContact
-    ) {
-      setError("Please fill out all the required fields.");
-      return;
-    }
+      if (Object.values(formData).some((value) => value === "")) {
+        setError("Please fill out all required fields.");
+        return;
+      }
 
-    setError("");
+      setError("");
+      setLoading(true);
 
-    const orderDate = new Date().toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+      try {
+        const orderData = {
+          ...formData,
+          date: Timestamp.now(),
+          selectedIds,
+          comboPrice,
+        };
 
-    const orderData = {
-      ...formData,
-      date: orderDate,
-      selectedIds,
-      comboPrice,
-    };
+        const result = await addDoc(collection(db, "customers"), orderData);
+        console.log("Order created with ID:", result.id);
 
-    try {
-      const result = await addDoc(collection(db, "customers"), orderData);
-      console.log("Order created with ID:", result.id);
+        setPopupVisible(true);
+        setTimeout(() => {
+          setPopupVisible(false);
+          navigate("/");
+        }, 2000);
 
-      setPopupVisible(true);
-      setTimeout(() => {
-        setPopupVisible(false);
-        navigate("/");
-      }, 2000);
-
-      setFormData({
-        fullName: "",
-        contact: "",
-        location: "",
-        size: "",
-        guarantorName: "",
-        guarantorContact: "",
-        addBox: false,
-        selectedIds: [],
-        comboPrice: 0, // Ensure it resets correctly
-      });
-    } catch (error) {
-      console.error("Error placing order:", error.message);
-      setError("Failed to place order. Try again later.");
-    }
-  };
+        setFormData(getDefaultFormState());
+      } catch (error) {
+        console.error("Error placing order:", error.message);
+        setError("Failed to place order. Try again later.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData, navigate, selectedIds, comboPrice]
+  );
 
   return (
     <motion.div
@@ -132,18 +117,22 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
             </div>
           ))}
 
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
+          <div className="flex w-full justify-between items-center mb-4">
+            <label htmlFor="addBox" className="font-medium">
+              Number of Boxes:
+            </label>
+            <select
               name="addBox"
               id="addBox"
-              className="mr-2"
-              checked={formData.addBox}
-              onChange={handleChange}
-            />
-            <label htmlFor="addBox" className="font-medium">
-              Add Box
-            </label>
+              className="w-1/2 p-2 border border-gray-300 rounded ml-2"
+              value={formData.addBox}
+              onChange={handleChange}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4 text-sm text-orange-600 bg-[#FBF4F4] p-4 rounded">
@@ -156,8 +145,13 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
 
           <button
             type="submit"
-            className="w-full p-2 bg-[#b0713e] text-white font-bold rounded hover:bg-[#9d6134]">
-            Place Order
+            className={`w-full p-2 text-white font-bold rounded ${
+              loading
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-[#b0713e] hover:bg-[#9d6134]"
+            }`}
+            disabled={loading}>
+            {loading ? "Placing Order..." : "Place Order"}
           </button>
         </form>
       </div>
