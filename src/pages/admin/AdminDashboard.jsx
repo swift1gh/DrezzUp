@@ -39,7 +39,7 @@ const AdminDashboard = () => {
             date: data.date?.toDate ? data.date.toDate() : new Date(data.date),
           };
         })
-        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by latest date first, including time
+        .sort((a, b) => b.date - a.date);
 
       setOrders(orderList);
     });
