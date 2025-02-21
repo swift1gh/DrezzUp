@@ -39,7 +39,7 @@ const AdminDashboard = () => {
             date: data.date?.toDate ? data.date.toDate() : new Date(data.date),
           };
         })
-        .sort((a, b) => b.date - a.date); // Sort by latest date first, including time
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by latest date first, including time
 
       setOrders(orderList);
     });
@@ -117,11 +117,18 @@ const AdminDashboard = () => {
   );
 
   const groupedOrders = filteredOrders.reduce((acc, order) => {
-    const formattedDate = order.date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    const date =
+      order.date instanceof Date
+        ? order.date
+        : order.date?.toDate?.() || new Date(order.date);
+
+    const formattedDate = !isNaN(date)
+      ? date.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+      : "Invalid Date";
 
     if (!acc[formattedDate]) {
       acc[formattedDate] = [];
@@ -129,10 +136,6 @@ const AdminDashboard = () => {
     acc[formattedDate].push(order);
     return acc;
   }, {});
-
-  Object.keys(groupedOrders).forEach((date) => {
-    groupedOrders[date].sort((a, b) => b.date - a.date);
-  });
 
   // Sort orders within each date group by time (latest first)
   Object.keys(groupedOrders).forEach((date) => {
