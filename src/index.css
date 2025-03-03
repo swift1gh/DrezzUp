@@ -31,3 +31,20 @@ html {
   filter: invert(50%) sepia(100%) saturate(1000%) hue-rotate(85deg)
     brightness(90%) contrast(100%);
 }
+
+.modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

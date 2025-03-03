@@ -27,19 +27,29 @@ const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [loadingOrderId, setLoadingOrderId] = useState(null);
 
+  // Listen to Firestore orders
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "customers"), (snapshot) => {
       const orderList = snapshot.docs
         .map((doc) => {
           const data = doc.data();
+          // Convert Firestore Timestamp to Date; if not available, default to now
+          const dateObj = data.date?.toDate
+            ? data.date.toDate()
+            : new Date(data.date || Date.now());
           return {
             id: doc.id,
             ...data,
             status: data.status || "new",
-            date:
-              data.date instanceof Date
-                ? data.date
-                : data.date?.toDate?.() || new Date(data.date || Date.now()),
+            date: dateObj,
+            // Store a formatted date string for UI components that require string operations
+            dateString: !isNaN(dateObj)
+              ? dateObj.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "Invalid Date",
           };
         })
         .sort((a, b) => b.date - a.date);
@@ -50,6 +60,7 @@ const AdminDashboard = () => {
     return () => unsubscribe();
   }, []);
 
+  // Auto toggle sidebar based on window width
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -61,12 +72,10 @@ const AdminDashboard = () => {
 
     handleResize();
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Fetch products from Firestore
   const fetchProducts = async () => {
     try {
       console.log("Fetching products...");
@@ -115,40 +124,20 @@ const AdminDashboard = () => {
     }
   };
 
+  // Filter orders based on status
   const filteredOrders = orders.filter((order) =>
     filter === "new" ? order.status === "new" : order.status === "done"
   );
 
+  // Group orders by their formatted date string (ensuring a string is used)
   const groupedOrders = filteredOrders.reduce((acc, order) => {
-    const date =
-      order.date instanceof Date
-        ? order.date
-        : order.date?.toDate?.() || new Date(order.date);
-
-    const formattedDate =
-      order.date instanceof Date
-        ? order.date.toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
-        : "Invalid Date";
-
-    if (!acc[formattedDate]) {
-      acc[formattedDate] = [];
+    const key = order.dateString || "Invalid Date";
+    if (!acc[key]) {
+      acc[key] = [];
     }
-    acc[formattedDate].push(order);
+    acc[key].push(order);
     return acc;
   }, {});
-
-  // Sort orders within each date group by time (latest first)
-  Object.keys(groupedOrders).forEach((date) => {
-    groupedOrders[date].sort((a, b) => {
-      const timeA = new Date(a.date).getTime();
-      const timeB = new Date(b.date).getTime();
-      return timeB - timeA;
-    });
-  });
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -156,8 +145,7 @@ const AdminDashboard = () => {
 
   const handleSidebarButtonClick = (newFilter) => {
     setFilter(newFilter);
-
-    // Close sidebar by default only on mobile
+    // Close sidebar on mobile devices
     if (window.innerWidth < 768) setIsSidebarOpen(false);
   };
 
@@ -198,7 +186,7 @@ const AdminDashboard = () => {
 
         {/* Done Orders Button */}
         <button
-          className={`w-full p-3 rounded-2xl transition flex items-center justify-center  gap-2 ${
+          className={`w-full p-3 rounded-2xl transition flex items-center justify-center gap-2 ${
             filter === "done"
               ? "bg-white text-black"
               : "bg-gray-700 hover:bg-gray-600"

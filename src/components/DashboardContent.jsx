@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { GiCheckMark } from "react-icons/gi";
 import { IoArrowUndoSharp } from "react-icons/io5";
@@ -15,6 +15,14 @@ const DashboardContent = ({
   loadingOrderId,
   filter,
 }) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchProducts();
+    setIsRefreshing(false);
+  };
+
   return (
     <div
       className={`${
@@ -26,13 +34,17 @@ const DashboardContent = ({
         </h1>
 
         {/* Refresh button */}
-        <TfiReload
-          size={20}
-          className="cursor-pointer hover:rotate-180 transition-transform mr-5 size-auto"
-          onClick={() => {
-            fetchProducts();
+        <motion.div
+          animate={{ rotate: isRefreshing ? 360 : 0 }}
+          transition={{
+            repeat: isRefreshing ? Infinity : 0,
+            duration: 0.5, // Faster spin duration
+            ease: "linear",
           }}
-        />
+          className="cursor-pointer hover:rotate-180 transition-transform mr-5"
+          onClick={handleRefresh}>
+          <TfiReload size={20} />
+        </motion.div>
       </div>
 
       {Object.keys(groupedOrders).length === 0 ? (
@@ -42,13 +54,13 @@ const DashboardContent = ({
           <i>While you wait, check your internet connection and refresh</i>
         </p>
       ) : (
-        Object.keys(groupedOrders).map((date) => (
-          <div key={date}>
+        Object.keys(groupedOrders).map((dateKey) => (
+          <div key={dateKey}>
             <h2 className="text-lg font-bold bg-gray-300 p-2 rounded-t-lg">
-              {date}
+              {dateKey}
             </h2>
             <div className="bg-white shadow-lg rounded-b-lg p-4 mb-5">
-              {groupedOrders[date].map((order) => (
+              {groupedOrders[dateKey].map((order) => (
                 <div
                   key={order.id}
                   className="mb-6 last:mb-0 flex flex-col md:flex-row gap-4">
@@ -81,7 +93,7 @@ const DashboardContent = ({
                                 animate={{ rotate: 360 }}
                                 transition={{
                                   repeat: Infinity,
-                                  duration: 1,
+                                  duration: 0.5, // Faster spin duration
                                   ease: "linear",
                                 }}
                                 className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
@@ -106,7 +118,7 @@ const DashboardContent = ({
                                 animate={{ rotate: 360 }}
                                 transition={{
                                   repeat: Infinity,
-                                  duration: 1,
+                                  duration: 0.5, // Faster spin duration
                                   ease: "linear",
                                 }}
                                 className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
@@ -130,7 +142,7 @@ const DashboardContent = ({
                               animate={{ rotate: 360 }}
                               transition={{
                                 repeat: Infinity,
-                                duration: 1,
+                                duration: 0.5, // Faster spin duration
                                 ease: "linear",
                               }}
                               className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
