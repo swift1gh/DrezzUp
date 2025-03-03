@@ -36,7 +36,10 @@ const AdminDashboard = () => {
             id: doc.id,
             ...data,
             status: data.status || "new",
-            date: data.date?.toDate ? data.date.toDate() : new Date(data.date),
+            date:
+              data.date instanceof Date
+                ? data.date
+                : data.date?.toDate?.() || new Date(data.date || Date.now()),
           };
         })
         .sort((a, b) => b.date - a.date);
@@ -122,13 +125,14 @@ const AdminDashboard = () => {
         ? order.date
         : order.date?.toDate?.() || new Date(order.date);
 
-    const formattedDate = !isNaN(date)
-      ? date.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      : "Invalid Date";
+    const formattedDate =
+      order.date instanceof Date
+        ? order.date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+        : "Invalid Date";
 
     if (!acc[formattedDate]) {
       acc[formattedDate] = [];
