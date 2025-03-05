@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import searchIcon from "../assets/search.svg";
 import SearchBar from "../components/SearchBar";
 import { motion } from "motion/react";
+import UserTour from "../components/UserTour"; // Import UserTour
 
 const HomePage = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -24,6 +25,9 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Include UserTour */}
+      <UserTour />
+
       <Navbar
         Btn={"Calculate Combo"}
         Destination={`/combo?ids=${selectedProducts.join(",")}`}
@@ -47,6 +51,14 @@ const HomePage = () => {
           </motion.div>
         )}
 
+        {/* Mobile Search Button  */}
+        <button
+          onClick={handleSearchBtn}
+          id="mobile-search"
+          className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
+          <img src={searchIcon} className="h-5 m-2" />
+        </button>
+
         {isSearchActive && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -63,12 +75,6 @@ const HomePage = () => {
           selectedBrand={selectedBrand}
           searchTerm={searchTerm}
         />
-
-        <button
-          onClick={handleSearchBtn}
-          className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
-          <img src={searchIcon} className="h-5 m-2" />
-        </button>
       </main>
 
       <Footer />

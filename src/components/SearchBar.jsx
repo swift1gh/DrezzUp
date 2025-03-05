@@ -2,7 +2,9 @@ import React from "react";
 
 const SearchBar = ({ searchTerm, setSearchTerm }) => {
   return (
-    <div className="flex justify-between items-center gap-1 bg-[#eae1e1] shadow-inner px-2 py-2 rounded-3xl md:w-60 lg:w-80 relative border border-gray-500">
+    <div
+      id="search-bar"
+      className="flex justify-between items-center gap-1 bg-[#eae1e1] shadow-inner px-2 py-2 rounded-3xl md:w-60 lg:w-80 relative border border-gray-500">
       <input
         type="text"
         placeholder="Find your sneakers..."

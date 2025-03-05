@@ -14,7 +14,9 @@ const Navbar = ({
   return (
     <div className="bg-[#FBF4F4] shadow-md sticky top-0 w-full z-50">
       <div className="flex flex-row justify-between items-center px-5 py-2 md:px-14 pt-5 gap-3">
-        <h1 className="font-sans font-semibold text-[20px] md:text-[25px] cursor-default">
+        <h1
+          id="logo"
+          className="font-sans font-semibold text-[20px] md:text-[25px] cursor-default">
           <span className="text-white bg-black">DREZZ</span>
           UP
         </h1>
@@ -29,7 +31,9 @@ const Navbar = ({
           </motion.div>
         )}
 
-        <div className="flex justify-center items-center gap-5 cursor-pointer">
+        <div
+          id="calculate-btn"
+          className="flex justify-center items-center gap-5 cursor-pointer">
           <Link to={Destination}>
             <motion.button
               whileHover={{ scale: 1.1 }}

@@ -245,7 +245,7 @@ const ProductUpload = () => {
             <p
               className="text-blue-900 font-thin italic cursor-pointer hover:text-gray-500"
               onClick={toggleForm}>
-              Want to delete a product?
+              Want to upload a product?
             </p>
           </div>
         ) : (
