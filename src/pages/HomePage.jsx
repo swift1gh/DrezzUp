@@ -55,8 +55,12 @@ const HomePage = () => {
         <button
           onClick={handleSearchBtn}
           id="mobile-search"
-          className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem] z-[9000]">
-          <img src={searchIcon} className="h-5 m-2" />
+          className="md:hidden fixed bottom-14 md:bottom-16 right-20 bg-[#d29c7b] rounded-full flex justify-center items-center shadow-2xl hover:scale-110 z-[9000]"
+          style={{
+            width: "50px",
+            height: "50px",
+          }}>
+          <img src={searchIcon} className="h-5" />
         </button>
 
         {isSearchActive && (
