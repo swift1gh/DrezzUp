@@ -31,3 +31,15 @@ html {
   filter: invert(50%) sepia(100%) saturate(1000%) hue-rotate(85deg)
     brightness(90%) contrast(100%);
 }
+
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure the navbar is above the spotlight */
+}
+
+#filters {
+  position: sticky;
+  top: 60px; /* Adjust this value based on the height of your navbar */
+  z-index: 1000; /* Ensure the filters are above the spotlight */
+}
