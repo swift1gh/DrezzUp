@@ -5,11 +5,7 @@ import Filter from "../components/Filter";
 import Footer from "../components/Footer";
 import searchIcon from "../assets/search.svg";
 import SearchBar from "../components/SearchBar";
-<<<<<<< Updated upstream
-import { motion } from "framer-motion";
-=======
 import { motion } from "motion/react";
->>>>>>> Stashed changes
 import UserTour from "../components/UserTour"; // Import UserTour
 
 const HomePage = () => {
@@ -59,11 +55,7 @@ const HomePage = () => {
         <button
           onClick={handleSearchBtn}
           id="mobile-search"
-<<<<<<< Updated upstream
-          className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem] z-[9000]">
-=======
           className="md:hidden fixed bottom-14 right-[-3rem] bg-[#d29c7b] rounded-full justify-center items-center shadow-2xl scale-110 hover:scale-125 w-[7rem]">
->>>>>>> Stashed changes
           <img src={searchIcon} className="h-5 m-2" />
         </button>
 

@@ -12,17 +12,6 @@ const Navbar = ({
   isHome = false,
 }) => {
   return (
-<<<<<<< Updated upstream
-    <nav id="navbar">
-      <div className="bg-[#FBF4F4] shadow-md sticky top-0 w-full z-50">
-        <div className="flex flex-row justify-between items-center px-5 py-2 md:px-14 pt-5 gap-3">
-          <h1
-            id="logo"
-            className="font-sans font-semibold text-[20px] md:text-[25px] cursor-default">
-            <span className="text-white bg-black">DREZZ</span>
-            UP
-          </h1>
-=======
     <div className="bg-[#FBF4F4] shadow-md sticky top-0 w-full z-50">
       <div className="flex flex-row justify-between items-center px-5 py-2 md:px-14 pt-5 gap-3">
         <h1
@@ -31,37 +20,17 @@ const Navbar = ({
           <span className="text-white bg-black">DREZZ</span>
           UP
         </h1>
->>>>>>> Stashed changes
 
-          {/* Search bar */}
-          {isHome && (
-            <motion.div
-              initial={false}
-              animate={{ scale: 1 }}
-              className="hidden md:block pl-[2rem]">
-              <SearchBar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-              />
-            </motion.div>
-          )}
+        {/* Search bar */}
+        {isHome && (
+          <motion.div
+            initial={false}
+            animate={{ scale: 1 }}
+            className="hidden md:block pl-[2rem]">
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          </motion.div>
+        )}
 
-<<<<<<< Updated upstream
-          <div
-            id="calculate-btn"
-            className="flex justify-center items-center gap-5 cursor-pointer">
-            <Link to={Destination}>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onHoverStart={() => console.log("hover started!")}
-                onClick={onClick}
-                className="bg-[#BD815A] p-2 px-3 md:p-3 border rounded-[18px] border-[#00000089] cursor-pointer">
-                <span className="text-white cursor-pointer">{Btn}</span>
-              </motion.button>
-            </Link>
-          </div>
-=======
         <div
           id="calculate-btn"
           className="flex justify-center items-center gap-5 cursor-pointer">
@@ -75,10 +44,9 @@ const Navbar = ({
               <span className="text-white cursor-pointer">{Btn}</span>
             </motion.button>
           </Link>
->>>>>>> Stashed changes
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
 
