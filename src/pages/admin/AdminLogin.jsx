@@ -31,21 +31,28 @@ const AdminLogin = () => {
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
       }}>
-      <div className="bg-white shadow-lg rounded-xl p-6 w-96">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">
-          Admin Login
-        </h1>
+      <div className="bg-white shadow-xl rounded-xl p-8 w-96 backdrop-blur-sm bg-opacity-95 border border-gray-100">
+        <div className="text-center mb-6">
+          <h1 className="font-sans font-semibold text-[28px] mb-2">
+            <span className="text-white bg-black px-1 py-0.5 rounded-sm">DREZZ</span>
+            <span className="text-[#BD815A] font-bold">UP</span>
+          </h1>
+          <h2 className="text-xl font-medium text-gray-700">Admin Login</h2>
+        </div>
+        
         <form onSubmit={handleLogin} className="flex flex-col">
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="border border-gray-300 p-3 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative mb-5">
+            <input
+              type="password"
+              placeholder="Enter Password"
+              className="w-full border border-gray-300 p-3 pl-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white font-medium p-3 rounded-md hover:bg-blue-600 transition duration-300">
+            className="bg-[#BD815A] text-white font-medium p-3 rounded-lg hover:bg-[#a06b4a] transition-colors duration-200 shadow-md">
             Login
           </button>
         </form>

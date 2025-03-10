@@ -9,7 +9,7 @@ const TourButton = ({ startTour, isMobile }) => {
       className="fixed bottom-14 md:bottom-16 z-[9000] flex items-center justify-center rounded-full p-0 overflow-hidden"
       style={{
         left: isMobile ? "20px" : "auto",
-        right: isMobile ? "auto" : "20px",
+        right: isMobile ? "auto" : "5px",
         width: "50px",
         height: "50px",
         background: "linear-gradient(135deg, #d29c7b 0%, #c78b6a 100%)",

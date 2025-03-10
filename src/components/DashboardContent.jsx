@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { BsFillTrash3Fill } from "react-icons/bs";
-import { GiCheckMark } from "react-icons/gi";
-import { IoArrowUndoSharp } from "react-icons/io5";
-import { TfiReload } from "react-icons/tfi";
+import { FaSyncAlt } from "react-icons/fa";
+import { FaInbox } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaUndo } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const DashboardContent = ({
@@ -24,138 +26,104 @@ const DashboardContent = ({
   };
 
   return (
-    <div
-      className={`${
-        isSidebarOpen ? "w-full md:w-full" : "w-full md:w-[92%]"
-      } p-5 overflow-y-auto`}>
-      <div className="flex justify-between items-center mb-10 gap-5">
-        <h1 className="text-xl md:text-xl lg:text-3xl font-bold text-gray-800">
-          DREZZUP COMBO ORDERS
+    <div className="flex-1 h-full p-3 sm:p-6 overflow-y-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">
+          {filter === "new" ? "New Orders" : "Completed Orders"}
         </h1>
-
-        {/* Refresh button */}
-        <motion.div
-          animate={{ rotate: isRefreshing ? 360 : 0 }}
-          transition={{
-            repeat: isRefreshing ? Infinity : 0,
-            duration: 0.5, // Faster spin duration
-            ease: "linear",
-          }}
-          className="cursor-pointer hover:rotate-180 transition-transform mr-5"
-          onClick={handleRefresh}>
-          <TfiReload size={20} />
-        </motion.div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-2 bg-[#BD815A] text-white px-4 py-2 rounded-lg hover:bg-[#a06b4a] transition-colors shadow-md">
+            <FaSyncAlt className={`${isRefreshing ? "animate-spin" : ""}`} />
+            <span>Refresh</span>
+          </button>
+        </div>
       </div>
 
       {Object.keys(groupedOrders).length === 0 ? (
-        <p className="text-gray-600">
-          Loading...
-          <br />
-          <i>While you wait, check your internet connection and refresh</i>
-        </p>
+        <div className="bg-white rounded-xl shadow-md p-8 text-center">
+          <FaInbox className="text-gray-400 text-5xl mx-auto mb-4" />
+          <p className="text-xl text-gray-500">No {filter} orders found</p>
+        </div>
       ) : (
         Object.keys(groupedOrders).map((dateKey) => (
-          <div key={dateKey}>
-            <h2 className="text-lg font-bold bg-gray-300 p-2 rounded-t-lg">
+          <div key={dateKey} className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">
               {dateKey}
             </h2>
-            <div className="bg-white shadow-lg rounded-b-lg p-4 mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {groupedOrders[dateKey].map((order) => (
                 <div
                   key={order.id}
-                  className="mb-6 last:mb-0 flex flex-col md:flex-row gap-4">
-                  <ul className="w-full">
-                    <li
-                      className="p-4 bg-gray-100 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition flex flex-col md:flex-row gap-5 justify-between items-center"
-                      onClick={() => setSelectedOrder(order)}>
+                  className="bg-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-4">
                       <div>
-                        <p>
-                          <strong>Name:</strong> {order.fullName}
+                        <h3 className="font-medium text-gray-800">
+                          {order.fullName}
+                        </h3>
+                        <p className="text-sm text-gray-500 italic">
+                          {order.contact}
                         </p>
-                        <p>
-                          <strong>Contact:</strong> {order.contact}
-                        </p>
-                        <p>
-                          <strong>Location:</strong> {order.location}
+                        <p className="text-sm text-gray-500 italic">
+                          <span className="font-medium">Address:</span>{" "}
+                          {order.location}
                         </p>
                       </div>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          order.status === "new"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                        }`}>
+                        {order.status}
+                      </span>
+                    </div>
 
-                      <div className="flex md:justify-center items-center gap-2">
-                        {filter === "new" && (
+                    <div className="flex justify-between items-center">
+                      <button
+                        onClick={() => setSelectedOrder(order)}
+                        className="text-[#BD815A] hover:text-[#a06b4a] transition-colors font-medium">
+                        View Details
+                      </button>
+                      <div className="flex gap-2">
+                        {filter === "new" ? (
                           <button
-                            className="bg-green-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleStatusChange(order.id, "done");
-                            }}>
+                            onClick={() => handleStatusChange(order.id, "done")}
+                            disabled={loadingOrderId === order.id}
+                            className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50">
                             {loadingOrderId === order.id ? (
-                              <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{
-                                  repeat: Infinity,
-                                  duration: 0.5, // Faster spin duration
-                                  ease: "linear",
-                                }}
-                                className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                              />
+                              <FaSpinner className="animate-spin" />
                             ) : (
-                              <>
-                                <GiCheckMark /> Done
-                              </>
+                              <FaCheck />
+                            )}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleStatusChange(order.id, "new")}
+                            disabled={loadingOrderId === order.id}
+                            className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50">
+                            {loadingOrderId === order.id ? (
+                              <FaSpinner className="animate-spin" />
+                            ) : (
+                              <FaUndo />
                             )}
                           </button>
                         )}
-
-                        {filter === "done" && (
-                          <button
-                            className="bg-blue-500 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-blue-600 transition flex items-center gap-1"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleStatusChange(order.id, "new");
-                            }}>
-                            {loadingOrderId === order.id ? (
-                              <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{
-                                  repeat: Infinity,
-                                  duration: 0.5, // Faster spin duration
-                                  ease: "linear",
-                                }}
-                                className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                              />
-                            ) : (
-                              <>
-                                <IoArrowUndoSharp /> Undo
-                              </>
-                            )}
-                          </button>
-                        )}
-
                         <button
-                          className="bg-red-600 text-white px-2 md:px-3 py-1 md:py-2 rounded-lg hover:bg-red-700 transition flex items-center gap-1"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteOrder(order.id);
-                          }}>
+                          onClick={() => handleDeleteOrder(order.id)}
+                          disabled={loadingOrderId === order.id}
+                          className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50">
                           {loadingOrderId === order.id ? (
-                            <motion.div
-                              animate={{ rotate: 360 }}
-                              transition={{
-                                repeat: Infinity,
-                                duration: 0.5, // Faster spin duration
-                                ease: "linear",
-                              }}
-                              className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                            />
+                            <FaSpinner className="animate-spin" />
                           ) : (
-                            <>
-                              <BsFillTrash3Fill /> Delete
-                            </>
+                            <FaTrash />
                           )}
                         </button>
                       </div>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

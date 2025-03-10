@@ -23,16 +23,35 @@ export async function upload(file) {
     }
 
     // Upload to Cloudinary
-    console.log("Uploading to Cloudinary...");
-    const cloudinaryUrl = await uploadToCloudinary(optimizedFile);
-    console.log("Uploaded to Cloudinary:", cloudinaryUrl);
+    let cloudinaryUrl = null;
+    try {
+      console.log("Uploading to Cloudinary...");
+      cloudinaryUrl = await uploadToCloudinary(optimizedFile);
+      console.log("Uploaded to Cloudinary:", cloudinaryUrl);
+    } catch (cloudinaryError) {
+      console.error("Cloudinary upload failed:", cloudinaryError);
+      // Continue with Firebase upload even if Cloudinary fails
+    }
 
     // Upload to Firebase Storage
-    console.log("Uploading to Firebase...");
-    const firebaseUrl = await uploadToFirebase(optimizedFile);
-    console.log("Uploaded to Firebase:", firebaseUrl);
+    let firebaseUrl = null;
+    try {
+      console.log("Uploading to Firebase...");
+      firebaseUrl = await uploadToFirebase(optimizedFile);
+      console.log("Uploaded to Firebase:", firebaseUrl);
+    } catch (firebaseError) {
+      console.error("Firebase upload failed:", firebaseError);
+      // If Cloudinary worked but Firebase failed, we can still proceed
+    }
 
+    // If both uploads failed, throw an error
+    if (!cloudinaryUrl && !firebaseUrl) {
+      throw new Error("Failed to upload image to any storage service");
+    }
+
+    // Return both URLs or whichever one succeeded
     return {
+      url: cloudinaryUrl || firebaseUrl, // For backward compatibility
       cloudinaryUrl,
       firebaseUrl,
     };
