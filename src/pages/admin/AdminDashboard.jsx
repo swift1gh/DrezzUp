@@ -150,76 +150,103 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-screen overflow-hidden bg-gray-50">
       {/* Sidebar */}
       <div
-        className={`transition-all duration-300 ${
-          isSidebarOpen
-            ? "w-3/5 md:w-1/4 absolute h-screen md:relative z-10"
-            : "w-1/5 md:w-[8%] md:min-w-[8%]"
-        } bg-gray-900 text-white p-2 md:p-5 shadow-lg`}>
-        <div className="items-center mb-5 py-5">
-          {isSidebarOpen ? (
-            <FaAngleDoubleLeft
-              className="size-7 cursor-pointer"
-              onClick={handleToggleSidebar}
-            />
-          ) : (
-            <FaAngleDoubleRight
-              className="size-7 cursor-pointer"
-              onClick={handleToggleSidebar}
-            />
+        className={`bg-[#1a202c] text-white transition-all duration-300 ease-in-out h-screen ${
+          isSidebarOpen ? "w-64" : "w-20"
+        } flex flex-col flex-shrink-0`}>
+        <div className="p-4 flex items-center justify-between">
+          {isSidebarOpen && (
+            <div className="font-sans font-semibold text-[20px]">
+              <span className="text-white bg-black px-1 py-0.5 rounded-sm">
+                DREZZ
+              </span>
+              <span className="text-[#BD815A] font-bold">UP</span>
+            </div>
           )}
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+            {isSidebarOpen ? (
+              <FaAngleDoubleLeft size={20} />
+            ) : (
+              <FaAngleDoubleRight size={20} />
+            )}
+          </button>
         </div>
 
-        {/* New Orders Button */}
-        <button
-          className={`w-full p-3 mb-2 rounded-2xl transition flex items-center justify-center gap-2 ${
-            filter === "new"
-              ? "bg-white text-black"
-              : "bg-gray-700 hover:bg-gray-600"
-          }`}
-          onClick={() => handleSidebarButtonClick("new")}>
-          <FaFileAlt className="flex justify-center text-center my-auto " />
-          {isSidebarOpen && <span>New</span>}
-        </button>
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-4">
+            <button
+              onClick={() => setFilter("new")}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
+                filter === "new" ? "bg-gray-700" : ""
+              }`}>
+              {isSidebarOpen ? (
+                <>
+                  <FaFileAlt size={24} className="text-[#BD815A]" />
+                  <span>New</span>
+                </>
+              ) : (
+                <FaFileAlt size={24} className="mx-auto text-[#BD815A]" />
+              )}
+            </button>
 
-        {/* Done Orders Button */}
-        <button
-          className={`w-full p-3 rounded-2xl transition flex items-center justify-center gap-2 ${
-            filter === "done"
-              ? "bg-white text-black"
-              : "bg-gray-700 hover:bg-gray-600"
-          }`}
-          onClick={() => handleSidebarButtonClick("done")}>
-          <FaCheckDouble className="flex justify-center text-center my-auto" />
-          {isSidebarOpen && <span>Done</span>}
-        </button>
+            <button
+              onClick={() => setFilter("done")}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
+                filter === "done" ? "bg-gray-700" : ""
+              }`}>
+              {isSidebarOpen ? (
+                <>
+                  <FaCheckDouble size={24} className="text-[#BD815A]" />
+                  <span>Done</span>
+                </>
+              ) : (
+                <FaCheckDouble size={24} className="mx-auto text-[#BD815A]" />
+              )}
+            </button>
 
-        {/* Add New Product Button */}
-        <Link to="/admin/productupload">
-          <button
-            className="w-full p-3 mt-5 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition flex items-center justify-center gap-2"
-            onClick={handleToggleSidebar}>
-            <FaCloudUploadAlt className="flex justify-center text-center my-auto" />
-            {isSidebarOpen && <span>Products</span>}
-          </button>
-        </Link>
+            {/* Open in new tab */}
+            <a
+              href="/admin/product-upload"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors ${
+                filter === "upload" ? "bg-gray-700" : ""
+              }`}>
+              {isSidebarOpen ? (
+                <>
+                  <FaCloudUploadAlt size={24} className="text-[#BD815A]" />
+                  <span>Products</span>
+                </>
+              ) : (
+                <FaCloudUploadAlt
+                  size={24}
+                  className="mx-auto text-[#BD815A]"
+                />
+              )}
+            </a>
+          </div>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <DashboardContent
-        isSidebarOpen={isSidebarOpen}
-        groupedOrders={groupedOrders}
-        fetchProducts={fetchProducts}
-        setSelectedOrder={setSelectedOrder}
-        handleStatusChange={handleStatusChange}
-        handleDeleteOrder={handleDeleteOrder}
-        loadingOrderId={loadingOrderId}
-        filter={filter}
-      />
+      {/* Main content */}
+      <div className="flex-1 overflow-y-auto">
+        <DashboardContent
+          isSidebarOpen={isSidebarOpen}
+          groupedOrders={groupedOrders}
+          fetchProducts={fetchProducts}
+          setSelectedOrder={setSelectedOrder}
+          handleStatusChange={handleStatusChange}
+          handleDeleteOrder={handleDeleteOrder}
+          loadingOrderId={loadingOrderId}
+          filter={filter}
+        />
+      </div>
 
-      {/* Order Details Modal */}
+      {/* Order details modal */}
       {selectedOrder && (
         <OrderDetails
           selectedOrder={selectedOrder}

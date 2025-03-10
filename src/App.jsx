@@ -31,7 +31,7 @@ const router = createBrowserRouter(
           {" "}
           {/* Wrap with AuthLayout */}
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="productupload" element={<ProductUpload />} />
+          <Route path="product-upload" element={<ProductUpload />} />
         </Route>
       </Route>
     </>

@@ -132,6 +132,9 @@ const UserTour = () => {
           }}
           spotlightPadding={10}
           hideBackButton={false}
+          locale={{
+            last: "Finish",
+          }}
         />
       )}
     </>
