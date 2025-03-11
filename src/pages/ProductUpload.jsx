@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-} from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import bgImage from "../assets/7.jpg";
 import ProductUploadForm from "../components/product/ProductUploadForm";
@@ -37,7 +31,7 @@ const ProductUpload = () => {
     setMessage(text);
     setMessageType(type);
     setShowNotification(true);
-    
+
     // Auto-hide notification after 5 seconds
     setTimeout(() => {
       setShowNotification(false);
@@ -87,7 +81,9 @@ const ProductUpload = () => {
       <div className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md backdrop-blur-sm bg-opacity-95 border border-gray-100">
         <div className="text-center mb-6">
           <h1 className="font-sans font-semibold text-[28px] mb-2">
-            <span className="text-white bg-black px-1 py-0.5 rounded-sm">DREZZ</span>
+            <span className="text-white bg-black px-1 py-0.5 rounded-sm">
+              DREZZ
+            </span>
             <span className="text-[#BD815A] font-bold">UP</span>
           </h1>
           <h2 className="text-xl font-medium text-gray-700 mb-1">

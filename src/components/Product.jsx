@@ -21,10 +21,10 @@ const Product = ({
       } transition-transform duration-200 hover:scale-[1.02]`}
       onClick={selectProduct}>
       <div
-        className={`border border-[#e0e0e0] md:hover:shadow-lg rounded-2xl p-[6px] md:p-3 bg-white w-[10rem] md:w-[12rem] h-auto transition-all duration-200 ${
+        className={`border md:hover:shadow-lg rounded-2xl p-[6px] md:p-3 bg-white w-[10rem] md:w-[12rem] h-auto transition-all duration-200 ${
           isSelected
             ? "border-b-4 border-2 border-[#bd815a] shadow-md"
-            : "hover:border-gray-400"
+            : "border-[#e0e0e0] hover:border-gray-400"
         }`}>
         <div className="p-1 bg-gray-200 w-auto h-[7rem] md:h-[8rem] flex justify-center items-center rounded-2xl shadow-inner border border-[#e5e5e5] relative overflow-hidden">
           {(!imageLoaded || loading) && (

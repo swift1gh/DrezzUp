@@ -71,14 +71,6 @@ const DashboardContent = ({
                           {order.location}
                         </p>
                       </div>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          order.status === "new"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
-                        }`}>
-                        {order.status}
-                      </span>
                     </div>
 
                     <div className="flex justify-between items-center">

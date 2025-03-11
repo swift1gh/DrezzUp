@@ -1,5 +1,5 @@
 import React from "react";
-import { FaSpinner, FaTrash } from "react-icons/fa";
+import { FaSpinner, FaTrash, FaUpload } from "react-icons/fa";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { upload } from "../../utils/storage";
@@ -21,13 +21,30 @@ const ProductUploadForm = ({
   fileLoading,
   setFileLoading,
   showMessage,
-  toggleForm
+  toggleForm,
 }) => {
   const [processedFile, setProcessedFile] = React.useState(null);
 
   const handleImageProcessed = (file) => {
     setProcessedFile(file);
     window.processedFileToUpload = file;
+  };
+
+  const formatText = (text) => {
+    return text
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/^\s+|\s+$/g, "")
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+      .replace(/\s+/g, "");
+  };
+
+  const handleProductNameChange = (e) => {
+    setProductName(formatText(e.target.value));
+  };
+
+  const handleProductColorChange = (e) => {
+    setProductColor(formatText(e.target.value));
   };
 
   const handleUpload = async () => {
@@ -75,7 +92,7 @@ const ProductUploadForm = ({
     try {
       showMessage("Uploading product...", "info");
       console.log("Uploading product with ID:", productId);
-      
+
       // Upload the image if we have a processed file waiting
       let imageUrl = productImageUrl;
       if (processedFile) {
@@ -83,10 +100,13 @@ const ProductUploadForm = ({
           console.log("Uploading image to storage...");
           const uploadResponse = await upload(processedFile);
           console.log("Image uploaded successfully:", uploadResponse);
-          
+
           // Use cloudinaryUrl if available, otherwise use firebaseUrl
-          imageUrl = uploadResponse.cloudinaryUrl || uploadResponse.firebaseUrl || uploadResponse.url;
-          
+          imageUrl =
+            uploadResponse.cloudinaryUrl ||
+            uploadResponse.firebaseUrl ||
+            uploadResponse.url;
+
           // Clear the stored file after successful upload
           setProcessedFile(null);
           window.processedFileToUpload = null;
@@ -97,7 +117,7 @@ const ProductUploadForm = ({
           return;
         }
       }
-      
+
       // Create the product object
       const productData = {
         id: productId,
@@ -106,12 +126,12 @@ const ProductUploadForm = ({
         image: imageUrl,
         singlePrice: parsedSinglePrice,
         comboPrice: parsedComboPrice,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-      
+
       // Add to Firestore
       await addDoc(collection(db, "products"), productData);
-      
+
       // Clear form and show success message
       showMessage("Product uploaded successfully!", "success");
       setProductName("");
@@ -128,42 +148,68 @@ const ProductUploadForm = ({
     }
   };
 
+  const handleClearForm = () => {
+    setProductName("");
+    setProductSinglePrice("");
+    setProductComboPrice("");
+    setProductColor("");
+    setProductImageUrl("");
+    setProcessedFile(null);
+    window.processedFileToUpload = null;
+  };
+
   return (
     <div>
       <div className="bg-gray-200 p-3 rounded-lg text-center mb-4">
         <span className="font-medium">Product {productId}</span>
       </div>
-      
-      {/* Image Preview */}
-      {productImageUrl && (
-        <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="flex justify-center">
-            <img 
-              src={productImageUrl} 
-              alt="Product Preview" 
-              className="h-48 object-contain rounded-lg shadow-sm"
-            />
-          </div>
-          <p className="text-center text-sm text-gray-500 mt-2">Image Preview</p>
-        </div>
-      )}
-      
+
       <form className="flex flex-col gap-4">
+        {/* Form Fields */}
         <div className="relative">
           <input
             type="text"
             placeholder="Product Name"
             value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            onChange={handleProductNameChange}
             className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
           />
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                clipRule="evenodd"
+              />
             </svg>
           </span>
         </div>
-        
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Color"
+            value={productColor}
+            onChange={handleProductColorChange}
+            className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
+          />
+          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="relative">
             <input
@@ -173,7 +219,9 @@ const ProductUploadForm = ({
               onChange={(e) => setProductSinglePrice(e.target.value)}
               className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
             />
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">₵</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              ₵
+            </span>
           </div>
           <div className="relative">
             <input
@@ -183,58 +231,74 @@ const ProductUploadForm = ({
               onChange={(e) => setProductComboPrice(e.target.value)}
               className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
             />
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">₵</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              ₵
+            </span>
           </div>
         </div>
-        
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Color"
-            value={productColor}
-            onChange={(e) => setProductColor(e.target.value)}
-            className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
-          />
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
-            </svg>
-          </span>
+
+        {/* Image Upload Section */}
+        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <div className="flex flex-col gap-4">
+            {/* Image Uploader */}
+            <div className="flex flex-col gap-4 justify-center">
+              <ImageUploader
+                fileLoading={fileLoading}
+                setFileLoading={setFileLoading}
+                showMessage={showMessage}
+                onImageProcessed={handleImageProcessed}
+              />
+            </div>
+
+            {/* Image Preview */}
+            {(productImageUrl || processedFile) && (
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-center">
+                  <img
+                    src={
+                      processedFile
+                        ? URL.createObjectURL(processedFile)
+                        : productImageUrl
+                    }
+                    alt="Product Preview"
+                    className="w-full h-64 object-cover rounded-lg shadow-sm"
+                    style={{ aspectRatio: "7/5" }}
+                  />
+                </div>
+                <p className="text-center text-sm text-gray-500">
+                  Image Preview
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-
-        <ImageUploader 
-          fileLoading={fileLoading}
-          setFileLoading={setFileLoading}
-          showMessage={showMessage}
-          onImageProcessed={handleImageProcessed}
-        />
-
+        {/* Action Buttons */}
         <button
           type="button"
           onClick={handleUpload}
-          disabled={fileLoading}
-          className={`flex items-center justify-center gap-2 bg-[#BD815A] text-white font-medium p-3 rounded-lg hover:bg-[#a06b4a] transition-colors duration-200 shadow-md mt-2 ${
-            fileLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}>
-          {fileLoading ? (
-            <>
-              <FaSpinner className="animate-spin" />
-              Processing...
-            </>
-          ) : (
-            "Upload Product"
-          )}
+          className="flex-1 bg-[#BD815A] text-white font-medium p-3 rounded-lg hover:bg-[#a06b4a] transition-all duration-200 shadow-md text-center flex items-center justify-center gap-2">
+          {fileLoading ? <FaSpinner className="animate-spin" /> : <FaUpload />}
+          Upload Product
         </button>
-      </form>
 
-      <div className="mt-6 text-center">
-        <button
-          onClick={toggleForm}
-          className="text-[#BD815A] hover:text-[#a06b4a] transition-colors duration-200 text-sm underline flex items-center justify-center gap-1 mx-auto">
-          <FaTrash className="text-xs" />
-          Want to delete a product?
-        </button>
-      </div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleClearForm}
+            className="flex-1 bg-gray-500 text-white font-medium p-3 rounded-lg hover:bg-gray-600 transition-all duration-200 shadow-md text-center flex items-center justify-center gap-2">
+            <FaTrash />
+            Clear Form
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleForm}
+            className="flex-1 bg-red-800 text-white font-medium p-3 rounded-lg hover:bg-gray-600 transition-all duration-200 shadow-md text-center flex items-center justify-center gap-2">
+            <FaTrash />
+            Delete a Product
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
