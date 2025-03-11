@@ -33,11 +33,6 @@ const TourStepContent = ({ type, isMobile }) => {
             <FaSearch className="text-[#d29c7b] mr-2" /> Search for Sneakers
           </h3>
           <p>Use this search bar to find your favorite sneakers by name!</p>
-          {isMobile && (
-            <div className="mt-3 text-sm text-gray-300 flex items-center">
-              <FaArrowRight className="mr-1" /> Swipe to continue
-            </div>
-          )}
         </div>
       );
 
