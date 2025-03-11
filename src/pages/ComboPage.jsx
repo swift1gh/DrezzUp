@@ -4,9 +4,10 @@ import Navbar from "../components/Navbar";
 import Selected from "../components/Selected";
 import Footer from "../components/Footer";
 import OrderForm from "../components/OrderForm";
-import { motion } from "framer-motion"; // Fixed incorrect import
+import { motion } from "framer-motion"; 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
+import bgImage from "../assets/7.jpg";
 
 const ComboPage = () => {
   const location = useLocation();
@@ -67,7 +68,15 @@ const ComboPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-40">
+      <div 
+        className="flex justify-center items-center h-screen"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+      >
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
@@ -78,11 +87,31 @@ const ComboPage = () => {
   }
 
   if (error) {
-    return <p>Error fetching products: {error.message}</p>;
+    return (
+      <div
+        className="flex justify-center items-center h-screen"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <p className="bg-white p-4 rounded-lg shadow-md">Error fetching products: {error.message}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div 
+      className="flex flex-col min-h-screen"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <Navbar Btn={"Home"} Destination="/" />
 
       <main className="flex-grow">

@@ -65,7 +65,7 @@ const Selected = ({ selectedProducts, totalComboPrice }) => {
               transition={{ duration: 1 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-[#cbcaca] w-11/12 md:w-4/5 py-4">
+              className="bg-[#cbcaca] w-11/12 md:w-4/5 py-4 rounded-3xl">
               <h2 className="flex justify-center text-center items-center gap-3 text-xl font-normal font-roboto">
                 Combo Price:{" "}
                 <span className="text-[#cf743c] font-mono font-bold md:text-2xl">

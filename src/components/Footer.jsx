@@ -19,7 +19,7 @@ const Footer = () => {
             <p className="text-sm mb-2">
               &#169;2025 DREZZUP. All Rights Reserved
             </p>
-            <span className="flex justify-end text-xs text-gray-500 gap-x-1">
+            <span className="flex justify-end text-xs text-gray-500 gap-x-1 italic">
               Developed by
               <a
                 className="cursor-pointer text-[#BD815A] hover:text-[#a06b4a] transition-colors duration-200"

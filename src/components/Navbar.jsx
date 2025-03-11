@@ -42,7 +42,7 @@ const Navbar = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#BD815A] p-2 px-4 md:p-3 border rounded-[18px] border-[#00000089] cursor-pointer shadow-md hover:bg-[#c78b6a] transition-colors duration-200">
+              className="bg-[#BD815A] p-2 px-4 md:p-3 border rounded-[18px] border-gray-500 cursor-pointer shadow-md hover:bg-[#c78b6a] transition-colors duration-200">
               <span className="text-white font-medium cursor-pointer">
                 {Btn}
               </span>

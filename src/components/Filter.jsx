@@ -28,7 +28,7 @@ const Filter = ({ selectedBrand, setSelectedBrand }) => {
 
   return (
     <nav className="px-3 pb-4 pt-2 bg-gradient-to-b from-[#FBF4F4] to-[#ffffff00] flex justify-center items-center sticky top-20 w-full z-40 overflow-x-auto">
-      <div className="relative w-full max-w-5xl">
+      <div className="relative w-full max-w-6xl md:max-w-7xl overflow-x-auto md:overflow-x-hidden scroll-smooth">
         {/* Left shadow gradient for scroll indication */}
         <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#FBF4F4] to-transparent z-10 pointer-events-none rounded-2xl"></div>
 
