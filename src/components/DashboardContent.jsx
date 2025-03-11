@@ -67,7 +67,6 @@ const DashboardContent = ({
                           {order.contact}
                         </p>
                         <p className="text-sm text-gray-500 italic">
-                          <span className="font-medium">Address:</span>{" "}
                           {order.location}
                         </p>
                       </div>
