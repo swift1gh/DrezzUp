@@ -164,9 +164,6 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
                     Name={product.name}
                     Color={product.color}
                     singlePrice={`GHS ${product.singlePrice}.00`}
-                    comboPrice={
-                      product.comboPrice ? `GHS ${product.comboPrice}.00` : null
-                    }
                     isSelected={selectedProductIds.includes(product.id)}
                     selectProduct={() => handleSelectProduct(product.id)}
                     loading={loading}

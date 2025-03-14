@@ -15,9 +15,12 @@ import {
   FaCheckDouble,
   FaCloudUploadAlt,
   FaFileAlt,
+  FaChartLine,
+  FaMoneyBillWave,
 } from "react-icons/fa";
 import OrderDetails from "../../components/OrderDetails";
-import DashboardContent from "../../components/DashboardContent";
+import DashboardContent from "../../components/dashboard/DashboardContent";
+import bgImage from "../../assets/7.jpg";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -30,6 +33,10 @@ const AdminDashboard = () => {
   // Listen to Firestore orders
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "customers"), (snapshot) => {
+      console.log(
+        "Raw Firestore data:",
+        snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
       const orderList = snapshot.docs
         .map((doc) => {
           const data = doc.data();
@@ -37,12 +44,12 @@ const AdminDashboard = () => {
           const dateObj = data.date?.toDate
             ? data.date.toDate()
             : new Date(data.date || Date.now());
-          return {
+
+          const order = {
             id: doc.id,
             ...data,
-            status: data.status || "new",
+            status: data.status || "new", // Ensure status is set
             date: dateObj,
-            // Store a formatted date string for UI components that require string operations
             dateString: !isNaN(dateObj)
               ? dateObj.toLocaleDateString("en-GB", {
                   day: "2-digit",
@@ -51,9 +58,12 @@ const AdminDashboard = () => {
                 })
               : "Invalid Date",
           };
+          console.log("Processed order:", order);
+          return order;
         })
         .sort((a, b) => b.date - a.date);
 
+      console.log("Final processed orders:", orderList);
       setOrders(orderList);
     });
 
@@ -125,19 +135,44 @@ const AdminDashboard = () => {
   };
 
   // Filter orders based on status
-  const filteredOrders = orders.filter((order) =>
-    filter === "new" ? order.status === "new" : order.status === "done"
-  );
+  const filteredOrders = orders.filter((order) => {
+    if (!order || !order.status) {
+      console.warn("Invalid order or missing status:", order);
+      return false;
+    }
+    console.log(
+      `Filtering order ${order.id}: status=${order.status}, filter=${filter}`
+    );
 
-  // Group orders by their formatted date string (ensuring a string is used)
+    switch (filter) {
+      case "new":
+        return order.status === "new";
+      case "paid":
+        return order.status === "paid";
+      case "done":
+        return order.status === "done";
+      default:
+        return order.status === "new";
+    }
+  });
+
+  // Group orders by their formatted date string
   const groupedOrders = filteredOrders.reduce((acc, order) => {
-    const key = order.dateString || "Invalid Date";
+    if (!order.dateString) {
+      console.warn("Order missing dateString:", order);
+      return acc;
+    }
+    const key = order.dateString;
     if (!acc[key]) {
       acc[key] = [];
     }
     acc[key].push(order);
     return acc;
   }, {});
+
+  console.log("Current filter:", filter);
+  console.log("Filtered orders:", filteredOrders);
+  console.log("Grouped orders:", groupedOrders);
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -150,13 +185,20 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      {/* Sidebar */}
+    <div
+      className="flex h-screen overflow-hidden"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}>
+      {/* Sidebar with glass effect */}
       <div
-        className={`bg-[#1a202c] text-white transition-all duration-300 ease-in-out h-screen ${
+        className={`backdrop-blur-md bg-[#1a202c]/90 text-white transition-all duration-300 ease-in-out h-screen ${
           isSidebarOpen ? "w-64" : "w-20"
-        } flex flex-col flex-shrink-0`}>
-        <div className="p-4 flex items-center justify-between">
+        } flex flex-col flex-shrink-0 border-r border-gray-700/30`}>
+        <div className="p-4 flex items-center justify-between border-b border-gray-700/30">
           {isSidebarOpen && (
             <div className="font-sans font-semibold text-[20px]">
               <span className="text-white bg-black px-1 py-0.5 rounded-sm">
@@ -176,10 +218,16 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4">
+        <div className="flex-1 overflow-y-auto p-4">
+          {/* Top */}
+          <div>
             <button
-              onClick={() => setFilter("new")}
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsSidebarOpen(false);
+                }
+                setFilter("new");
+              }}
               className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
                 filter === "new" ? "bg-gray-700" : ""
               }`}>
@@ -194,7 +242,32 @@ const AdminDashboard = () => {
             </button>
 
             <button
-              onClick={() => setFilter("done")}
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsSidebarOpen(false);
+                }
+                setFilter("paid");
+              }}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
+                filter === "paid" ? "bg-gray-700" : ""
+              }`}>
+              {isSidebarOpen ? (
+                <>
+                  <FaMoneyBillWave size={24} className="text-[#BD815A]" />
+                  <span>Paid</span>
+                </>
+              ) : (
+                <FaMoneyBillWave size={24} className="mx-auto text-[#BD815A]" />
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsSidebarOpen(false);
+                }
+                setFilter("done");
+              }}
               className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
                 filter === "done" ? "bg-gray-700" : ""
               }`}>
@@ -207,13 +280,20 @@ const AdminDashboard = () => {
                 <FaCheckDouble size={24} className="mx-auto text-[#BD815A]" />
               )}
             </button>
+          </div>
 
-            {/* Open in new tab */}
+          {/* Bottom */}
+          <div className="mt-auto mb-2 fixed bottom-0">
             <a
               href="/admin/product-upload"
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors ${
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsSidebarOpen(false);
+                }
+              }}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors ${
                 filter === "upload" ? "bg-gray-700" : ""
               }`}>
               {isSidebarOpen ? (
@@ -228,6 +308,26 @@ const AdminDashboard = () => {
                 />
               )}
             </a>
+
+            <button
+              onClick={() => {
+                if (window.innerWidth < 768) {
+                  setIsSidebarOpen(false);
+                }
+                setFilter("summary");
+              }}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 transition-colors mt-2 ${
+                filter === "summary" ? "bg-gray-700" : ""
+              }`}>
+              {isSidebarOpen ? (
+                <>
+                  <FaChartLine size={24} className="text-[#BD815A]" />
+                  <span>Summary</span>
+                </>
+              ) : (
+                <FaChartLine size={24} className="mx-auto text-[#BD815A]" />
+              )}
+            </button>
           </div>
         </div>
       </div>
