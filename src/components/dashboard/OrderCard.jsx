@@ -1,7 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { FaCheck, FaTruck, FaSpinner } from "react-icons/fa";
+import { calculateOrderTotal } from "../../utils/helpers/orderHelpers";
 
+/**
+ * Reusable OrderCard component for displaying order information
+ */
 const OrderCard = ({
   order,
   setSelectedOrder,
@@ -15,6 +19,7 @@ const OrderCard = ({
   }
 
   const isLoading = loadingOrderId === order.id;
+  const orderTotal = calculateOrderTotal(order);
 
   const getStatusButton = () => {
     if (isLoading) {
@@ -91,6 +96,13 @@ const OrderCard = ({
               <span className="inline-block w-2 h-2 rounded-full bg-[#BD815A]"></span>
               {order.location || "No Location"}
             </p>
+            <p className="text-sm font-medium text-[#BD815A] mt-2">
+              GHS{" "}
+              {orderTotal.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </div>
           <span
             className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor()}`}>
@@ -120,6 +132,8 @@ OrderCard.propTypes = {
     contact: PropTypes.string,
     location: PropTypes.string,
     status: PropTypes.oneOf(["new", "paid", "done"]).isRequired,
+    comboPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    addBox: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }).isRequired,
   setSelectedOrder: PropTypes.func.isRequired,
   loadingOrderId: PropTypes.string,

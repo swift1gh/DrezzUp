@@ -1,18 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Product from "../Product";
+import { calculateOrderTotal } from "../../utils/helpers/orderHelpers";
 
+/**
+ * OrderDetails component to display detailed order information
+ */
 const OrderDetails = ({ selectedOrder, setSelectedOrder, products }) => {
   if (!selectedOrder) return null;
 
-  // Calculate total properly using TOTAL field if available, otherwise fallback to combo calculation
-  const total = selectedOrder.TOTAL
-    ? parseFloat(selectedOrder.TOTAL)
-    : (selectedOrder.comboPrice || 0) + (selectedOrder.addBox || 0) * 20;
+  const total = calculateOrderTotal(selectedOrder);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-200 rounded-xl shadow-xl w-[90%] max-w-xl max-h-[90vh] overflow-hidden">
-        {/* Header */}
         <div className="bg-[#1a202c] text-white p-4 flex justify-between items-center">
           <h2 className="text-xl font-semibold">Order Details</h2>
           <button
@@ -34,51 +35,34 @@ const OrderDetails = ({ selectedOrder, setSelectedOrder, products }) => {
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          {/* Customer Info */}
           <div className="mb-6 bg-gray-50 p-4 rounded-lg">
             <h3 className="text-lg font-medium text-gray-800 mb-3">
               Customer Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-500">Name</p>
-                <p className="font-medium">{selectedOrder.fullName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Contact</p>
-                <p className="font-medium">{selectedOrder.contact}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">{selectedOrder.location}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Number of Boxes</p>
-                <p className="font-medium">{selectedOrder.addBox || 0}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Guarantor's Name</p>
-                <p className="font-medium">{selectedOrder.guarantorName}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Guarantor's Contact</p>
-                <p className="font-medium">{selectedOrder.guarantorContact}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Shoe Size</p>
-                <p className="font-medium">{selectedOrder.size}</p>
-              </div>
+              <InfoField label="Name" value={selectedOrder.fullName} />
+              <InfoField label="Contact" value={selectedOrder.contact} />
+              <InfoField label="Location" value={selectedOrder.location} />
+              <InfoField label="Number of Boxes" value={selectedOrder.addBox} />
+              <InfoField
+                label="Guarantor's Name"
+                value={selectedOrder.guarantorName}
+              />
+              <InfoField
+                label="Guarantor's Contact"
+                value={selectedOrder.guarantorContact}
+              />
+              <InfoField label="Shoe Size" value={selectedOrder.size} />
               <div>
                 <p className="text-sm text-gray-500">Status</p>
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-medium inline-block ${
                     selectedOrder.status === "new"
-                      ? "bg-blue-100 text-blue-800"
+                      ? "bg-yellow-100 text-yellow-800"
                       : selectedOrder.status === "paid"
                       ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
+                      : "bg-blue-100 text-blue-800"
                   }`}>
                   {selectedOrder.status.charAt(0).toUpperCase() +
                     selectedOrder.status.slice(1)}
@@ -87,14 +71,13 @@ const OrderDetails = ({ selectedOrder, setSelectedOrder, products }) => {
             </div>
           </div>
 
-          {/* Selected Products */}
           <div>
             <h3 className="text-lg font-medium text-gray-800 mb-3">
               Selected Products
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {selectedOrder.selectedIds &&
-                products
+            {products && selectedOrder.selectedIds ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
+                {products
                   .filter((product) =>
                     selectedOrder.selectedIds.includes(product.id.toString())
                   )
@@ -104,14 +87,14 @@ const OrderDetails = ({ selectedOrder, setSelectedOrder, products }) => {
                       Image={product.image}
                       Name={product.name}
                       Color={product.color}
-                      singlePrice={product.singlePrice}
-                      comboPrice={product.comboPrice}
                     />
                   ))}
-            </div>
+              </div>
+            ) : (
+              <p className="text-gray-500">No products selected</p>
+            )}
           </div>
 
-          {/* Total */}
           <div className="md:mt-6 mt-4 py-3 border-t border-gray-200 bg-white px-4 rounded-lg">
             <div className="flex justify-between items-center">
               <h3 className="text-lg text-gray-800 uppercase font-bold">
@@ -130,6 +113,27 @@ const OrderDetails = ({ selectedOrder, setSelectedOrder, products }) => {
       </div>
     </div>
   );
+};
+
+/**
+ * Helper component for displaying field info
+ */
+const InfoField = ({ label, value }) => (
+  <div>
+    <p className="text-sm text-gray-500">{label}</p>
+    <p className="font-medium">{value || "—"}</p>
+  </div>
+);
+
+InfoField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
+
+OrderDetails.propTypes = {
+  selectedOrder: PropTypes.object,
+  setSelectedOrder: PropTypes.func.isRequired,
+  products: PropTypes.array.isRequired,
 };
 
 export default OrderDetails;
