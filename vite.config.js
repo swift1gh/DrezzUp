@@ -5,14 +5,8 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    rollupOptions: {
-      external: ["react-chartjs-2", "chart.js"],
-      output: {
-        globals: {
-          "react-chartjs-2": "ReactChartjs2",
-          "chart.js": "Chart",
-        },
-      },
+    commonjsOptions: {
+      include: [/react-chartjs-2/, /chart.js/],
     },
   },
 });
