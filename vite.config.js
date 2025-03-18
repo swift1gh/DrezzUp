@@ -7,5 +7,16 @@ export default defineConfig({
     commonjsOptions: {
       include: [/react-chartjs-2/, /chart.js/],
     },
+    rollupOptions: {
+      external: ["react"],
+      output: {
+        globals: {
+          react: "React",
+        },
+      },
+    },
+  },
+  optimizeDeps: {
+    include: ["react", "react-dom"],
   },
 });
