@@ -10,6 +10,15 @@ import { useOrders } from "../../hooks/useOrders";
 import { useProducts } from "../../hooks/useProducts";
 
 const AdminDashboard = () => {
+  // Add title change effect
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = "DrezzUp | Combo Admin Dashboard";
+    return () => {
+      document.title = originalTitle;
+    };
+  }, []);
+
   const {
     orders,
     loading: ordersLoading,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const Navbar = ({
   Btn,

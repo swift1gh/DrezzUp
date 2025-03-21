@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const AdminRoute = () => {
   const { user, loading } = useAuth();
