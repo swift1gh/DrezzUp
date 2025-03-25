@@ -18,7 +18,7 @@ const Footer = () => {
           </div>
 
           <p className="text-sm mb-2">
-            &#169;2025 DREZZUP. All Rights Reserved
+            &#169;2025 DREZZUP. All Rights Reserved.
           </p>
         </div>
       </div>
