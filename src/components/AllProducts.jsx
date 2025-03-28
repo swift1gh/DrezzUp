@@ -21,9 +21,9 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -164,9 +164,6 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
                     Name={product.name}
                     Color={product.color}
                     singlePrice={`GHS ${product.singlePrice}.00`}
-                    comboPrice={
-                      product.comboPrice ? `GHS ${product.comboPrice}.00` : null
-                    }
                     isSelected={selectedProductIds.includes(product.id)}
                     selectProduct={() => handleSelectProduct(product.id)}
                     loading={loading}
@@ -182,7 +179,7 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
               whileTap={{ scale: 0.95 }}
               className="mt-8 px-6 py-2 bg-[#BD815A] text-white rounded-xl shadow-md hover:bg-[#a06b4a] transition-colors duration-200 font-medium"
               onClick={loadMore}>
-              Load More
+              Show More
             </motion.button>
           )}
         </>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../utils/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { calculateOrderTotal } from "../utils/helpers/orderHelpers";
 
 const getDefaultFormState = (selectedIds = [], comboPrice = 0) => ({
   fullName: "",
@@ -55,11 +56,22 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
       setLoading(true);
 
       try {
+        // Use the utility function to calculate total
+        const orderDataWithNumericValues = {
+          ...formData,
+          comboPrice: parseFloat(formData.comboPrice) || 0,
+          addBox: parseInt(formData.addBox) || 0,
+        };
+
+        const total = calculateOrderTotal(orderDataWithNumericValues);
+
         const orderData = {
           ...formData,
           date: Timestamp.now(),
           selectedIds,
-          comboPrice,
+          comboPrice: parseFloat(formData.comboPrice) || 0,
+          addBox: parseInt(formData.addBox) || 0,
+          TOTAL: total.toString(), // Store the calculated total amount
         };
 
         const result = await addDoc(collection(db, "customers"), orderData);
@@ -97,21 +109,20 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 100 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative flex justify-center items-center py-6 px-4"
-    >
+      className="relative flex justify-center items-center py-6 px-4">
       <div
         className={`w-full flex justify-center items-center ${
           isPopupVisible ? "blur-md" : ""
-        }`}
-      >
+        }`}>
         <motion.div
           className="bg-white rounded-2xl shadow-xl w-full max-w-4xl overflow-hidden"
           whileHover={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
-          transition={{ duration: 0.3 }}
-        >
+          transition={{ duration: 0.3 }}>
           <div className="bg-gradient-to-r from-[#bd815a] to-[#d29c7b] p-4 text-white">
             <h2 className="text-2xl font-bold">Place Your Order</h2>
-            <p className="text-sm opacity-90 mt-1">Please fill out the form below</p>
+            <p className="text-sm opacity-90 mt-1">
+              Please fill out the form below
+            </p>
           </div>
 
           <form className="p-4 md:p-6" onSubmit={handleSubmit}>
@@ -119,8 +130,7 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-r"
-              >
+                className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-r">
                 <p className="text-red-700 text-sm">{error}</p>
               </motion.div>
             )}
@@ -132,11 +142,15 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
                   key={name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: formFields.findIndex((f) => f.name === name) * 0.05 }}
-                >
+                  transition={{
+                    duration: 0.3,
+                    delay: formFields.findIndex((f) => f.name === name) * 0.05,
+                  }}>
                   <div className="flex items-center mb-1">
                     <span className="mr-2">{icon}</span>
-                    <label htmlFor={name} className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor={name}
+                      className="text-sm font-medium text-gray-700">
                       {label}
                     </label>
                   </div>
@@ -164,11 +178,12 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
                 className="relative"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-              >
+                transition={{ duration: 0.3, delay: 0.3 }}>
                 <div className="flex items-center mb-1">
                   <span className="mr-2">📦</span>
-                  <label htmlFor="addBox" className="text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="addBox"
+                    className="text-sm font-medium text-gray-700">
                     Number of Boxes
                   </label>
                 </div>
@@ -184,8 +199,7 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
                     value={formData.addBox}
                     onChange={handleChange}
                     onFocus={() => handleFocus("addBox")}
-                    onBlur={handleBlur}
-                  >
+                    onBlur={handleBlur}>
                     {Array.from({ length: 6 }, (_, i) => (
                       <option key={i} value={i}>
                         {i}
@@ -196,8 +210,7 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
                     <svg
                       className="h-4 w-4 fill-current text-gray-500"
                       xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
+                      viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
                   </div>
@@ -208,8 +221,7 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
                 className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r text-sm mt-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.35 }}
-              >
+                transition={{ duration: 0.3, delay: 0.35 }}>
                 <div className="flex">
                   <span className="text-amber-500 mr-2">⚠️</span>
                   <p className="text-amber-700">
@@ -230,29 +242,25 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
               }`}
               disabled={loading}
               whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
-            >
+              whileTap={{ scale: loading ? 1 : 0.98 }}>
               {loading ? (
                 <div className="flex items-center justify-center">
                   <svg
                     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
-                    viewBox="0 0 24 24"
-                  >
+                    viewBox="0 0 24 24">
                     <circle
                       className="opacity-25"
                       cx="12"
                       cy="12"
                       r="10"
                       stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
+                      strokeWidth="4"></circle>
                     <path
                       className="opacity-75"
                       fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                   Processing...
                 </div>
@@ -269,28 +277,24 @@ const OrderForm = ({ selectedIds = [], comboPrice = 0 }) => {
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
+          exit={{ opacity: 0 }}>
           <motion.div
             className="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm mx-4"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 className="w-8 h-8 text-green-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
+                  d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">

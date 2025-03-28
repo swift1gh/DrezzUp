@@ -11,7 +11,6 @@ const Product = ({
   selectProduct,
   loading,
 }) => {
-  const displayPrice = comboPrice || singlePrice;
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
@@ -54,7 +53,7 @@ const Product = ({
         </div>
         <div className="w-full justify-center items-center text-center py-1 bg-[#f9f6f4] rounded-lg">
           <span className="font-mono font-semibold text-[12px] md:text-[16px] text-[#BD815A]">
-            {displayPrice}
+            {singlePrice}
           </span>
         </div>
       </div>

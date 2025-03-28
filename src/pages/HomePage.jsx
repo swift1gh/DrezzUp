@@ -5,7 +5,7 @@ import Filter from "../components/Filter";
 import Footer from "../components/Footer";
 import searchIcon from "../assets/search.svg";
 import SearchBar from "../components/SearchBar";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import UserTour from "../components/UserTour"; // Import UserTour
 
 const HomePage = () => {

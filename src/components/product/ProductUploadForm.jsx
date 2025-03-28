@@ -1,5 +1,5 @@
 import React from "react";
-import { FaSpinner, FaTrash, FaUpload } from "react-icons/fa";
+import { FaSpinner, FaTrash, FaUpload, FaArrowRight } from "react-icons/fa";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { upload } from "../../utils/storage";
@@ -294,8 +294,8 @@ const ProductUploadForm = ({
             type="button"
             onClick={toggleForm}
             className="flex-1 bg-red-800 text-white font-medium p-3 rounded-lg hover:bg-gray-600 transition-all duration-200 shadow-md text-center flex items-center justify-center gap-2">
-            <FaTrash />
-            Delete a Product
+            Delete Product
+            <FaArrowRight className="text-xs" />
           </button>
         </div>
       </form>
