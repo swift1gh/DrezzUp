@@ -14,6 +14,7 @@ import { AuthProvider } from "./hooks/useAuth.jsx";
 import AdminRoute from "./routes/AdminRoute.jsx";
 import ProductUpload from "./pages/ProductUpload.jsx";
 import AuthLayout from "./layouts/AuthLayout.jsx"; // Import AuthLayout
+import NotFound from "./pages/NotFound.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,20 +31,32 @@ const router = createBrowserRouter(
         <Route element={<AuthLayout />}>
           {" "}
           {/* Wrap with AuthLayout */}
+          <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="product-upload" element={<ProductUpload />} />
         </Route>
       </Route>
+
+      {/* Catch all route for 404 */}
+      <Route path="*" element={<NotFound />} />
     </>
   )
 );
 
-const App = () => {
+function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <div className="app-container">
+      <header>{/* Your header content */}</header>
+
+      <main>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </main>
+
+      <footer>{/* Your footer content */}</footer>
+    </div>
   );
-};
+}
 
 export default App;

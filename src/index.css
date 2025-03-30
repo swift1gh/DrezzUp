@@ -74,3 +74,70 @@ html {
 .animate-slideUp {
   animation: slideUp 0.3s ease-out forwards;
 }
+
+/* Reset and base styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content wrapper */
+main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+/* Footer styles */
+footer {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+/* Ensure content doesn't overflow */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll */
+body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Fix for Chrome specific scrolling */
+html {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* App container styles */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ensure content stays within bounds */
+.app-container > * {
+  width: 100%;
+}
+
+/* Fix for Chrome specific issues */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .app-container {
+    min-height: -webkit-fill-available;
+  }
+}

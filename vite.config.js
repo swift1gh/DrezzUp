@@ -10,8 +10,13 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
-    rollupOptions: {
-      external: ["prop-types"],
+  },
+  resolve: {
+    alias: {
+      "react-native": "react-native-web",
     },
+  },
+  optimizeDeps: {
+    include: ["react-native-web"],
   },
 });
