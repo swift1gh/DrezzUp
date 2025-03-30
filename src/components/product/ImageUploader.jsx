@@ -80,11 +80,35 @@ const ImageUploader = ({
       img.onload = () => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        const targetWidth = 700;
-        const targetHeight = 500;
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-        ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+        const maxWidth = 700;
+        const maxHeight = 500;
+
+        // Calculate dimensions while preserving aspect ratio
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate the scaling ratio to fit within our constraints
+        if (width > height) {
+          // Landscape orientation
+          if (width > maxWidth) {
+            height = Math.round(height * (maxWidth / width));
+            width = maxWidth;
+          }
+        } else {
+          // Portrait orientation
+          if (height > maxHeight) {
+            width = Math.round(width * (maxHeight / height));
+            height = maxHeight;
+          }
+        }
+
+        // Set canvas size to the new dimensions
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw image with the new dimensions
+        ctx.drawImage(img, 0, 0, width, height);
+
         canvas.toBlob((blob) => {
           resolve(new File([blob], file.name, { type: "image/png" }));
         }, "image/png");
@@ -111,7 +135,7 @@ const ImageUploader = ({
 
   return (
     <div
-      className="flex flex-col gap-4 p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#BD815A] transition-colors duration-200 bg-white"
+      className="flex flex-col gap-4 p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#BD815A] transition-colors duration-200 bg-gray-100"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}>
       <label className="cursor-pointer">

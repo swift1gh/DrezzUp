@@ -252,8 +252,8 @@ const ProductUploadForm = ({
 
             {/* Image Preview */}
             {(productImageUrl || processedFile) && (
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-center">
+              <div className="flex flex-col gap-2 ">
+                <div className="flex justify-center bg-gray-200 rounded-lg shadow-sm border border-gray-300">
                   <img
                     src={
                       processedFile
@@ -265,7 +265,7 @@ const ProductUploadForm = ({
                     style={{ aspectRatio: "7/5" }}
                   />
                 </div>
-                <p className="text-center text-sm text-gray-500">
+                <p className="text-center text-sm text-gray-500 italic">
                   Image Preview
                 </p>
               </div>
