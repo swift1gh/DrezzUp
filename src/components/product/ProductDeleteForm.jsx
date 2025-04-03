@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaTrash, FaSpinner, FaArrowLeft } from "react-icons/fa";
-import { collection, getDocs, query, deleteDoc, doc, orderBy, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  deleteDoc,
+  doc,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 const ProductDeleteForm = ({
@@ -16,8 +24,14 @@ const ProductDeleteForm = ({
   setDeleteLoading,
   showMessage,
   toggleForm,
-  setProductId
+  setProductId,
 }) => {
+  const formatText = (text) => {
+    return text
+      .trim() // Remove spaces from beginning and end
+      .replace(/\s+/g, " "); // Replace multiple spaces with a single space
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       if (!deleteProductName || !deleteProductColor) {
@@ -29,16 +43,16 @@ const ProductDeleteForm = ({
       try {
         const productsRef = collection(db, "products");
         // Case insensitive search
-        const productQuery = query(
-          productsRef
-        );
+        const productQuery = query(productsRef);
         const querySnapshot = await getDocs(productQuery);
-        
+
         // Perform case-insensitive filtering in JavaScript
-        const matchingDocs = querySnapshot.docs.filter(doc => {
+        const matchingDocs = querySnapshot.docs.filter((doc) => {
           const data = doc.data();
-          return data.name.toLowerCase() === deleteProductName.toLowerCase() && 
-                 data.color.toLowerCase() === deleteProductColor.toLowerCase();
+          return (
+            data.name.toLowerCase() === deleteProductName.toLowerCase() &&
+            data.color.toLowerCase() === deleteProductColor.toLowerCase()
+          );
         });
 
         if (matchingDocs.length > 0) {
@@ -71,16 +85,18 @@ const ProductDeleteForm = ({
     try {
       const productsRef = collection(db, "products");
       // Case insensitive search
-      const productQuery = query(
-        productsRef
-      );
+      const productQuery = query(productsRef);
       const querySnapshot = await getDocs(productQuery);
-      
+
       // Perform case-insensitive filtering in JavaScript
-      const matchingDocs = querySnapshot.docs.filter(doc => {
+      const matchingDocs = querySnapshot.docs.filter((doc) => {
         const data = doc.data();
-        return data.name.toLowerCase() === deleteProductName.toLowerCase() && 
-               data.color.toLowerCase() === deleteProductColor.toLowerCase();
+        return (
+          data.name.toLowerCase() ===
+            formatText(deleteProductName).toLowerCase() &&
+          data.color.toLowerCase() ===
+            formatText(deleteProductColor).toLowerCase()
+        );
       });
 
       if (matchingDocs.length > 0) {
@@ -114,7 +130,7 @@ const ProductDeleteForm = ({
       setDeleteProductColor("");
       setDeleteProductImageUrl("");
       setDeleteProductId(null);
-      
+
       // Update product number after deletion
       // Fetch the highest ID and set the next ID
       try {
@@ -133,7 +149,10 @@ const ProductDeleteForm = ({
         setProductId(highestId + 1);
       } catch (error) {
         console.error("Error updating product ID after deletion:", error);
-        showMessage("Product deleted, but failed to update product number.", "info");
+        showMessage(
+          "Product deleted, but failed to update product number.",
+          "info"
+        );
       }
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -163,8 +182,16 @@ const ProductDeleteForm = ({
             className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
           />
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                clipRule="evenodd"
+              />
             </svg>
           </span>
         </div>
@@ -177,8 +204,16 @@ const ProductDeleteForm = ({
             className="w-full border border-gray-300 p-3 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BD815A] focus:border-transparent transition-all duration-200"
           />
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path
+                fillRule="evenodd"
+                d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
+                clipRule="evenodd"
+              />
             </svg>
           </span>
         </div>

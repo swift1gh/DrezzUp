@@ -36,7 +36,7 @@ const Product = ({
           <img
             src={Image}
             alt={Name}
-            className={`h-full object-contain w-full transition-all duration-500 ${
+            className={`h-full object-contain w-full transition-all duration-500 mx-auto ${
               imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
             onLoad={() => setImageLoaded(true)}

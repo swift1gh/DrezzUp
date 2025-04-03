@@ -32,11 +32,10 @@ const ProductUploadForm = ({
 
   const formatText = (text) => {
     return text
-      .trim()
-      .replace(/\s+/g, " ")
-      .replace(/^\s+|\s+$/g, "")
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-      .replace(/\s+/g, "");
+      .trim() // Remove spaces from beginning and end
+      .replace(/\s+/g, " ") // Replace multiple spaces with a single space
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+    // Removed the line that was eliminating all spaces
   };
 
   const handleProductNameChange = (e) => {
