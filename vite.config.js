@@ -10,6 +10,9 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
+    rollupOptions: {
+      external: ["@rollup/rollup-win32-x64-msvc"],
+    },
   },
   resolve: {
     alias: {
