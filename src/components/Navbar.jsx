@@ -15,10 +15,10 @@ const Navbar = ({
     <div
       className="bg-[#FBF4F4] shadow-md sticky top-0 w-full z-50"
       id="navbar">
-      <div className="flex flex-row justify-between items-center px-5 py-3 md:px-14 gap-3">
+      <div className="flex flex-row justify-between items-center px-5 py-2 md:px-14 gap-3">
         <h1
           id="logo"
-          className="font-sans font-semibold text-[22px] md:text-[28px] cursor-default">
+          className="font-sans font-semibold text-[20px] md:text-[26px] cursor-default">
           <span className="text-white bg-black px-1 py-0.5 rounded-sm">
             DREZZ
           </span>
@@ -42,7 +42,7 @@ const Navbar = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#BD815A] p-2 px-4 md:p-3 border rounded-[18px] border-gray-500 cursor-pointer shadow-md hover:bg-[#c78b6a] transition-colors duration-200">
+              className="bg-[#BD815A] p-1 px-5 md:p-2 border rounded-[18px] border-gray-500 cursor-pointer shadow-md hover:bg-[#c78b6a] transition-colors duration-200">
               <span className="text-white font-medium cursor-pointer">
                 {Btn}
               </span>
