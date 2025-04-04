@@ -35,20 +35,27 @@ const ProductUploadForm = ({
       .trim() // Remove spaces from beginning and end
       .replace(/\s+/g, " ") // Replace multiple spaces with a single space
       .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
-    // Removed the line that was eliminating all spaces
   };
 
   const handleProductNameChange = (e) => {
-    setProductName(formatText(e.target.value));
+    setProductName(e.target.value); // No formatting during typing
   };
 
   const handleProductColorChange = (e) => {
-    setProductColor(formatText(e.target.value));
+    setProductColor(e.target.value); // No formatting during typing
   };
 
   const handleUpload = async () => {
+    // Format text inputs before validation and submission
+    const formattedName = formatText(productName);
+    const formattedColor = formatText(productColor);
+
+    // Update the state with formatted values
+    setProductName(formattedName);
+    setProductColor(formattedColor);
+
     // Enhanced input validation
-    if (!productName || productName.trim() === "") {
+    if (!formattedName) {
       showMessage("Please enter a valid product name.", "error");
       return;
     }
@@ -63,7 +70,7 @@ const ProductUploadForm = ({
       return;
     }
 
-    if (!productColor || productColor.trim() === "") {
+    if (!formattedColor) {
       showMessage("Please enter a valid product color.", "error");
       return;
     }
@@ -117,11 +124,11 @@ const ProductUploadForm = ({
         }
       }
 
-      // Create the product object
+      // Create the product object with formatted values
       const productData = {
         id: productId,
-        name: productName.trim(),
-        color: productColor.trim(),
+        name: formattedName,
+        color: formattedColor,
         image: imageUrl,
         singlePrice: parsedSinglePrice,
         comboPrice: parsedComboPrice,
@@ -240,14 +247,18 @@ const ProductUploadForm = ({
         <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
           <div className="flex flex-col gap-4">
             {/* Image Uploader */}
-            <div className="flex flex-col gap-4 justify-center">
-              <ImageUploader
-                fileLoading={fileLoading}
-                setFileLoading={setFileLoading}
-                showMessage={showMessage}
-                onImageProcessed={handleImageProcessed}
-              />
-            </div>
+            {processedFile ? (
+              ""
+            ) : (
+              <div className="flex flex-col gap-4 justify-center">
+                <ImageUploader
+                  fileLoading={fileLoading}
+                  setFileLoading={setFileLoading}
+                  showMessage={showMessage}
+                  onImageProcessed={handleImageProcessed}
+                />
+              </div>
+            )}
 
             {/* Image Preview */}
             {(productImageUrl || processedFile) && (
@@ -280,7 +291,9 @@ const ProductUploadForm = ({
           Upload Product
         </button>
 
-        <div className="flex gap-2">
+        <hr />
+
+        <div className="flex gap-2 mt-4">
           <button
             type="button"
             onClick={handleClearForm}

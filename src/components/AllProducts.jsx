@@ -143,9 +143,10 @@ const AllProducts = ({ setSelectedProducts, selectedBrand, searchTerm }) => {
           <h3 className="text-lg font-semibold text-gray-700 mb-1">
             No Sneakers Found
           </h3>
-          <p className="text-gray-500 max-w-md">
-            We couldn't find any sneakers matching your search criteria. Try
-            adjusting your filters or search term.
+          <p className="text-gray-600 max-w-md italic text-sm font-thin">
+            We couldn't find any sneakers matching your search criteria. Check
+            your internet connection and try adjusting your filters or search
+            term.
           </p>
         </div>
       ) : (
