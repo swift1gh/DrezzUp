@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      external: [],
+      external: ["@rollup/rollup-win32-x64-msvc"],
       output: {
         manualChunks: (id) => {
           if (id.includes("node_modules")) {
