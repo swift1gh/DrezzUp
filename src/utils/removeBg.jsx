@@ -11,7 +11,7 @@ const removeBg = async (imageFile) => {
       formData,
       {
         headers: {
-          "X-Api-Key": "VUy1DkdTDjTTZtySzv1RCeB5",
+          "X-Api-Key": import.meta.env.VITE_REMOVE_BG_API_KEY,
         },
         responseType: "blob",
       }
