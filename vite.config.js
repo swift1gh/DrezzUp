@@ -7,7 +7,6 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      external: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
@@ -22,15 +21,11 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['react-floater'],
-    include: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage']
+    exclude: ['react-floater']
   },
   resolve: {
     alias: {
-      'firebase/app': 'firebase/app/dist/index.esm.js',
-      'firebase/auth': 'firebase/auth/dist/index.esm.js',
-      'firebase/firestore': 'firebase/firestore/dist/index.esm.js',
-      'firebase/storage': 'firebase/storage/dist/index.esm.js'
+      // Remove specific path aliases for Firebase
     }
   }
 });
