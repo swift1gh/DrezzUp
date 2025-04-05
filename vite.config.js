@@ -1,31 +1,27 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: '/',
+  base: "/",
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      external: [],
       output: {
         manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (id.includes('firebase')) return 'firebase';
-            if (id.includes('react')) return 'react';
-            if (id.includes('@mui')) return 'mui';
-            if (id.includes('chart')) return 'chart';
-            return 'vendor';
+          if (id.includes("node_modules")) {
+            if (id.includes("firebase")) return "firebase";
+            if (id.includes("react")) return "react";
+            if (id.includes("@mui")) return "mui";
+            if (id.includes("chart")) return "chart";
+            return "vendor";
           }
-        }
-      }
+        },
+      },
     },
   },
   optimizeDeps: {
-    exclude: ['react-floater']
+    exclude: ["react-floater"],
   },
-  resolve: {
-    alias: {
-      // Remove specific path aliases for Firebase
-    }
-  }
 });
